@@ -1,0 +1,61 @@
+<resources>
+    <string name="app_name">積ん読防止</string>
+    <string name="action_input">入力</string>
+    <string name="sum">合計額</string>
+    <string name="get_loss">損失</string>
+    <string name="filt">Filter</string>
+    <string name="action_sort">SORT</string>
+    <string name="all_book">未読本/所持冊数=未読本の割合：</string>
+    <string name="book_page">ページ</string>
+    <string name="txt_buy_date">購入日：</string>
+    <string name="msg_del">破棄しました。</string>
+    <string name="context_del">情報削除</string>
+    <string name="context_modification">情報修正</string>
+    <string name="context_graph">グラフ表示</string>
+    <!--
+    sql文にも利用するため、%dではなく%s
+    %s : 経過日数の数字
+    -->
+    <string name="days">購入から%s日経過</string>
+
+    <!--  Input Activity -->
+    <string name="book_name">書籍名</string>
+    <string name="book_value">購入金額</string>
+    <string name="yen">円</string>
+    <string name="book_memo">メモ：</string>
+    <string name="btn_entry">登録</string>
+    <string name="action_delete">削除</string>
+    <string name="rdbtn_kidoku">既読</string>
+    <string name="rdbtn_midoku">未読</string>
+
+    <!-- Dialog -->
+    <string name="dialog_save">保存する</string>
+    <string name="dialog_close">閉じる</string>
+
+    <!--<string name="build_sql">select %s, strftime('%Y/%m/%d', %s) as date, %s, %s, %s, %s, '%s' as days, %s, %s from %s %s %s</string>-->
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="zero">0</string>
+    <string name="slash">/</string>
+    <string name="equal">=</string>
+    <string name="percent">%</string>
+    <string name="name">name</string>
+    <string name="value">value</string>
+    <string name="page">page</string>
+    <string name="memo">memo</string>
+    <string name="date">date</string>
+    <string name="colon">：</string>
+    <string name="suu">数：</string>
+    <string name="upper_triangle">△</string>
+    <string name="bottom_triangle">▽</string>
+    <string name="played">played</string>
+    <string name="before_bracket">（</string>
+    <string name="after_bracket">）</string>
+    <string name="before_double_kagi_bracket">『</string>
+    <string name="after_double_kagi_bracket">』</string>
+    <string name="rate">%1$d/%2$d=%3$d%%</string>
+
+    <string name="sql_build">
+        select _id, strftime(\'%%Y/%%m/%%d\', date) as date, name, played, current, capacity, \'購入から\' || cast(julianday(\'now\') - julianday(date) as int) || \'日経過\' as days, price, memo from %1$s %2$s %3$s
+    </string>
+</resources>
