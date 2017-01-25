@@ -21,8 +21,10 @@ import com.example.ymiyauchi.mylibrary.view.manager.ContainerManager;
 
 /**
  * Created by ymiyauchi on 2017/01/07.
- * <p>
+ *
  * リストアイテムの登録、更新、削除
+ *
+ *
  */
 
 public class ItemEntryManager {
@@ -33,6 +35,7 @@ public class ItemEntryManager {
     private final SummaryView mSummaryView;
     private final ListBuilder mListBuilder;
     private final SortFilter mSortFilter;
+    private final HistoryController mHistoryController;
 
     ItemEntryManager(MainFragment fragment, ListBuilder listBuilder, SortFilter sortFilter,
                      ContainerManager containerManager, SummaryView summaryView) {
@@ -42,6 +45,7 @@ public class ItemEntryManager {
         mSummaryView = summaryView;
         mListBuilder = listBuilder;
         mSortFilter = sortFilter;
+        mHistoryController = new HistoryController(fragment, mType);
     }
 
     void registerItem(DataConverter data) {
@@ -180,6 +184,7 @@ public class ItemEntryManager {
     }
 
     /**
+     *
      * @param db
      * @param data
      * @param cumulativePage 新しい累積ページ数
@@ -212,7 +217,6 @@ public class ItemEntryManager {
     /**
      * 指定されたポジションにあるデータを削除する
      * コンテキストメニューからの削除と、InputActivityからの削除の場合がある
-     *
      * @param data
      */
     public void deleteItem(DataConverter data) {

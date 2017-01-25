@@ -339,4 +339,9 @@ abstract public class AndroidDatabase extends SQLiteOpenHelper implements AutoCl
         return cursor.getCount();
     }
 
+    public SQLiteDatabase beginTransaction() {
+        SQLiteDatabase db = getWritableDatabase();
+        db.beginTransaction();
+        return db;
+    }
 }

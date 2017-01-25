@@ -85,12 +85,88 @@ public class ChartDialogFragment extends DialogFragment {
             Cursor cursor = db.query("select date, cumulative_page, today_page from " + data.getType().historyTable()
                     + " where basic_id=? order by cumulative_page", Long.toString(data.getId()));
 
+//            List<String> labels = new ArrayList<>();
+//            while (cursor.moveToNext()) {
+//                DateTime date = DateTime.newInstance(
+//                        db.getString(HistoryColumns.DATE.getName()), DateTime.SQLITE_DATE_FORMAT);
+//                labels.add(date.format());
+//            }
+//            if (labels.size() < 10) {  // ラベルが一つだけなど少数の場合、棒グラフがかなりの幅を持ってしまうため追加
+//                DateTime date = DateTime.newInstance(labels.get(labels.size() - 1));
+//                for (int i = labels.size(); i < 10; i++) {
+//                    date = date.nextDay();
+//                    labels.add(date.format());
+//                }
+//            }
+//
+//            ValueFormatter formatter = new ValueFormatter() {
+//                @Override
+//                public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+//                    return Integer.toString((int) value);
+//                }
+//            };
+//
+//            List<Entry> listEntries = new ArrayList<>();
+//            cursor.moveToPosition(-1);
+//            for (int i = 0; cursor.moveToNext(); i++) {
+//                int cumulativePage = db.getInt(HistoryColumns.CUMULATIVE_PAGE.getName());
+//                Entry entry = new Entry(cumulativePage, i);
+//                listEntries.add(entry);
+//            }
+//            LineDataSet lineDataSet = new LineDataSet(listEntries, "累積");
+//            LineData lineData = new LineData(labels, lineDataSet);
+//            lineData.setValueFormatter(formatter);
+//
+//            List<BarEntry> barEntries = new ArrayList<>();
+//            cursor.moveToPosition(-1);
+//            for (int i = 0; cursor.moveToNext(); i++) {
+//                int todayPage = db.getInt(HistoryColumns.TODAY_PAGE.getName());
+//                BarEntry entry = new BarEntry(todayPage, i);
+//                barEntries.add(entry);
+//            }
+//            BarDataSet barDataSet = new BarDataSet(barEntries, "１日分");
+//            barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+//            BarData barData = new BarData(labels, barDataSet);
+//            barData.setValueFormatter(formatter);
+
+
             List<String> labels = new ArrayList<>();
-            while (cursor.moveToNext()) {
-                DateTime date = DateTime.newInstance(
-                        db.getString(HistoryColumns.DATE.getName()), DateTime.SQLITE_DATE_FORMAT);
-                labels.add(date.format());
+            List<Entry> listEntries = new ArrayList<>();
+            List<BarEntry> barEntries = new ArrayList<>();
+
+            {
+                boolean isLoop = cursor.moveToNext();
+                DateTime date = null;
+                DateTime cursorDate;
+                if (isLoop)
+                    date = DateTime.newInstanceFromSqliteDateString(db.getString(HistoryColumns.DATE.getName()));
+                int cumulativePage = 0;
+                for (int i = 0; isLoop; i++) {
+                    cursorDate = DateTime.newInstanceFromSqliteDateString(db.getString(HistoryColumns.DATE.getName()));
+                    labels.add(date.format());
+                    if (date.equals(cursorDate)) {
+                        int todayPage = db.getInt(HistoryColumns.TODAY_PAGE.getName());
+                        BarEntry barEntry = new BarEntry(todayPage, i);
+                        barEntries.add(barEntry);
+
+                        cumulativePage = db.getInt(HistoryColumns.CUMULATIVE_PAGE.getName());
+                        Entry entry = new Entry(cumulativePage, i);
+                        listEntries.add(entry);
+                    } else {
+                        BarEntry barEntry = new BarEntry(0, i);
+                        barEntries.add(barEntry);
+
+                        Entry entry = new Entry(cumulativePage, i);
+                        listEntries.add(entry);
+                    }
+
+                    date = date.nextDay();
+                    if (date.equals(cursorDate)) {
+                        isLoop = cursor.moveToNext();
+                    }
+                }
             }
+
             if (labels.size() < 10) {  // ラベルが一つだけなど少数の場合、棒グラフがかなりの幅を持ってしまうため追加
                 DateTime date = DateTime.newInstance(labels.get(labels.size() - 1));
                 for (int i = labels.size(); i < 10; i++) {
@@ -106,32 +182,18 @@ public class ChartDialogFragment extends DialogFragment {
                 }
             };
 
-            List<Entry> listEntries = new ArrayList<>();
-            cursor.moveToPosition(-1);
-            for (int i = 0; cursor.moveToNext(); i++) {
-                int cumulativePage = db.getInt(HistoryColumns.CUMULATIVE_PAGE.getName());
-                Entry entry = new Entry(cumulativePage, i);
-                listEntries.add(entry);
-            }
-            LineDataSet lineDataSet = new LineDataSet(listEntries, "累積");
-            LineData lineData = new LineData(labels, lineDataSet);
-            lineData.setValueFormatter(formatter);
-
-            List<BarEntry> barEntries = new ArrayList<>();
-            cursor.moveToPosition(-1);
-            for (int i = 0; cursor.moveToNext(); i++) {
-                int todayPage = db.getInt(HistoryColumns.TODAY_PAGE.getName());
-                BarEntry entry = new BarEntry(todayPage, i);
-                barEntries.add(entry);
-            }
             BarDataSet barDataSet = new BarDataSet(barEntries, "１日分");
             barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
             BarData barData = new BarData(labels, barDataSet);
             barData.setValueFormatter(formatter);
 
+            LineDataSet lineDataSet = new LineDataSet(listEntries, "累積");
+            LineData lineData = new LineData(labels, lineDataSet);
+            lineData.setValueFormatter(formatter);
+
             CombinedData combinedData = new CombinedData(labels);
-            combinedData.setData(lineData);
             combinedData.setData(barData);
+            combinedData.setData(lineData);
             return combinedData;
         }
     }

@@ -164,4 +164,17 @@ public final class DateTime {
         ret.add(Calendar.DAY_OF_MONTH, 1);
         return new DateTime(ret);
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof DateTime
+                && mCalendar.equals(((DateTime) obj).mCalendar);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + mCalendar.hashCode();
+        return result;
+    }
 }

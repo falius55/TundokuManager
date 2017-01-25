@@ -39,12 +39,7 @@ class EntryButtonClickListener implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         RadioGroup rd = (RadioGroup) mActivity.findViewById(R.id.rdgroup);
-        DataConverter data;
-        if (mId < 0) {
-            data = new InputDataConverter(mPosition, mType, mTextViewManager, rd);
-        } else {
-            data = new InputDataConverter(mId, mPosition, mType, mTextViewManager, rd);
-        }
+        DataConverter data = new InputDataConverter(mId, mPosition, mType, mTextViewManager, rd);
 
         // Activityを閉じる
         mActivity.setResult(mResultCode, data.toIntent());

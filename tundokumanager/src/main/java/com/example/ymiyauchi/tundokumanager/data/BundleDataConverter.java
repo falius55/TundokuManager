@@ -18,6 +18,10 @@ public class BundleDataConverter extends AbstractDataConverter {
         mData = bundle;
     }
 
+    public BundleDataConverter(DataConverter dataConverter) {
+        this(dataConverter.toBundle());
+    }
+
     @Override
     public String getName() {
         return mData.getString(ItemColumns.NAME.getName(), "");
