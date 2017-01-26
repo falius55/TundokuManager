@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 
 import com.example.ymiyauchi.tundokumanager.data.BundleDataConverter;
 import com.example.ymiyauchi.tundokumanager.data.DataConverter;
@@ -39,6 +40,13 @@ import java.util.List;
 public class ChartDialogFragment extends DialogFragment {
     private static String TAG = "CHART_DIALOG";
 
+    private DataConverter mItemData;
+
+    private final List<String> mLabels = new ArrayList<>();
+    private final List<BarEntry> mBarEntries = new ArrayList<>();
+    private final List<Entry> mLineEntries = new ArrayList<>();
+    private CombinedChart mCombinedChart;
+
     public static ChartDialogFragment newInstance(DataConverter data) {
         ChartDialogFragment fragment = new ChartDialogFragment();
         fragment.setArguments(data.toBundle());
@@ -60,8 +68,10 @@ public class ChartDialogFragment extends DialogFragment {
         builder.setView(layout);
 
         CombinedChart combinedChart = (CombinedChart) layout.findViewById(R.id.combined_chart);
+        mCombinedChart = combinedChart;
         combinedChart.setDescription("");
         DataConverter data = new BundleDataConverter(getArguments());
+        mItemData = data;
 
         YAxis yAxisL = combinedChart.getAxisLeft();
         yAxisL.setAxisMaxValue(data.getCapacity());
@@ -72,91 +82,111 @@ public class ChartDialogFragment extends DialogFragment {
         yAxisR.setAxisMinValue(0);
 
         combinedChart.setData(createData(data));
+
+        ResultChanger resultChanger = new ResultChanger(this, layout, data, mLabels, mBarEntries, mLineEntries);
+        Button reflectButton = (Button) layout.findViewById(R.id.btn_reflect);
+        reflectButton.setOnClickListener(resultChanger);
+        combinedChart.setOnChartValueSelectedListener(resultChanger);
+
         combinedChart.invalidate();
 
-        return builder.create();
+        return builder.setTitle(data.getName()).create();
 
     }
 
-    private CombinedData createData(DataConverter data) {
+    void reload() {
+        loadEntries(mItemData);
+        mCombinedChart.invalidate();
+    }
+
+    private void loadEntries(DataConverter data) {
         try (AndroidDatabase db = new BasicDatabase(getActivity())) {
             Cursor cursor = db.selectWithOrder(data.getType().historyTable(),
                     HistoryColumns.values(),
                     /* order by */ HistoryColumns.CUMULATIVE_PAGE.getName(),
                     /* where */ HistoryColumns.BASIC_ID.getName() + "=?", Long.toString(data.getId()));
 
+            mLabels.clear();
+            mBarEntries.clear();
+            mLineEntries.clear();
+            List<String> labels = mLabels;
+            List<BarEntry> barEntries = mBarEntries;
+            List<Entry> lineEntries = mLineEntries;
 
+            // データベースに保存されている日付の最初の日から始まり、データのない日も値を格納していく
+            // データのない日は当日分は０、累計はその前日の値をそのまま受け継ぐ
+            // cursorDateと一致するまでdateを更新していき、一致するとcursorDateも更新して続ける(cursorDateが更新できなくなるまで)
+            // するとカーソルの最初日から最終日までdateが逐次更新される
+            boolean isLoop = cursor.moveToNext();
+            DateTime date;
+            DateTime cursorDate;
+            if (isLoop) {
+                date = DateTime.newInstance(db.getString(HistoryColumns.DATE.getName()), DateTime.SQLITE_DATE_FORMAT);
+            } else {
+                throw new IllegalStateException("no history data");
+            }
+            int cumulativePage = 0;
 
-            List<String> labels = new ArrayList<>();
-            List<Entry> listEntries = new ArrayList<>();
-            List<BarEntry> barEntries = new ArrayList<>();
+            for (int i = 0; isLoop; i++, date = date.nextDay()) {
+                cursorDate = DateTime.newInstance(db.getString(HistoryColumns.DATE.getName()), DateTime.SQLITE_DATE_FORMAT);
+                labels.add(date.format());
 
-            {
-                // データベースに保存されている日付の最初の日から始まり、データのない日も値を格納していく
-                // データのない日は当日分は０、累計はその前日の値をそのまま受け継ぐ
-                // cursorDateと一致するまでdateを更新していき、一致するとcursorDateも更新して続ける(cursorDateが更新できなくなるまで)
-                // するとカーソルの最初日から最終日までdateが逐次更新される
-                boolean isLoop = cursor.moveToNext();
-                DateTime date = null;
-                DateTime cursorDate;
-                if (isLoop)
-                    date = DateTime.newInstance(db.getString(HistoryColumns.DATE.getName()), DateTime.SQLITE_DATE_FORMAT);
-                int cumulativePage = 0;
+                if (date.equals(cursorDate)) {
+                    int todayPage = db.getInt(HistoryColumns.TODAY_PAGE.getName());
+                    BarEntry barEntry = new BarEntry(todayPage, i);
+                    barEntries.add(barEntry);
 
-                for (int i = 0; isLoop; i++, date = date.nextDay()) {
-                    cursorDate = DateTime.newInstance(db.getString(HistoryColumns.DATE.getName()), DateTime.SQLITE_DATE_FORMAT);
-                    labels.add(date.format());
+                    cumulativePage = db.getInt(HistoryColumns.CUMULATIVE_PAGE.getName());
+                    Entry entry = new Entry(cumulativePage, i);
+                    lineEntries.add(entry);
+                } else {
+                    BarEntry barEntry = new BarEntry(0, i);
+                    barEntries.add(barEntry);
 
-                    if (date.equals(cursorDate)) {
-                        int todayPage = db.getInt(HistoryColumns.TODAY_PAGE.getName());
-                        BarEntry barEntry = new BarEntry(todayPage, i);
-                        barEntries.add(barEntry);
+                    Entry entry = new Entry(cumulativePage, i);
+                    lineEntries.add(entry);
+                }
 
-                        cumulativePage = db.getInt(HistoryColumns.CUMULATIVE_PAGE.getName());
-                        Entry entry = new Entry(cumulativePage, i);
-                        listEntries.add(entry);
-                    } else {
-                        BarEntry barEntry = new BarEntry(0, i);
-                        barEntries.add(barEntry);
-
-                        Entry entry = new Entry(cumulativePage, i);
-                        listEntries.add(entry);
-                    }
-
-                    if (date.equals(cursorDate)) {
-                        isLoop = cursor.moveToNext();
-                    }
+                if (date.equals(cursorDate)) {
+                    isLoop = cursor.moveToNext();
                 }
             }
 
             if (labels.size() < 10) {  // ラベルが一つだけなど少数の場合、棒グラフがかなりの幅を持ってしまうため追加
-                DateTime date = DateTime.newInstance(labels.get(labels.size() - 1));
-                for (int i = labels.size(); i < 10; i++) {
-                    date = date.nextDay();
+                for (int i = labels.size(); i < 10; i++, date = date.nextDay()) {
                     labels.add(date.format());
                 }
             }
-
-            ValueFormatter formatter = new ValueFormatter() {
-                @Override
-                public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                    return Integer.toString((int) value);
-                }
-            };
-
-            BarDataSet barDataSet = new BarDataSet(barEntries, "１日分");
-            barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-            BarData barData = new BarData(labels, barDataSet);
-            barData.setValueFormatter(formatter);
-
-            LineDataSet lineDataSet = new LineDataSet(listEntries, "累積");
-            LineData lineData = new LineData(labels, lineDataSet);
-            lineData.setValueFormatter(formatter);
-
-            CombinedData combinedData = new CombinedData(labels);
-            combinedData.setData(barData);
-            combinedData.setData(lineData);
-            return combinedData;
         }
+    }
+
+    private CombinedData createData(DataConverter data) {
+        loadEntries(data);
+
+        List<String> labels = mLabels;
+        List<BarEntry> barEntries = mBarEntries;
+        List<Entry> lineEntries = mLineEntries;
+
+        ValueFormatter formatter = new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
+                return Integer.toString((int) value);
+            }
+        };
+
+        BarDataSet barDataSet = new BarDataSet(barEntries, "１日分");
+        barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        BarData barData = new BarData(labels, barDataSet);
+        barData.setValueFormatter(formatter);
+
+        LineDataSet lineDataSet = new LineDataSet(lineEntries, "累積");
+        LineData lineData = new LineData(labels, lineDataSet);
+        lineData.setValueFormatter(formatter);
+
+        CombinedData combinedData = new CombinedData(labels);
+        combinedData.setData(barData);
+        combinedData.setData(lineData);
+
+        return combinedData;
     }
 }

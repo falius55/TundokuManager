@@ -263,11 +263,8 @@ abstract public class AndroidDatabase extends SQLiteOpenHelper implements AutoCl
      * @return 結果を取得するためのカーソルインスタンス
      */
     public final Cursor selectAllColumn(String table, String whereClause, String... whereArgs) {
-        StringBuilder sql = new StringBuilder("select * from ")
-                .append(table)
-                .append(" where ")
-                .append(whereClause);
-        return query(sql.toString(), whereArgs);
+        String sql = TextUtils.concat("select * from ", table, " where ", whereClause).toString();
+        return query(sql, whereArgs);
     }
 
     /**
@@ -339,7 +336,8 @@ abstract public class AndroidDatabase extends SQLiteOpenHelper implements AutoCl
 
     public final boolean isExist(String table, String whereClause, String... whereArgs) {
         String sql = TextUtils.concat("select * from ", table, " where ", whereClause).toString();
-        try (Cursor cursor = query(sql, whereArgs)) {
+        SQLiteDatabase db = getReadableDatabase();
+        try (Cursor cursor = db.rawQuery(sql, whereArgs)) {
             return cursor.moveToFirst();
         }
     }
@@ -379,10 +377,6 @@ abstract public class AndroidDatabase extends SQLiteOpenHelper implements AutoCl
     public final int getInt(String column) {
         Cursor cursor = mCursorStack.peek();
         int index = cursor.getColumnIndexOrThrow(column);
-//        if (index == -1) {
-//            throw new IllegalArgumentException("no columns " + column + " in " + Arrays.format(cursor.getColumnNames()));
-//        }
-//        Log.d("DATABASE", "getInt("+ column + ") index:"+ index + " " + Arrays.format(cursor.getColumnNames()) + " type: " + cursor.getType(0));
         return cursor.getInt(index);
     }
 

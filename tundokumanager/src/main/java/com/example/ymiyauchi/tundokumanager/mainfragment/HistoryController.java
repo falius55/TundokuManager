@@ -26,6 +26,34 @@ public class HistoryController {
         mType = type;
     }
 
+    public void initHistory(long itemId, AndroidDatabase db, DataConverter data) {
+        // 新規入力された場合のDataConverterにはまだIDがない(-1が返ってくる)ため、別途itemIdを受け取る必要がある
+        if (!data.getType().hasProgress()) {
+            return;
+        }
+        if (itemId == -1) {
+            return; // アイテムデータの挿入に失敗している
+        }
+
+        ContentValues values = new ContentValues();
+        values.put(HistoryColumns.BASIC_ID.getName(), itemId);
+        values.put(HistoryColumns.TODAY_PAGE.getName(), data.getCurrent());  // 未読なら０、既読ならcapacityが登録される
+        values.put(HistoryColumns.CUMULATIVE_PAGE.getName(), data.getCurrent());
+        values.put(HistoryColumns.DATE.getName(), data.getDateForDB());
+        db.insert(mType.historyTable(), values);
+    }
+
+    public void deleteHistory(long itemId, AndroidDatabase db) {
+        db.delete(mType.historyTable(), HistoryColumns.BASIC_ID.getName() + "=?", Long.toString(itemId));
+    }
+
+    /**
+     * 増分が0と計算されたら何もしない
+     *
+     * @param data
+     * @param modifyDate
+     * @param newCumulativePlayed
+     */
     public void updateHistoryCumulativePlayed(DataConverter data, DateTime modifyDate, int newCumulativePlayed) {
         // 増分の計算が主目的
         try (AndroidDatabase db = new BasicDatabase(mFragment.getActivity())) {
@@ -67,6 +95,7 @@ public class HistoryController {
                     values.put(HistoryColumns.DATE.getName(), modifyDay);
                     values.put(HistoryColumns.TODAY_PAGE.getName(), 0);
                     values.put(HistoryColumns.CUMULATIVE_PAGE.getName(), maxCumulative);
+                    values.put(HistoryColumns.BASIC_ID.getName(), data.getId());
                     db.insert(mType.historyTable(), values);
                     updateHistoryRecord(db, data, modifyDate, delta);
                 }
@@ -117,6 +146,7 @@ public class HistoryController {
                     values.put(HistoryColumns.DATE.getName(), modifyDay);
                     values.put(HistoryColumns.TODAY_PAGE.getName(), 0);
                     values.put(HistoryColumns.CUMULATIVE_PAGE.getName(), maxCumulative);
+                    values.put(HistoryColumns.BASIC_ID.getName(), data.getId());
                     db.insert(mType.historyTable(), values);
                     updateHistoryRecord(db, data, modifyDate, delta);
                 }
@@ -188,7 +218,6 @@ public class HistoryController {
             if (newTodayPlayed < 0) {
                 db.delete(mType.historyTable(), "basic_id=? and date=?", id, modifyDay);
                 // 修正日より前の操作
-//                db.query("select * from " + mType.historyTable() + " where basic_id=? and date < ? order by date desc", id, modifyDay);
                 db.selectWithOrder(mType.historyTable(),
                         HistoryColumns.values(),
                         /* order by */ HistoryColumns.DATE.getName() + " desc",
@@ -201,10 +230,11 @@ public class HistoryController {
                         int newPrevTodayPlayed = prevTodayPlayed + prevDelta;
                         int prevCumulativePlayed = db.getInt(HistoryColumns.CUMULATIVE_PAGE.getName());
                         int newPrevCumulativePlayed = prevCumulativePlayed + prevDelta;
-                        ContentValues values = new ContentValues();
-                        values.put(HistoryColumns.TODAY_PAGE.getName(), newPrevTodayPlayed);
-                        values.put(HistoryColumns.CUMULATIVE_PAGE.getName(), newPrevCumulativePlayed);
+
                         if (newPrevTodayPlayed > 0) {
+                            ContentValues values = new ContentValues();
+                            values.put(HistoryColumns.TODAY_PAGE.getName(), newPrevTodayPlayed);
+                            values.put(HistoryColumns.CUMULATIVE_PAGE.getName(), newPrevCumulativePlayed);
                             db.update(mType.historyTable(), values, "_id=?", Integer.toString(prevId));
                             break;
                         } else if (newPrevTodayPlayed == 0) {
@@ -223,7 +253,6 @@ public class HistoryController {
         }
 
         // 修正日より後ろの操作
-//        db.query("select * from " + mType.historyTable() + " where basic_id=? and date > ? order by date", id, modifyDay);
         db.selectWithOrder(mType.historyTable(),
                 HistoryColumns.values(),
                 HistoryColumns.DATE.getName(),

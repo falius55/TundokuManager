@@ -58,4 +58,10 @@
     <string name="sql_build">
         select _id, strftime(\'%%Y/%%m/%%d\', date) as date, name, played, current, capacity, \'購入から\' || cast(julianday(\'now\') - julianday(date) as int) || \'日経過\' as days, price, memo from %1$s %2$s %3$s
     </string>
+    <string name="result_per_day">実績/日</string>
+    <string name="result_cumulative">累計</string>
+    <string name="seekbar_value">(%d)</string>
+    <string name="graph_refrection">反映</string>
+    <string name="left">←</string>
+    <string name="btn_right">→</string>
 </resources>

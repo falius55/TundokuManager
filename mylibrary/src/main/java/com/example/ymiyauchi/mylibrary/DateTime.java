@@ -15,10 +15,11 @@ import java.util.Locale;
  * 文字列のフォーマット機能もあります
  */
 
-public final class DateTime {
+public final class DateTime implements Comparable<DateTime> {
     private final static String DEFAULT_DATETIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
     private final static String DEFAULT_DATE_FORMAT = "yyyy/MM/dd";
     public final static String SQLITE_DATE_FORMAT = "yyyy-MM-dd";
+
     private final Calendar mCalendar;
 
 
@@ -165,6 +166,13 @@ public final class DateTime {
         return new DateTime(ret);
     }
 
+    public DateTime prevDay() {
+        Calendar ret = Calendar.getInstance();
+        ret.setTimeInMillis(getTimeInMillis());
+        ret.add(Calendar.DAY_OF_MONTH, -1);
+        return new DateTime(ret);
+    }
+
     @Override
     public boolean equals(Object obj) {
         return obj instanceof DateTime
@@ -181,5 +189,10 @@ public final class DateTime {
     @Override
     public String toString() {
         return format();
+    }
+
+    @Override
+    public int compareTo(@NonNull DateTime another) {
+        return mCalendar.compareTo(another.mCalendar);
     }
 }
