@@ -11,7 +11,6 @@ import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayDeque;
-import java.util.Arrays;
 import java.util.Deque;
 
 /**
@@ -115,6 +114,7 @@ abstract public class AndroidDatabase extends SQLiteOpenHelper implements AutoCl
                 cursor.close();
             }
         }
+        super.close();
     }
 
     public void deleteDatabase() {
@@ -224,6 +224,36 @@ abstract public class AndroidDatabase extends SQLiteOpenHelper implements AutoCl
         return cursor;
     }
 
+    public final Cursor select(String table, String[] columns, String whereClause, String... whereArgs) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(table, columns, whereClause, whereArgs, null, null, null, null);
+        mCursorStack.push(cursor);
+        return cursor;
+    }
+
+    public final Cursor select(String table, DatabaseColumns[] columns, String whereClause, String... whereArgs) {
+        return select(table, stringArrayFrom(columns), whereClause, whereArgs);
+    }
+
+    private String[] stringArrayFrom(DatabaseColumns[] columns) {
+        String[] ret = new String[columns.length];
+        for (int i = 0, len = columns.length; i < len; i++) {
+            ret[i] = columns[i].getName();
+        }
+        return ret;
+    }
+
+    public final Cursor selectWithOrder(String table, String[] columns, String order, String whereClause, String... whereArgs) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.query(table, columns, whereClause, whereArgs, null, null, order);
+        mCursorStack.push(cursor);
+        return cursor;
+    }
+
+    public final Cursor selectWithOrder(String table, DatabaseColumns[] columns, String order, String whereClause, String... whereArgs) {
+        return selectWithOrder(table, stringArrayFrom(columns), order, whereClause, whereArgs);
+    }
+
     /**
      * 条件に合致した行の全列を取得するカーソルを返します
      *
@@ -258,26 +288,54 @@ abstract public class AndroidDatabase extends SQLiteOpenHelper implements AutoCl
      * @return
      */
     public final int min(String table, String targetColumn, String whereClause, String... whereArgs) {
-        String sql = TextUtils.concat("select min(", targetColumn, ") from ", table, " where ", whereClause).toString();
-        SQLiteDatabase db = getReadableDatabase();
-        try (Cursor cursor = db.rawQuery(sql, whereArgs)) {
-            if (!cursor.moveToNext()) {
-                throw new SQLiteException("no data min from " + table + " where " + whereClause + " with " + Arrays.toString(whereArgs));
-            }
-            return cursor.getInt(0);
-        }
+        return executeIntFunc("min", table, targetColumn, whereClause, whereArgs);
+    }
+
+    public final int min(String table, String targetColumn) {
+        return min(table, targetColumn, "");
     }
 
     public final int max(String table, String targetColumn, String whereClause, String... whereArgs) {
-        String sql = TextUtils.concat("select max(", targetColumn, ") from ", table, " where ", whereClause).toString();
+        return executeIntFunc("max", table, targetColumn, whereClause, whereArgs);
+    }
+
+    public final int max(String table, String targetColumn) {
+        return max(table, targetColumn, "");
+    }
+
+    public final int sum(String table, String targetColumn, String whereClause, String... whereArgs) {
+        return executeIntFunc("sum", table, targetColumn, whereClause, whereArgs);
+    }
+
+    public final int sum(String table, String targetColumn) {
+        return sum(table, targetColumn, "");
+    }
+
+    public final int count(String table, String whereClause, String... whereArgs) {
+        return executeIntFunc("count", table, "*", whereClause, whereArgs);
+    }
+
+    public final int count(String table) {
+        return count(table, "");
+    }
+
+    private int executeIntFunc(String funcName, String table, String targetColumn, String whereClause, String... whereArgs) {
+        String sql;
+        if (TextUtils.isEmpty(whereClause)) {
+            sql = TextUtils.concat("select ", funcName, "(", targetColumn, ") from ", table).toString();
+        } else {
+            sql = TextUtils.concat("select ", funcName, "(", targetColumn, ") from ", table, " where ", whereClause).toString();
+        }
         SQLiteDatabase db = getReadableDatabase();
         try (Cursor cursor = db.rawQuery(sql, whereArgs)) {
-            if (!cursor.moveToNext()) {
-                throw new SQLiteException("no data max from " + table + " where " + whereClause + " with " + Arrays.toString(whereArgs));
+            if (cursor.moveToFirst()) {
+                return cursor.getInt(0);
+            } else {
+                throw new SQLiteException("no data from sql:" + sql);
             }
-            return cursor.getInt(0);
         }
     }
+
 
     public final boolean isExist(String table, String whereClause, String... whereArgs) {
         String sql = TextUtils.concat("select * from ", table, " where ", whereClause).toString();

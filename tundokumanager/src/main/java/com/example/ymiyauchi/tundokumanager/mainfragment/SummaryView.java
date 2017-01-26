@@ -1,6 +1,5 @@
 package com.example.ymiyauchi.tundokumanager.mainfragment;
 
-import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
@@ -10,6 +9,7 @@ import com.example.ymiyauchi.tundokumanager.R;
 import com.example.ymiyauchi.tundokumanager.Type;
 import com.example.ymiyauchi.mylibrary.AndroidDatabase;
 import com.example.ymiyauchi.mylibrary.view.manager.TextViewManager;
+import com.example.ymiyauchi.tundokumanager.database.ItemColumns;
 
 /**
  * Created by ymiyauchi on 2017/01/07.
@@ -17,7 +17,7 @@ import com.example.ymiyauchi.mylibrary.view.manager.TextViewManager;
  * 集計部分
  */
 
-public class SummaryView {
+class SummaryView {
     private final Type mType;
     private final Fragment mFragment;
     private final TextViewManager mTextViewManager;
@@ -42,32 +42,19 @@ public class SummaryView {
     /**
      * データベースから読み出した最新の結果を用いて、集計を更新します
      */
-    public void build() {
+    void build() {
         TextViewManager textViewManager = mTextViewManager;
         try (AndroidDatabase db = new BasicDatabase(mFragment.getActivity())) {
             String table = mType.table();
 
-            Cursor sumCursor = db.query("select sum(price) as sum from " + table);
-            if (sumCursor.moveToNext()) {
-                textViewManager.setText(R.id.txt_sum, db.getInt("sum"));
-            }
+            int sum = db.sum(table, ItemColumns.PRICE.getName());
+            textViewManager.setText(R.id.txt_sum, sum);
 
-            Cursor lossCursor = db.query("select sum(price) as loss from " + table + " where played == ?", mType.playedText(false));
-            if (lossCursor.moveToNext()) {
-                textViewManager.setText(R.id.txt_getloss, db.getInt("loss"));
-            }
+            int loss = db.sum(table, ItemColumns.PRICE.getName(), ItemColumns.PLAYED.getName() + "=?", mType.playedText(false));
+            textViewManager.setText(R.id.txt_getloss, loss);
 
-            db.query("select count(*) as num from " + table + " where played == ?", mType.playedText(false));
-            int yetNum = 0;
-            if (db.next()) {
-                yetNum = db.getInt("num");
-            }
-
-            db.query("select count(*) as count from " + table);
-            int all = 0;
-            if (db.next()) {
-                all = db.getInt("count");
-            }
+            int yetNum = db.count(table, ItemColumns.PLAYED + "=?", mType.playedText(false));
+            int all = db.count(table);
 
             int rate = all == 0 ? 100 : (int) ((double) yetNum / all * 100);
             textViewManager.setTextFromRes(R.id.rate, R.string.rate, yetNum, all, rate);

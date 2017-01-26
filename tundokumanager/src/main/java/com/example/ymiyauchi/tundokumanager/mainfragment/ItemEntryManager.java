@@ -74,7 +74,7 @@ public class ItemEntryManager {
         values.put(HistoryColumns.BASIC_ID.getName(), id);
         values.put(HistoryColumns.TODAY_PAGE.getName(), data.getCurrent());  // 未読なら０、既読ならcapacityが登録される
         values.put(HistoryColumns.CUMULATIVE_PAGE.getName(), data.getCurrent());
-        values.put(HistoryColumns.DATE.getName(), DateTime.now().formatTo(DateTime.SQLITE_DATE_FORMAT));
+        values.put(HistoryColumns.DATE.getName(), data.getDateForDB());
         db.insert(mType.historyTable(), values);
     }
 
@@ -167,7 +167,7 @@ public class ItemEntryManager {
                 id, Integer.toString(cumulativePage));
 
         // 削除した以前のデータで累積ページ数が最大のものを取得(上の例では1/2。今回の累積ページとの差が再登録の日に読んだ分)
-        int maxCumulative = db.max(mType.historyTable(), "cumulative_page", "basic_id=?", id);
+        int maxCumulative = db.max(mType.historyTable(), HistoryColumns.CUMULATIVE_PAGE.getName(), HistoryColumns.BASIC_ID.getName() + "=?", id);
 
         int newPlayedPage = cumulativePage - maxCumulative;
         if (newPlayedPage == 0) {
@@ -224,7 +224,7 @@ public class ItemEntryManager {
 
         try (AndroidDatabase db = new BasicDatabase(mFragment.getActivity())) {
             db.delete(mType.table(), ItemColumns.ID.getName() + "=?", Long.toString(id));
-            db.delete(mType.historyTable(), "basic_id=?", Long.toString(id));
+            db.delete(mType.historyTable(), HistoryColumns.BASIC_ID.getName() + "=?", Long.toString(id));
         }
         mContainerManager.removeItem(data.getPosition());
 

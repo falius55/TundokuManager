@@ -177,4 +177,9 @@ public final class DateTime {
         result = 31 * result + mCalendar.hashCode();
         return result;
     }
+
+    @Override
+    public String toString() {
+        return format();
+    }
 }

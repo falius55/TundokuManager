@@ -24,7 +24,7 @@ enum Filter {
     },
     ONLY_NON_PLAY() {
         String where(Type type) {
-            return "where played == '" + type.playedText(false) + "'";
+            return "played == '" + type.playedText(false) + "'";
         }
 
         String label(Type type) {
@@ -33,7 +33,7 @@ enum Filter {
     },
     ONLY_PLAYED() {
         String where(Type type) {
-            return "where played == '" + type.playedText(true) + "'";
+            return "played == '" + type.playedText(true) + "'";
         }
 
         String label(Type type) {

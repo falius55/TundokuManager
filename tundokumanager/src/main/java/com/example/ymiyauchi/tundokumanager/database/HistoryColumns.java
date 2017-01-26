@@ -3,11 +3,13 @@ package com.example.ymiyauchi.tundokumanager.database;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
 
+import com.example.ymiyauchi.mylibrary.DatabaseColumns;
+
 /**
  * Created by ymiyauchi on 2017/01/22.
  */
 
-public enum HistoryColumns {
+public enum HistoryColumns implements DatabaseColumns {
     ID(BaseColumns._ID, "integer", "primary key"),
     DATE("date", "date", "not null"),
     TODAY_PAGE("today_page", "integer", "not null default 0"),
@@ -24,6 +26,7 @@ public enum HistoryColumns {
         this.options = options;
     }
 
+    @Override
     public String getName() {
         return name;
     }

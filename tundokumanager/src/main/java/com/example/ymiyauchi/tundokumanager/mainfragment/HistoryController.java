@@ -11,6 +11,8 @@ import com.example.ymiyauchi.tundokumanager.data.DataConverter;
 import com.example.ymiyauchi.tundokumanager.database.BasicDatabase;
 import com.example.ymiyauchi.tundokumanager.database.HistoryColumns;
 
+import java.util.Objects;
+
 /**
  * Created by ymiyauchi on 2017/01/25.
  */
@@ -25,6 +27,7 @@ public class HistoryController {
     }
 
     public void updateHistoryCumulativePlayed(DataConverter data, DateTime modifyDate, int newCumulativePlayed) {
+        // 増分の計算が主目的
         try (AndroidDatabase db = new BasicDatabase(mFragment.getActivity())) {
             SQLiteDatabase sdb = db.beginTransaction();
             try {
@@ -160,7 +163,7 @@ public class HistoryController {
             int newCumulativePlayed = oldCumulativePlayed + delta;
 
             if (newTodayPlayed > 0
-                    || (newTodayPlayed == 0 && !db.isExist(mType.historyTable(), "basic_id=? and date <?", id, modifyDay))) {
+                    || Objects.equals(modifyDay, data.getDateForDB())) {
                 ContentValues values = new ContentValues();
                 values.put(HistoryColumns.DATE.getName(), modifyDay);
                 values.put(HistoryColumns.TODAY_PAGE.getName(), newTodayPlayed);
@@ -185,7 +188,11 @@ public class HistoryController {
             if (newTodayPlayed < 0) {
                 db.delete(mType.historyTable(), "basic_id=? and date=?", id, modifyDay);
                 // 修正日より前の操作
-                db.query("select * from " + mType.historyTable() + " where basic_id=? and date < ? order by date desc", id, modifyDay);
+//                db.query("select * from " + mType.historyTable() + " where basic_id=? and date < ? order by date desc", id, modifyDay);
+                db.selectWithOrder(mType.historyTable(),
+                        HistoryColumns.values(),
+                        /* order by */ HistoryColumns.DATE.getName() + " desc",
+                        /* where */ HistoryColumns.BASIC_ID.getName() + "=? and " + HistoryColumns.DATE.getName() + " < ?", id, modifyDay);
                 int prevDelta = newTodayPlayed;
                 while (true) {
                     if (db.next()) {
@@ -216,7 +223,11 @@ public class HistoryController {
         }
 
         // 修正日より後ろの操作
-        db.query("select * from " + mType.historyTable() + " where basic_id=? and date > ? order by date", id, modifyDay);
+//        db.query("select * from " + mType.historyTable() + " where basic_id=? and date > ? order by date", id, modifyDay);
+        db.selectWithOrder(mType.historyTable(),
+                HistoryColumns.values(),
+                HistoryColumns.DATE.getName(),
+                HistoryColumns.BASIC_ID.getName() + "=? and " + HistoryColumns.DATE.getName() + " > ?", id, modifyDay);
         int nextDelta = -delta;
         while (db.next()) {
             int nextId = db.getInt(HistoryColumns.ID.getName());

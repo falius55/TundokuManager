@@ -3,6 +3,7 @@ package com.example.ymiyauchi.tundokumanager.database;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
 
+import com.example.ymiyauchi.mylibrary.DatabaseColumns;
 import com.example.ymiyauchi.tundokumanager.Type;
 
 /**
@@ -11,7 +12,7 @@ import com.example.ymiyauchi.tundokumanager.Type;
  * データベースの列を表す列挙
  */
 
-public enum ItemColumns {
+public enum ItemColumns implements DatabaseColumns {
     ID(BaseColumns._ID, "integer", "primary key"),
     NAME("name", "text", "not null"),
     PRICE("price", "integer", "not null default 0 check(price >= 0)"),
@@ -39,6 +40,7 @@ public enum ItemColumns {
         this.options = options;
     }
 
+    @Override
     public String getName() {
         return name;
     }

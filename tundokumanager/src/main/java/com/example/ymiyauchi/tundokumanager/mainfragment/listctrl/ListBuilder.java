@@ -7,14 +7,16 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.ymiyauchi.tundokumanager.database.BasicDatabase;
-import com.example.ymiyauchi.tundokumanager.R;
 import com.example.ymiyauchi.tundokumanager.Type;
 import com.example.ymiyauchi.tundokumanager.data.DataConverter;
 import com.example.ymiyauchi.tundokumanager.data.ListItemDataConverter;
 import com.example.ymiyauchi.tundokumanager.data.MutableDataConverter;
+import com.example.ymiyauchi.tundokumanager.database.ItemColumns;
 import com.example.ymiyauchi.tundokumanager.mainfragment.ItemEntryManager;
 import com.example.ymiyauchi.mylibrary.AndroidDatabase;
 import com.example.ymiyauchi.mylibrary.view.manager.ContainerManager;
+
+import java.util.Locale;
 
 /**
  * Created by ymiyauchi on 2017/01/19.
@@ -50,8 +52,15 @@ public class ListBuilder {
         Type type = mType;
         try (AndroidDatabase db = new BasicDatabase(mFragment.getActivity().getApplicationContext())) {
             String table = type.table();
-            String sql = mFragment.getString(R.string.sql_build, table, filter.where(type), sort.orderBy());
-            Cursor cursor = db.query(sql);
+//            String sql = mFragment.getString(R.string.sql_build, table, filter.where(type), sort.orderBy());
+            String dateColumn = String.format(Locale.JAPAN, "strftime('%%Y/%%m/%%d', %s) as date", ItemColumns.DATE.getName());
+            String daysColumn = String.format("\'購入から\' || cast(julianday(\'now\') - julianday(%s) as int) || \'日経過\' as days", ItemColumns.DATE.getName());
+            Cursor cursor = db.selectWithOrder(table,
+                    new String[]{
+                            ItemColumns.ID.getName(), dateColumn, ItemColumns.NAME.getName(), ItemColumns.PLAYED.getName(),
+                            ItemColumns.CURRENT.getName(), ItemColumns.CAPACITY.getName(), daysColumn,
+                            ItemColumns.PRICE.getName(), ItemColumns.MEMO.getName()}, sort.orderBy(), filter.where(type));
+            // select _id, strftime(\'%%Y/%%m/%%d\', date) as date, name, played, current, capacity, \'購入から\' || cast(julianday(\'now\') - julianday(date) as int) || \'日経過\' as days, price, memo from %1$s %2$s %3$s
             containerManager.addAllItem(cursor, 1, 2, 3, 4, 5, 6, 7, 8);
         }
     }

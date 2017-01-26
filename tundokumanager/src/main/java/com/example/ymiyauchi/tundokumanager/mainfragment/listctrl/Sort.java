@@ -14,19 +14,19 @@ enum Sort {
     DEFAULT("登録順") {
         @Override
         String orderBy() {
-            return "order by _id desc";
+            return "_id desc";
         }
     },
     DATE("購入日順") {
         @Override
         String orderBy() {
-            return "order by date desc";
+            return "date desc";
         }
     },
     PRICE("価格順") {
         @Override
         String orderBy() {
-            return "order by price desc";
+            return "price desc";
         }
     };
 
