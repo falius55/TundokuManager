@@ -48,9 +48,10 @@ class Conductor {
         Type type = mData.getType();
         int position = mData.getPosition();
 
+        RadioGroup rd = (RadioGroup) activity.findViewById(R.id.rdgroup);
+        DataConverter inputDataConverter = new InputDataConverter(mData.getId(), mData.getPosition(), mData.getType(), textViewManager, rd, mData.getCurrent());
         textViewManager.setOnClickListener(R.id.btnEntry,
-                new EntryButtonClickListener(
-                        activity, textViewManager, type, mData.getId(), position, mWhereFrom.getEntryResult().getCode()
+                new EntryButtonClickListener(activity, inputDataConverter, mWhereFrom.getEntryResult().getCode()
                 )
         );
 
@@ -86,8 +87,9 @@ class Conductor {
 
     void onSaveInstanceState(Bundle outState) {
         RadioGroup rd = (RadioGroup) mActivity.findViewById(R.id.rdgroup);
-        DataConverter inputData = new InputDataConverter(mData.getPosition(), mData.getType(), mTextViewManager, rd);
-        inputData.stuffInto(outState);
+        DataConverter inputDataConverter
+                = new InputDataConverter(mData.getId(), mData.getPosition(), mData.getType(), mTextViewManager, rd, mData.getCurrent());
+        inputDataConverter.stuffInto(outState);
     }
 
     void onRestoreInstanceState(Bundle savedInstanceState) {

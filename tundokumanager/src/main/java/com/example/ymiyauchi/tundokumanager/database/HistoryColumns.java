@@ -13,7 +13,6 @@ public enum HistoryColumns implements DatabaseColumns {
     ID(BaseColumns._ID, "integer", "primary key"),
     DATE("date", "date", "not null"),
     TODAY_PAGE("today_page", "integer", "not null default 0"),
-    CUMULATIVE_PAGE("cumulative_page", "integer", "not null default 0"),  // 累積ページ数
     BASIC_ID("basic_id", "integer", "not null");
 
     private final String name;

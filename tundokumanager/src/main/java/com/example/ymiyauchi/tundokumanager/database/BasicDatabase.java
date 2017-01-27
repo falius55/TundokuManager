@@ -14,7 +14,7 @@ import com.example.ymiyauchi.mylibrary.AndroidDatabase;
 
 public class BasicDatabase extends AndroidDatabase {
     private final static String DATABASE_NAME = "TundokuManager";
-    private final static int VERSION = 10;
+    private final static int VERSION = 11;
 
     public BasicDatabase(Context context) {
         super(context, DATABASE_NAME, VERSION);
@@ -43,7 +43,6 @@ public class BasicDatabase extends AndroidDatabase {
                     HistoryColumns.ID.toColumnString(),
                     HistoryColumns.DATE.toColumnString(),
                     HistoryColumns.TODAY_PAGE.toColumnString(),
-                    HistoryColumns.CUMULATIVE_PAGE.toColumnString(),
                     HistoryColumns.BASIC_ID.toColumnString()
             );
         }

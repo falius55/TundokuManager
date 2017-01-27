@@ -1,12 +1,10 @@
 package com.example.ymiyauchi.tundokumanager.mainfragment;
 
-import android.content.ContentValues;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import com.example.ymiyauchi.tundokumanager.database.BasicDatabase;
 import com.example.ymiyauchi.tundokumanager.database.ItemColumns;
-import com.example.ymiyauchi.tundokumanager.database.HistoryColumns;
 import com.example.ymiyauchi.tundokumanager.data.DataConverter;
 import com.example.ymiyauchi.tundokumanager.R;
 import com.example.ymiyauchi.tundokumanager.data.ListItemDataConverter;
@@ -14,7 +12,6 @@ import com.example.ymiyauchi.tundokumanager.Type;
 import com.example.ymiyauchi.tundokumanager.mainfragment.listctrl.ListBuilder;
 import com.example.ymiyauchi.tundokumanager.mainfragment.listctrl.SortFilter;
 import com.example.ymiyauchi.mylibrary.AndroidDatabase;
-import com.example.ymiyauchi.mylibrary.DateTime;
 import com.example.ymiyauchi.mylibrary.view.manager.ContainerManager;
 
 /**
@@ -82,7 +79,7 @@ public class ItemEntryManager {
                     ItemColumns.ID.getName() + "=?", Long.toString(id));
         }
 
-        mHistoryController.updateHistoryCumulativePlayed(newData, DateTime.now(), curData.getCurrent());
+        mHistoryController.onUpdateItem(newData);
         mSummaryView.build();
     }
 

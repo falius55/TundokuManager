@@ -2,7 +2,6 @@ package com.example.ymiyauchi.tundokumanager;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
@@ -101,10 +100,13 @@ public class ChartDialogFragment extends DialogFragment {
 
     private void loadEntries(DataConverter data) {
         try (AndroidDatabase db = new BasicDatabase(getActivity())) {
-            Cursor cursor = db.selectWithOrder(data.getType().historyTable(),
+            db.selectWithOrder(data.getType().historyTable(),
                     HistoryColumns.values(),
-                    /* order by */ HistoryColumns.CUMULATIVE_PAGE.getName(),
+                    /* order by */ HistoryColumns.DATE.getName(),
                     /* where */ HistoryColumns.BASIC_ID.getName() + "=?", Long.toString(data.getId()));
+            if (!db.next()) {
+                throw new IllegalStateException();
+            }
 
             mLabels.clear();
             mBarEntries.clear();
@@ -113,42 +115,39 @@ public class ChartDialogFragment extends DialogFragment {
             List<BarEntry> barEntries = mBarEntries;
             List<Entry> lineEntries = mLineEntries;
 
-            // データベースに保存されている日付の最初の日から始まり、データのない日も値を格納していく
+            // 購入日から始まり、データのない日も値を格納していく
             // データのない日は当日分は０、累計はその前日の値をそのまま受け継ぐ
             // cursorDateと一致するまでdateを更新していき、一致するとcursorDateも更新して続ける(cursorDateが更新できなくなるまで)
             // するとカーソルの最初日から最終日までdateが逐次更新される
-            boolean isLoop = cursor.moveToNext();
-            DateTime date;
-            DateTime cursorDate;
-            if (isLoop) {
-                date = DateTime.newInstance(db.getString(HistoryColumns.DATE.getName()), DateTime.SQLITE_DATE_FORMAT);
-            } else {
-                throw new IllegalStateException("no history data");
+            DateTime firstDate = DateTime.newInstance(data.getDate());
+            DateTime endDate = DateTime.now().nextDay();
+            DateTime date = firstDate;
+            DateTime cursorDate = DateTime.newInstance(db.getString(HistoryColumns.DATE.getName()), DateTime.SQLITE_DATE_FORMAT);
+            if (firstDate.compareTo(cursorDate) > 0) {
+                // 購入日以前のデータが存在するとdateとcursorDateが一致しなくなり、無限ループに陥るため例外送出
+                throw new IllegalStateException("firstData:" + firstDate + ", cursorDate:" + cursorDate);
             }
             int cumulativePage = 0;
-
-            for (int i = 0; isLoop; i++, date = date.nextDay()) {
-                cursorDate = DateTime.newInstance(db.getString(HistoryColumns.DATE.getName()), DateTime.SQLITE_DATE_FORMAT);
+            for (int i = 0; !date.equals(endDate); i++, date = date.nextDay()) {
                 labels.add(date.format());
-
                 if (date.equals(cursorDate)) {
                     int todayPage = db.getInt(HistoryColumns.TODAY_PAGE.getName());
                     BarEntry barEntry = new BarEntry(todayPage, i);
                     barEntries.add(barEntry);
 
-                    cumulativePage = db.getInt(HistoryColumns.CUMULATIVE_PAGE.getName());
+                    cumulativePage += todayPage;
                     Entry entry = new Entry(cumulativePage, i);
                     lineEntries.add(entry);
+
+                    if (db.next()) {
+                        cursorDate = DateTime.newInstance(db.getString(HistoryColumns.DATE.getName()), DateTime.SQLITE_DATE_FORMAT);
+                    }
                 } else {
                     BarEntry barEntry = new BarEntry(0, i);
                     barEntries.add(barEntry);
 
                     Entry entry = new Entry(cumulativePage, i);
                     lineEntries.add(entry);
-                }
-
-                if (date.equals(cursorDate)) {
-                    isLoop = cursor.moveToNext();
                 }
             }
 

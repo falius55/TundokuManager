@@ -64,4 +64,6 @@
     <string name="graph_refrection">反映</string>
     <string name="left">←</string>
     <string name="btn_right">→</string>
+    <string name="day_before">前日</string>
+    <string name="day_after">翌日</string>
 </resources>

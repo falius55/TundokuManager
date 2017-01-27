@@ -8,35 +8,42 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <Button
-            android:text="@string/left"
+            android:text="@string/day_before"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btn_yesterday"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textSize="8sp"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:padding="2dp"/>
 
         <TextView
             android:id="@+id/txt_graph_date"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/context_graph"
             android:layout_weight="1"/>
 
         <Button
-            android:text="@string/btn_right"
+            android:text="@string/day_after"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btn_tomorrow"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:textSize="8sp"
+            style="@style/Widget.AppCompat.Button.Small"
+            android:padding="2dp"/>
 
         <Button
             android:text="@string/graph_refrection"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btn_reflect"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:layout_gravity="right|end"/>
     </LinearLayout>
 
     <TableLayout
@@ -65,34 +72,10 @@
             <SeekBar
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/seekbar_result_day"/>
+                android:id="@+id/seekbar_result_day"
+                style="@style/Widget.AppCompat.SeekBar"/>
         </TableRow>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:text="@string/result_cumulative"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/textView5"/>
-
-            <TextView
-                android:text="@string/seekbar_value"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/txt_seekbar_cumulative"/>
-
-            <SeekBar
-                style="@style/Widget.AppCompat.SeekBar.Discrete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:max="10"
-                android:progress="3"
-                android:id="@+id/seekbar_result_cumulative"/>
-
-        </TableRow>
     </TableLayout>
 
     <com.github.mikephil.charting.charts.CombinedChart

@@ -18,18 +18,15 @@ public class InputDataConverter extends AbstractDataConverter {
     private final TextViewManager mTextViewManager;
     private final RadioGroup mRadioGroup;
     private final long mId;
+    private final int mCurrent;
 
     public InputDataConverter(
-            long id, int position, Type type, TextViewManager textViewManager, RadioGroup radioGroup) {
+            long id, int position, Type type, TextViewManager textViewManager, RadioGroup radioGroup, int current) {
         super(type, position);
         mId = id;
         mTextViewManager = textViewManager;
         mRadioGroup = radioGroup;
-    }
-
-    public InputDataConverter(
-            int position, Type type, TextViewManager textViewManager, RadioGroup radioGroup) {
-        this(-1, position, type, textViewManager, radioGroup);
+        mCurrent = current;
     }
 
     @Override
@@ -59,7 +56,7 @@ public class InputDataConverter extends AbstractDataConverter {
 
     @Override
     public int getCurrent() {
-        return isPlayed() ? getCapacity() : 0;
+        return isPlayed() ? getCapacity() : mCurrent;
     }
 
     @Override

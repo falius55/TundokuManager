@@ -6,10 +6,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ymiyauchi.mylibrary.DateTime;
 import com.example.ymiyauchi.tundokumanager.data.DataConverter;
+import com.example.ymiyauchi.tundokumanager.data.MutableDataConverter;
 import com.example.ymiyauchi.tundokumanager.mainfragment.HistoryController;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
@@ -22,22 +22,19 @@ import java.util.List;
  * Created by ymiyauchi on 2017/01/26.
  */
 
-public class ResultChanger implements OnChartValueSelectedListener, View.OnClickListener {
-    private final DataConverter mItemData;
+class ResultChanger implements OnChartValueSelectedListener, View.OnClickListener {
     private final List<String> mLabels;
     private final List<BarEntry> mBarEntries;
     private final List<Entry> mLineEntries;
+    private DataConverter mItemData;
 
     private final TextView mDateText;
     private final SeekBar mDaySeekBar;
-    private final SeekBar mCumulativeSeekBar;
     private final ChartDialogFragment mFragment;
 
     private final HistoryController mHistoryController;
 
-    private DateTime mSelectedDate;
-
-    public ResultChanger(ChartDialogFragment fragment, View layout, DataConverter itemData, List<String> labels, List<BarEntry> barEntries, List<Entry> lineEntries) {
+    ResultChanger(ChartDialogFragment fragment, View layout, DataConverter itemData, List<String> labels, List<BarEntry> barEntries, List<Entry> lineEntries) {
         mFragment = fragment;
         mItemData = itemData;
         mLabels = labels;
@@ -46,27 +43,21 @@ public class ResultChanger implements OnChartValueSelectedListener, View.OnClick
 
         mDateText = (TextView) layout.findViewById(R.id.txt_graph_date);
         mDaySeekBar = (SeekBar) layout.findViewById(R.id.seekbar_result_day);
-        mCumulativeSeekBar = (SeekBar) layout.findViewById(R.id.seekbar_result_cumulative);
 
         mHistoryController = new HistoryController(fragment, itemData.getType());
         init(layout);
     }
 
     private void init(View layout) {
-        mCumulativeSeekBar.setMax(mItemData.getCapacity());
-        mDateText.setText(mLabels.get(mLabels.size() - 1));
+        int lastIndex = mBarEntries.size() - 1;
+        mDateText.setText(mLabels.get(lastIndex));
 
-        TextChanger dayTextChanger = new TextChanger(mFragment, layout, R.id.txt_seekbar_day, mCumulativeSeekBar);
-        mDaySeekBar.setOnSeekBarChangeListener(dayTextChanger);
+        ProgressTextChanger dayProgressTextChanger = new ProgressTextChanger(mFragment, layout, R.id.txt_seekbar_day);
+        mDaySeekBar.setOnSeekBarChangeListener(dayProgressTextChanger);
         int lastDayResult = (int) mBarEntries.get(mBarEntries.size() - 1).getVal();
-        dayTextChanger.onProgressChanged(mDaySeekBar, lastDayResult, false);
-        mDaySeekBar.setEnabled(false);
+        dayProgressTextChanger.onProgressChanged(mDaySeekBar, lastDayResult, false);
 
-        TextChanger cumulativeTextChanger = new TextChanger(mFragment, layout, R.id.txt_seekbar_cumulative, mDaySeekBar);
-        mCumulativeSeekBar.setOnSeekBarChangeListener(cumulativeTextChanger);
-        int lastCumulativeResult = (int) mLineEntries.get(mLineEntries.size() - 1).getVal();
-        cumulativeTextChanger.onProgressChanged(mCumulativeSeekBar, lastCumulativeResult, false);
-        mCumulativeSeekBar.setEnabled(false);
+        setSeekBar();
 
         Button btnYesterday = (Button) layout.findViewById(R.id.btn_yesterday);
         btnYesterday.setOnClickListener(new View.OnClickListener() {
@@ -74,10 +65,11 @@ public class ResultChanger implements OnChartValueSelectedListener, View.OnClick
             public void onClick(View view) {
                 DateTime currentDate = DateTime.newInstance(mDateText.getText().toString());
                 String prevDay = currentDate.prevDay().format();
-                int index = mLabels.indexOf(prevDay);
-                // FIXME: もしグラフにない日付が選ばれるとIndexOutOfBoundsExceptionが発生する
-                onValueSelected(mBarEntries.get(index), 0, null);
+                if (currentDate.format().equals(mItemData.getDate())) {
+                    return;
+                }
                 mDateText.setText(prevDay);
+                setSeekBar();
             }
         });
         Button btnTomorrow = (Button) layout.findViewById(R.id.btn_tomorrow);
@@ -85,10 +77,13 @@ public class ResultChanger implements OnChartValueSelectedListener, View.OnClick
             @Override
             public void onClick(View view) {
                 DateTime currentDate = DateTime.newInstance(mDateText.getText().toString());
-                String nextDay = currentDate.nextDay().format();
-                int index = mLabels.indexOf(nextDay);
-                onValueSelected(mBarEntries.get(index), 0, null);
-                mDateText.setText(nextDay);
+                DateTime today = DateTime.now();
+                DateTime nextDay = currentDate.nextDay();
+                if (nextDay.compareTo(today) > 0) {
+                    return;
+                }
+                mDateText.setText(nextDay.format());
+                setSeekBar();
             }
         });
     }
@@ -101,56 +96,71 @@ public class ResultChanger implements OnChartValueSelectedListener, View.OnClick
     @Override
     public void onValueSelected(Entry e, int dataSetIndex, Highlight h) {
         int index = e.getXIndex();
-        mSelectedDate = DateTime.newInstance(mLabels.get(index));
-        int resultDay = (int) mBarEntries.get(index).getVal();
-        int resultCumulative = (int) mLineEntries.get(index).getVal();
-        int cumulativeOfDayBeforeSelected = index == 0 ? 0 : (int) mLineEntries.get(index - 1).getVal();
-        int dayLimit = mItemData.getCapacity() - cumulativeOfDayBeforeSelected;
 
-        mDateText.setText(mSelectedDate.format());
+        DateTime selectedDate = DateTime.newInstance(mLabels.get(index));
+        mDateText.setText(selectedDate.format());
 
-        mDaySeekBar.setMax(dayLimit);
-
-        mDaySeekBar.setProgress(resultDay);
-        mCumulativeSeekBar.setProgress(resultCumulative);
-
-        mDaySeekBar.setEnabled(true);
-        mCumulativeSeekBar.setEnabled(true);
+        setSeekBar();
     }
 
     @Override
     public void onNothingSelected() {
-        mDaySeekBar.setEnabled(false);
-        mCumulativeSeekBar.setEnabled(false);
-        mSelectedDate = null;
+    }
+
+    private void setSeekBar() {
+        DateTime currentDate = DateTime.newInstance(mDateText.getText().toString());
+        DateTime firstDate = DateTime.newInstance(mLabels.get(0));
+        if (currentDate.compareTo(firstDate) < 0) {
+            return;
+        }
+
+        int dataIndex = mLabels.indexOf(currentDate.format());
+        boolean isExistData = dataIndex != -1 && dataIndex < mBarEntries.size();
+        if (isExistData) {
+            int resultDay = (int) mBarEntries.get(dataIndex).getVal();
+            int cumulativeOfDayBeforeSelected = dataIndex == 0 ? 0 : (int) mLineEntries.get(dataIndex - 1).getVal();
+            int dayLimit = mItemData.getCapacity() - cumulativeOfDayBeforeSelected;
+
+            mDaySeekBar.setMax(dayLimit);
+            mDaySeekBar.setProgress(resultDay);
+        } else {
+            int resultDay = 0;
+            int lastDateIndex = mLineEntries.size() - 1;
+            int cumulativeOfDayBeforeSelected = (int) mLineEntries.get(lastDateIndex).getVal();
+            int dayLimit = mItemData.getCapacity() - cumulativeOfDayBeforeSelected;
+
+            mDaySeekBar.setMax(dayLimit);
+            mDaySeekBar.setProgress(resultDay);
+        }
     }
 
     @Override
     public void onClick(View view) {
-        if (mSelectedDate == null) {
-            return;
-        }
+        DateTime selectedDate = DateTime.newInstance(mDateText.getText().toString());
 
         int dayProgress = mDaySeekBar.getProgress();
-        if (dayProgress == 0) {
-            mHistoryController.updateHistoryCumulativePlayed(mItemData, mSelectedDate, mCumulativeSeekBar.getProgress());
-        } else {
-            mHistoryController.updateHistoryTodayPlayed(mItemData, mSelectedDate, dayProgress);
-        }
+        mHistoryController.updateDayResult(mItemData, selectedDate, dayProgress);
+
         mFragment.reload();
+
+        int lastCumulative = (int) mLineEntries.get(mLineEntries.size() - 1).getVal();
+        if (lastCumulative != mItemData.getCurrent()) {
+            DataConverter newData = new MutableDataConverter(mItemData)
+                    .putCurrent(lastCumulative).putPlayed(lastCumulative == mItemData.getCapacity());
+            MainActivity mainActivity = (MainActivity) mFragment.getActivity();
+            mainActivity.onDialogLeaved(newData);
+            mItemData = newData;
+        }
     }
 
 
-    private static class TextChanger implements SeekBar.OnSeekBarChangeListener {
+    private static class ProgressTextChanger implements SeekBar.OnSeekBarChangeListener {
         private final Fragment mFragment;
         private final TextView mCurValText;
-        private final SeekBar mAnotherSeekBar;
-        private int mMemory = 0;
 
-        TextChanger(Fragment fragment, View layout, @IdRes int textViewRes, SeekBar anotherSeekBar) {
+        ProgressTextChanger(Fragment fragment, View layout, @IdRes int textViewRes) {
             mFragment = fragment;
             mCurValText = (TextView) layout.findViewById(textViewRes);
-            mAnotherSeekBar = anotherSeekBar;
         }
 
         @Override
@@ -161,14 +171,10 @@ public class ResultChanger implements OnChartValueSelectedListener, View.OnClick
 
         @Override
         public void onStartTrackingTouch(SeekBar seekBar) {
-            mMemory = seekBar.getProgress();
         }
 
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {
-            int delta = seekBar.getProgress() - mMemory;
-            mMemory = seekBar.getProgress();
-            mAnotherSeekBar.setProgress(mAnotherSeekBar.getProgress() + delta);
         }
     }
 }

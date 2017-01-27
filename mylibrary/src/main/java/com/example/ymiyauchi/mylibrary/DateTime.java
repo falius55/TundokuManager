@@ -176,13 +176,13 @@ public final class DateTime implements Comparable<DateTime> {
     @Override
     public boolean equals(Object obj) {
         return obj instanceof DateTime
-                && mCalendar.equals(((DateTime) obj).mCalendar);
+                && format().equals(((DateTime) obj).format());
     }
 
     @Override
     public int hashCode() {
         int result = 17;
-        result = 31 * result + mCalendar.hashCode();
+        result = 31 * result + format().hashCode();
         return result;
     }
 

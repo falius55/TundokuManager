@@ -1,7 +1,6 @@
 package com.example.ymiyauchi.tundokumanager.mainfragment;
 
 import android.content.ContentValues;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.app.Fragment;
 
 import com.example.ymiyauchi.mylibrary.AndroidDatabase;
@@ -11,7 +10,6 @@ import com.example.ymiyauchi.tundokumanager.data.DataConverter;
 import com.example.ymiyauchi.tundokumanager.database.BasicDatabase;
 import com.example.ymiyauchi.tundokumanager.database.HistoryColumns;
 
-import java.util.Objects;
 
 /**
  * Created by ymiyauchi on 2017/01/25.
@@ -26,7 +24,7 @@ public class HistoryController {
         mType = type;
     }
 
-    public void initHistory(long itemId, AndroidDatabase db, DataConverter data) {
+    void initHistory(long itemId, AndroidDatabase db, DataConverter data) {
         // 新規入力された場合のDataConverterにはまだIDがない(-1が返ってくる)ため、別途itemIdを受け取る必要がある
         if (!data.getType().hasProgress()) {
             return;
@@ -38,241 +36,101 @@ public class HistoryController {
         ContentValues values = new ContentValues();
         values.put(HistoryColumns.BASIC_ID.getName(), itemId);
         values.put(HistoryColumns.TODAY_PAGE.getName(), data.getCurrent());  // 未読なら０、既読ならcapacityが登録される
-        values.put(HistoryColumns.CUMULATIVE_PAGE.getName(), data.getCurrent());
         values.put(HistoryColumns.DATE.getName(), data.getDateForDB());
         db.insert(mType.historyTable(), values);
     }
 
-    public void deleteHistory(long itemId, AndroidDatabase db) {
+    void deleteHistory(long itemId, AndroidDatabase db) {
         db.delete(mType.historyTable(), HistoryColumns.BASIC_ID.getName() + "=?", Long.toString(itemId));
     }
 
-    /**
-     * 増分が0と計算されたら何もしない
-     *
-     * @param data
-     * @param modifyDate
-     * @param newCumulativePlayed
-     */
-    public void updateHistoryCumulativePlayed(DataConverter data, DateTime modifyDate, int newCumulativePlayed) {
-        // 増分の計算が主目的
+    public void updateDayResult(DataConverter itemData, DateTime modifyDate, int newDayResult) {
+        // 指定日の実績を指定された値に置き換え
         try (AndroidDatabase db = new BasicDatabase(mFragment.getActivity())) {
-            SQLiteDatabase sdb = db.beginTransaction();
-            try {
-                String id = Long.toString(data.getId());
-                String modifyDay = modifyDate.formatTo(DateTime.SQLITE_DATE_FORMAT);
-                db.selectAllColumn(mType.historyTable(), "basic_id=? and date=?", id, modifyDay);
-
-                if (db.next()) {
-                    int oldCumulative = db.getInt(HistoryColumns.CUMULATIVE_PAGE.getName());
-                    int delta = newCumulativePlayed - oldCumulative;
-                    if (delta == 0)
-                        return;
-                    updateHistoryRecord(db, data, modifyDate, delta);
-                } else {
-                    /*
-                    1/1 20 20
-                    1/3 30 50
-                    1/4 20 70
-                    の場合に1/2に新しい累計が40で実行された場合、
-                    1/1 20 20
-                    1/2 0  20  // この部分だけ先に挿入してしまう(他はいじらず)
-                    1/3 30 50
-                    1/4 20 70
-                    にいったんした上で、増分20でupdateHistoryRecord()を実行する
-                    すると、最終的には
-                    1/1 20 20
-                    1/2 20 40
-                    1/3 10 50
-                    1/4 20 70
-                    となる
-                     */
-                    int maxCumulative = db.max(mType.historyTable(), "cumulative_page", "basic_id=? and date < ?", id, modifyDay);
-                    int delta = newCumulativePlayed - maxCumulative;
-                    if (delta == 0)
-                        return;
-                    ContentValues values = new ContentValues();
-                    values.put(HistoryColumns.DATE.getName(), modifyDay);
-                    values.put(HistoryColumns.TODAY_PAGE.getName(), 0);
-                    values.put(HistoryColumns.CUMULATIVE_PAGE.getName(), maxCumulative);
-                    values.put(HistoryColumns.BASIC_ID.getName(), data.getId());
-                    db.insert(mType.historyTable(), values);
-                    updateHistoryRecord(db, data, modifyDate, delta);
-                }
-                sdb.setTransactionSuccessful();
-            } finally {
-                sdb.endTransaction();
-            }
-        }
-    }
-
-    public void updateHistoryTodayPlayed(DataConverter data, DateTime modifyDate, int newTodayPlayed) {
-        try (AndroidDatabase db = new BasicDatabase(mFragment.getActivity())) {
-            SQLiteDatabase sdb = db.beginTransaction();
-            try {
-                String id = Long.toString(data.getId());
-                String modifyDay = modifyDate.formatTo(DateTime.SQLITE_DATE_FORMAT);
-                db.selectAllColumn(mType.historyTable(), "basic_id=? and date=?", id, modifyDay);
-
-                if (db.next()) {
-                    int oldTodayPlayed = db.getInt(HistoryColumns.TODAY_PAGE.getName());
-                    int delta = newTodayPlayed - oldTodayPlayed;
-                    if (delta == 0)
-                        return;
-                    updateHistoryRecord(db, data, modifyDate, delta);
-                } else {
-                    /*
-                    1/1 20 20
-                    1/3 30 50
-                    1/4 20 70
-                    の場合に1/2に新しい当日分が15で実行された場合、
-                    1/1 20 20
-                    1/2 0  20  // この部分だけ先に挿入してしまう(他はいじらず)
-                    1/3 30 50
-                    1/4 20 70
-                    にいったんした上で、増分15でupdateHistoryRecord()を実行する
-                    すると、最終的には
-                    1/1 20 20
-                    1/2 15 35
-                    1/3 15 50
-                    1/4 20 70
-                    となる
-                     */
-                    int maxCumulative = db.max(mType.historyTable(), "cumulative_page", "basic_id=? and date < ?", id, modifyDay);
-                    int delta = newTodayPlayed;
-                    if (delta == 0)
-                        return;
-                    ContentValues values = new ContentValues();
-                    values.put(HistoryColumns.DATE.getName(), modifyDay);
-                    values.put(HistoryColumns.TODAY_PAGE.getName(), 0);
-                    values.put(HistoryColumns.CUMULATIVE_PAGE.getName(), maxCumulative);
-                    values.put(HistoryColumns.BASIC_ID.getName(), data.getId());
-                    db.insert(mType.historyTable(), values);
-                    updateHistoryRecord(db, data, modifyDate, delta);
-                }
-                sdb.setTransactionSuccessful();
-            } finally {
-                sdb.endTransaction();
-            }
-        }
-    }
-
-    private void updateHistoryRecord(AndroidDatabase db, DataConverter data, DateTime modifyDate, int delta) {
-        /*
-        1/1 20 20
-        1/2 15 35
-        1/3 40 75
-        1/4 35 110
-        から、1/2 の当日分を15 --> 30に増やしたとすると、
-        1/1 20 20
-        1/2 30 50  // 新しい数値の30と古い数値の15の差分である15がdeltaの値
-        1/3 25 75  // その次に当たるデータの当日分は逆にdelta分減る
-        1/4 35 110
-        となる
-        1/2の当日分を15 --> 60に増やしたとすると、
-        1/1 20 20
-        1/2 60 80
-                      // 1/3は40-delta(45) <= 0なので削除される
-        1/4 30 110  // 1/3の受けきれなかったマイナス分5をその次の1/4から引く(40-delta=-5)
-        となる
-         */
-        String id = Long.toString(data.getId());
-        String modifyDay = modifyDate.formatTo(DateTime.SQLITE_DATE_FORMAT);
-        db.selectAllColumn(mType.historyTable(), "basic_id=? and date=?", id, modifyDay);
-        db.next();
-
-        {
-            /*
-            上の例では、
-            1/2の当日と累積をともに15(delta)増やす部分(自身の操作)
-            自身の当日分がマイナスになれば自身より前の部分を操作する
-             */
-            int oldTodayPlayed = db.getInt(HistoryColumns.TODAY_PAGE.getName());
-            int oldCumulativePlayed = db.getInt(HistoryColumns.CUMULATIVE_PAGE.getName());
-            int newTodayPlayed = oldTodayPlayed + delta;
-            int newCumulativePlayed = oldCumulativePlayed + delta;
-
-            if (newTodayPlayed > 0
-                    || Objects.equals(modifyDay, data.getDateForDB())) {
+            String strItemId = Long.toString(itemData.getId());
+            String strModifyDay = modifyDate.formatTo(DateTime.SQLITE_DATE_FORMAT);
+            db.selectAllColumn(mType.historyTable(), "basic_id=? and date=?", strItemId, strModifyDay);
+            if (db.next()) {
+                int id = db.getInt(HistoryColumns.ID.getName());
                 ContentValues values = new ContentValues();
-                values.put(HistoryColumns.DATE.getName(), modifyDay);
-                values.put(HistoryColumns.TODAY_PAGE.getName(), newTodayPlayed);
-                values.put(HistoryColumns.CUMULATIVE_PAGE.getName(), newCumulativePlayed);
-                db.update(mType.historyTable(), values, "basic_id=? and date=?", id, modifyDay);
+                values.put(HistoryColumns.TODAY_PAGE.getName(), newDayResult);
+                db.update(mType.historyTable(), values, "_id=?", Integer.toString(id));
+            } else {
+                ContentValues values = new ContentValues();
+                values.put(HistoryColumns.TODAY_PAGE.getName(), newDayResult);
+                values.put(HistoryColumns.BASIC_ID.getName(), strItemId);
+                values.put(HistoryColumns.DATE.getName(), strModifyDay);
+                db.insert(mType.historyTable(), values);
             }
-            /*
-            1/1 20 20
-            1/2 30 50
-            1/3 25 75
-            1/4 15 90
-            のから、1/3の累積75 --> 40に減らしたとすると(delta=-35)、
-            1/1 20 20
-            1/2 20 40   // 25+delta(-35)=-10だけ食い込まれるので減らす
-            1/3         // 25 + delta(-35) <= 0なので削除(この値がnewTodayPlayed)
-            1/4 50 90   // 15 - delta(-35) = 50 (この部分は下部で実行)
-            となる
-             */
-            if (newTodayPlayed == 0) {
-                db.delete(mType.historyTable(), "basic_id=? and date=?", id, modifyDay);
-            }
-            if (newTodayPlayed < 0) {
-                db.delete(mType.historyTable(), "basic_id=? and date=?", id, modifyDay);
-                // 修正日より前の操作
-                db.selectWithOrder(mType.historyTable(),
-                        HistoryColumns.values(),
-                        /* order by */ HistoryColumns.DATE.getName() + " desc",
-                        /* where */ HistoryColumns.BASIC_ID.getName() + "=? and " + HistoryColumns.DATE.getName() + " < ?", id, modifyDay);
-                int prevDelta = newTodayPlayed;
-                while (true) {
-                    if (db.next()) {
-                        int prevId = db.getInt(HistoryColumns.ID.getName());
-                        int prevTodayPlayed = db.getInt(HistoryColumns.TODAY_PAGE.getName());
-                        int newPrevTodayPlayed = prevTodayPlayed + prevDelta;
-                        int prevCumulativePlayed = db.getInt(HistoryColumns.CUMULATIVE_PAGE.getName());
-                        int newPrevCumulativePlayed = prevCumulativePlayed + prevDelta;
 
-                        if (newPrevTodayPlayed > 0) {
-                            ContentValues values = new ContentValues();
-                            values.put(HistoryColumns.TODAY_PAGE.getName(), newPrevTodayPlayed);
-                            values.put(HistoryColumns.CUMULATIVE_PAGE.getName(), newPrevCumulativePlayed);
-                            db.update(mType.historyTable(), values, "_id=?", Integer.toString(prevId));
-                            break;
-                        } else if (newPrevTodayPlayed == 0) {
-                            db.delete(mType.historyTable(), "_id=?", Integer.toString(prevId));
-                            break;
-                        } else {
-                            db.delete(mType.historyTable(), "_id=?", Integer.toString(prevId));
-                            prevDelta = newPrevTodayPlayed;
-                        }
-                    } else {
-                        throw new IllegalStateException("new today played is minus");
-                    }
+            // 一日の実績を増やした結果容量を超えた場合の処理
+            // 新しい日付から減らしていく
+            int dayResultSum = db.sum(mType.historyTable(), HistoryColumns.TODAY_PAGE.getName(), "basic_id=?", strItemId);
+            if (dayResultSum > itemData.getCapacity()) {
+                decreaseCurrent(db, itemData.getId(), itemData.getCapacity());
+            }
+        }
+    }
+
+    void onUpdateItem(DataConverter itemData) {
+        try (AndroidDatabase db = new BasicDatabase(mFragment.getActivity())) {
+            String strItemId = Long.toString(itemData.getId());
+
+            // 購入日が変更されて、それ以前の日付でデータが存在した場合の処理
+            // 購入日以前の累計を購入日の実績に上乗せ
+            int cumulativeBefore = db.sum(mType.historyTable(), HistoryColumns.TODAY_PAGE.getName(),
+                    "basic_id=? and date < ?", strItemId, itemData.getDateForDB());
+            System.out.println("cumulative before:" + cumulativeBefore);
+            if (cumulativeBefore > 0) {
+                db.selectAllColumn(mType.historyTable(), "basic_id=? and date=?", strItemId, itemData.getDateForDB());
+                if (db.next()) {
+                    int buyDateResult = db.getInt(HistoryColumns.TODAY_PAGE.getName());
+                    updateDayResult(itemData, DateTime.newInstance(itemData.getDate()), buyDateResult + cumulativeBefore);
+                } else {
+                    updateDayResult(itemData, DateTime.newInstance(itemData.getDate()), cumulativeBefore);
                 }
+            }
+            db.delete(mType.historyTable(), "basic_id=? and date < ?", strItemId, itemData.getDateForDB());
+
+
+            // 増えた場合は今日の実績に加え(今日のデータがなければ新たに作る)
+            // 減った場合は日付が新しいものから実績を減らしていく
+            int newCurrent = itemData.getCurrent();
+            int oldCurrent = db.sum(mType.historyTable(), HistoryColumns.TODAY_PAGE.getName(), "basic_id=?", strItemId);
+            int delta = newCurrent - oldCurrent;
+            if (delta >= 0) {
+                String today = DateTime.now().formatTo(DateTime.SQLITE_DATE_FORMAT);
+                db.selectAllColumn(mType.historyTable(), "basic_id=? and date=?", strItemId, today);
+                if (db.next()) {
+                    updateDayResult(itemData, DateTime.now(), db.getInt(HistoryColumns.TODAY_PAGE.getName()) + delta);
+                } else {
+                    updateDayResult(itemData, DateTime.now(), delta);
+                }
+            } else {
+                // 累計がnewCurrentを上回った日を上回った分だけ減らし、それ以降の日のデータがあれば削除
+                decreaseCurrent(db, itemData.getId(), newCurrent);
             }
 
         }
+    }
 
-        // 修正日より後ろの操作
-        db.selectWithOrder(mType.historyTable(),
-                HistoryColumns.values(),
-                HistoryColumns.DATE.getName(),
-                HistoryColumns.BASIC_ID.getName() + "=? and " + HistoryColumns.DATE.getName() + " > ?", id, modifyDay);
-        int nextDelta = -delta;
+    private void decreaseCurrent(AndroidDatabase db, long itemId, int newCurrent) {
+        // 累計を計算していき、newCurrentを超えた分を削除
+        String strItemId = Long.toString(itemId);
+        db.selectWithOrder(mType.historyTable(), HistoryColumns.values(), HistoryColumns.DATE.getName(), "basic_id=?", strItemId);
+        int cumulative = 0;
         while (db.next()) {
-            int nextId = db.getInt(HistoryColumns.ID.getName());
-            int nextTodayPlayed = db.getInt(HistoryColumns.TODAY_PAGE.getName());
-            int newNextTodayPlayed = nextTodayPlayed + nextDelta;
-            ContentValues values = new ContentValues();
-            values.put(HistoryColumns.TODAY_PAGE.getName(), newNextTodayPlayed);
-            if (newNextTodayPlayed > 0) {
-                db.update(mType.historyTable(), values, "_id=?", Integer.toString(nextId));
+            cumulative += db.getInt(HistoryColumns.TODAY_PAGE.getName());
+            if (cumulative > newCurrent) {
+                int id = db.getInt(HistoryColumns.ID.getName());
+                String date = db.getString(HistoryColumns.DATE.getName());
+                int diff = cumulative - newCurrent;
+                int newDayResult = db.getInt(HistoryColumns.TODAY_PAGE.getName()) - diff;
+                ContentValues values = new ContentValues();
+                values.put(HistoryColumns.TODAY_PAGE.getName(), newDayResult);
+                db.update(mType.historyTable(), values, "_id=?", Integer.toString(id));
+                db.delete(mType.historyTable(), "basic_id=? and date > ?", strItemId, date);
                 break;
-            } else if (newNextTodayPlayed == 0) {
-                db.delete(mType.historyTable(), "_id=?", Integer.toString(nextId));
-                break;
-            } else {
-                db.delete(mType.historyTable(), "_id=?", Integer.toString(nextId));
-                nextDelta = newNextTodayPlayed;
             }
         }
     }
