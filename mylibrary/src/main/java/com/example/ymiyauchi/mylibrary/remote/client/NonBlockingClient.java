@@ -1,15 +1,19 @@
-package com.example.ymiyauchi.mylibrary.remote;
+package com.example.ymiyauchi.mylibrary.remote.client;
 
 
 import android.util.Log;
 
 import com.android.annotations.NonNull;
 import com.android.annotations.Nullable;
+import com.example.ymiyauchi.mylibrary.remote.Disconnectable;
+import com.example.ymiyauchi.mylibrary.remote.Remote;
+import com.example.ymiyauchi.mylibrary.remote.client.Client;
 import com.example.ymiyauchi.mylibrary.remote.handler.Handler;
 import com.example.ymiyauchi.mylibrary.remote.handler.WritingHandler;
 import com.example.ymiyauchi.mylibrary.remote.receiver.OnReceiveListener;
 import com.example.ymiyauchi.mylibrary.remote.receiver.Receiver;
 import com.example.ymiyauchi.mylibrary.remote.sender.OnSendListener;
+import com.example.ymiyauchi.mylibrary.remote.swapper.Swapper;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;

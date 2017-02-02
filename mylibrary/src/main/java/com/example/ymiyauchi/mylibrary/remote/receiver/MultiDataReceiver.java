@@ -19,6 +19,7 @@ import java.util.Deque;
 
 public class MultiDataReceiver implements Receiver {
     private final Deque<ByteBuffer> mReceivedData = new ArrayDeque<>();
+    private Entry mNonFinishedEntry = null;
     private OnReceiveListener mListener = null;
 
     public MultiDataReceiver() {
@@ -29,39 +30,44 @@ public class MultiDataReceiver implements Receiver {
     }
 
     @Override
-    public int receive(SocketChannel channel) throws IOException {
+    public Result receive(SocketChannel channel) throws IOException {
         // もし送信側がByteBufferの配列を使って送信してきても、
         //  受け取り側ではその内容がすべて連結されて送られてくる
 
         Header header;
-        try {
-            header = Header.parse(channel);
-        } catch (IOException e) {
-            return -1;
-        }
-        int readSize = header.size();
-
-        Deque<ByteBuffer> data = mReceivedData;
-
-        IntBuffer dataSizeBuf = header.dataSizeBuffer();
-        while (dataSizeBuf.hasRemaining()) {
-            int dataSize = dataSizeBuf.get();
-            ByteBuffer buf = ByteBuffer.allocate(dataSize);
-            int tmp = channel.read(buf);
-            if (tmp < 0) {
-                return -1;
+        Entry entry;
+        if (mNonFinishedEntry == null) {
+            try {
+                header = Header.parse(channel);
+                System.out.println("header size:" + header.size());
+            } catch (IOException e) {
+                return Result.ERROR;
             }
-            readSize += tmp;
-            buf.flip();
-            data.add(buf);
+            entry = new Entry(header);
+        } else {
+            header = mNonFinishedEntry.mHeader;
+            entry = mNonFinishedEntry;
         }
 
-        if (mListener != null) {
-            String remoteAddress = channel.socket().getRemoteSocketAddress().toString();
-            mListener.onReceive(remoteAddress, readSize, this);
+        int tmp = entry.read(channel);
+        System.out.println("data read:" + tmp);
+        if (tmp < 0) {
+            return Result.ERROR;
         }
 
-        return readSize;
+        if (entry.isFinished()) {
+            System.out.println("reading finish");
+            entry.add(mReceivedData);
+            if (mListener != null) {
+                String remoteAddress = channel.socket().getRemoteSocketAddress().toString();
+                mListener.onReceive(remoteAddress, header.allDataSize(), this);
+            }
+            mNonFinishedEntry = null;
+            return Result.FINISHED;
+        } else {
+            mNonFinishedEntry = entry;
+            return Result.UNFINISHED;
+        }
 
     }
 
@@ -124,4 +130,57 @@ public class MultiDataReceiver implements Receiver {
         }
     }
 
+    /**
+     * 一度の受信単位
+     *
+     * @author "ymiyauchi"
+     */
+    private static class Entry {
+        private final Header mHeader;
+        private int mRemain;
+        private final Deque<ByteBuffer> mItemData;
+
+        private Entry(Header header) {
+            mHeader = header;
+            mRemain = header.allDataSize() - header.size();
+            mItemData = new ArrayDeque<>();
+            System.out.println("all data size:" + header.allDataSize());
+            init();
+        }
+
+        private void init() {
+            IntBuffer sizeBuf = mHeader.dataSizeBuffer();
+            while (sizeBuf.hasRemaining()) {
+                ByteBuffer buf = ByteBuffer.allocate(sizeBuf.get());
+                mItemData.add(buf);
+            }
+        }
+
+        private int read(SocketChannel channel) throws IOException {
+            int readed = 0;
+            for (ByteBuffer itemBuf : mItemData) {
+                int tmp = channel.read(itemBuf);
+                if (tmp < 0) {
+                    return -1;
+                }
+                readed += tmp;
+            }
+            mRemain -= readed;
+            return readed;
+        }
+
+        private void add(Deque<ByteBuffer> dst) {
+            if (!isFinished()) {
+                return;
+            }
+            for (ByteBuffer item : mItemData) {
+                item.flip();
+                dst.add(item);
+            }
+        }
+
+        private boolean isFinished() {
+            return mRemain == 0;
+        }
+    }
 }

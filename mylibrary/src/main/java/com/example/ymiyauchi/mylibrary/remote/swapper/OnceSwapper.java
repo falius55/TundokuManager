@@ -1,7 +1,5 @@
-package com.example.ymiyauchi.mylibrary.remote.sender;
+package com.example.ymiyauchi.mylibrary.remote.swapper;
 
-
-import com.example.ymiyauchi.mylibrary.remote.Swapper;
 
 /**
  * Created by ymiyauchi on 2017/02/02.

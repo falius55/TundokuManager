@@ -19,6 +19,7 @@ public class WritingHandler implements Handler {
     private final Disconnectable mDisconnectable;
     private final Remote mRemote;
     private final boolean mIsClient;
+    private Sender mSender = null;
 
     public WritingHandler(Disconnectable disconnectable, Remote remote, boolean isClient) {
         mDisconnectable = disconnectable;
@@ -28,25 +29,33 @@ public class WritingHandler implements Handler {
 
     @Override
     public void handle(SelectionKey key) {
-        Log.d(TAG, "handle");
+        System.out.println("writing handle");
         SocketChannel channel = (SocketChannel) key.channel();
         try {
             if (!channel.isOpen()) {
                 // チャンネルが閉じられている場合、書き込みを中止して正常終了させる
                 System.err.println("channel is closed. cancel writing.");
-                mDisconnectable.disconnect(channel, key, new IllegalStateException("channel is closed @WritingHandler"));
+                mDisconnectable.disconnect(channel, key,
+                        new IllegalStateException("channel is not open@writing handler"));
                 return;
             }
 
-            Sender sender = mRemote.sender();
+            Sender sender;
+            if (mSender == null) {
+                sender = mSender = mRemote.sender();
+            } else {
+                sender = mSender;
+            }
+
             if (sender == null) {
                 mDisconnectable.disconnect(channel, key, null);
                 return;
             }
-            sender.send(channel);
 
-            if (!mRemote.restore(sender)) {
-                System.out.println("!sender.isWrittenFinished()");
+            Sender.Result result = sender.send(channel);
+
+            if (result == Sender.Result.UNFINISHED) {
+                System.out.println("sender unfinished");
                 return;
             }
 
@@ -58,9 +67,8 @@ public class WritingHandler implements Handler {
             }
 
         } catch (Exception e) {
-            mDisconnectable.disconnect(channel, key, new IOException("writing handler throws", e));
+            mDisconnectable.disconnect(channel, key, new IOException("writing handler exception", e));
             e.printStackTrace();
         }
     }
-
 }

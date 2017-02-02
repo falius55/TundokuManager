@@ -1,8 +1,9 @@
-package com.example.ymiyauchi.mylibrary.remote;
+package com.example.ymiyauchi.mylibrary.remote.client;
 
 import com.example.ymiyauchi.mylibrary.remote.receiver.OnReceiveListener;
 import com.example.ymiyauchi.mylibrary.remote.sender.OnSendListener;
 import com.example.ymiyauchi.mylibrary.remote.receiver.Receiver;
+import com.example.ymiyauchi.mylibrary.remote.swapper.Swapper;
 
 import java.io.IOException;
 import java.util.concurrent.Callable;

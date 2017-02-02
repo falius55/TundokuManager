@@ -2,7 +2,7 @@ package com.example.ymiyauchi.mylibrary.remote.server;
 
 import com.android.annotations.Nullable;
 import com.example.ymiyauchi.mylibrary.remote.Disconnectable;
-import com.example.ymiyauchi.mylibrary.remote.Swapper;
+import com.example.ymiyauchi.mylibrary.remote.swapper.Swapper;
 import com.example.ymiyauchi.mylibrary.remote.handler.Handler;
 import com.example.ymiyauchi.mylibrary.remote.receiver.OnReceiveListener;
 import com.example.ymiyauchi.mylibrary.remote.sender.OnSendListener;

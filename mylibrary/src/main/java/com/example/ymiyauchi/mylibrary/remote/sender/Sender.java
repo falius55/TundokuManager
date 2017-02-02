@@ -1,5 +1,7 @@
 package com.example.ymiyauchi.mylibrary.remote.sender;
 
+import com.example.ymiyauchi.mylibrary.remote.receiver.Receiver;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -12,10 +14,11 @@ import java.nio.channels.SocketChannel;
  */
 
 public interface Sender {
+    enum Result {
+        FINISHED, UNFINISHED,
+    }
 
-    void send(SocketChannel channel) throws IOException;
-
-    boolean isSendFinished();
+    Result send(SocketChannel channel) throws IOException;
 
     /**
      * Client及びServerにて内部的に使用するメソッドです。

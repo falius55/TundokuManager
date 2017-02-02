@@ -31,15 +31,20 @@ public class ReadingHandler implements Handler {
     public void handle(SelectionKey key) {
         Log.d(TAG, "handle");
         SocketChannel channel = (SocketChannel) key.channel();
-
         try {
 
             Receiver receiver = mRemote.receiver();
 
-            if (receiver.receive(channel) < 0) {
+            Receiver.Result result = receiver.receive(channel);
+
+            if (result == Receiver.Result.ERROR) {
                 System.err.println("receive error");
-                mDisconnectable.disconnect(channel, key, new IOException("reading handler reads -1"));
+                mDisconnectable.disconnect(channel, key, new IOException("reading channel returns -1"));
                 return;
+            }
+
+            if (result == Receiver.Result.UNFINISHED) {
+                return;  // 書き込み操作に移行せず、もう一度読み込みを行う
             }
 
             if (!mIsClient || mRemote.isContinue()) {
@@ -50,7 +55,7 @@ public class ReadingHandler implements Handler {
             }
 
         } catch (Exception e) {
-            mDisconnectable.disconnect(channel, key, new IOException("reading handler throw", e));
+            mDisconnectable.disconnect(channel, key, new IOException("reading handler exception", e));
             e.printStackTrace();
         }
     }

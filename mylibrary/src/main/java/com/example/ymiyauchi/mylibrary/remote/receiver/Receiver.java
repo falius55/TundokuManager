@@ -10,6 +10,9 @@ import java.nio.channels.SocketChannel;
  */
 
 public interface Receiver {
+    enum Result {
+        FINISHED, UNFINISHED, ERROR,
+    }
 
     /**
      * 内部的に使用するメソッドです。
@@ -19,7 +22,7 @@ public interface Receiver {
      */
     void addOnReceiveListener(OnReceiveListener listener);
 
-    int receive(SocketChannel channel) throws IOException;
+    Result receive(SocketChannel channel) throws IOException;
 
     /**
      * 保持しているデータの個数を返します。

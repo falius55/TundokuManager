@@ -23,7 +23,7 @@ public class MultiDataSender implements Sender {
 
     private OnSendListener mListener = null;
     private ByteBuffer mSendData = null;
-    private int mWriteSize = 0;
+    private State mState = null;
 
     @Override
     public Sender addOnSendListener(OnSendListener listener) {
@@ -32,49 +32,36 @@ public class MultiDataSender implements Sender {
     }
 
     @Override
-    public final void send(SocketChannel channel) throws IOException {
-
-        ByteBuffer sendData = getSendData();
-        int writeSize = channel.write(sendData);
-        if (writeSize < 0) {
-            return;
+    public final Result send(SocketChannel channel) throws IOException {
+        State state;
+        if (mState == null) {
+            state = mState = new State();
+            state.header = Header.parse(mData);
+            state.headerBuffer = state.header.toByteBuffer();
+        } else {
+            state = mState;
         }
-        mWriteSize += writeSize;
 
-        if (!isSendFinished()) {
+        state.writeSize += channel.write(state.headerBuffer);
+        for (ByteBuffer item : mData) {
+            state.writeSize += channel.write(item);
+        }
+
+        if (state.writeSize == state.header.allDataSize()) {
+            if (mListener != null) {
+                mListener.onSend(state.writeSize);
+            }
+            return Result.FINISHED;
+        } else {
             System.out.println("written is not finished");
-            return;
-        }
-
-        if (mListener != null) {
-            mListener.onSend(writeSize);
+            return Result.UNFINISHED;
         }
     }
 
-    private ByteBuffer getSendData() {
-        if (mSendData != null) {
-            return mSendData;
-        }
-
-        Header header = Header.parse(mData);
-        ByteBuffer sendData = ByteBuffer.allocate(header.dataSize());
-
-        sendData.put(header.toByteBuffer());
-
-        for (ByteBuffer data : mData) {
-            sendData.put(data);
-        }
-
-        sendData.flip();
-
-        mSendData = sendData;
-        return sendData;
-    }
-
-    @Override
-    public boolean isSendFinished() {
-        Header header = Header.parse(mData);
-        return mWriteSize == header.dataSize();
+    private static class State {
+        private Header header;
+        private ByteBuffer headerBuffer;
+        private int writeSize = 0;
     }
 
     @Override
