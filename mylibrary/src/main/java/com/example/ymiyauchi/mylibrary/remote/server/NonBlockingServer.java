@@ -1,5 +1,6 @@
 package com.example.ymiyauchi.mylibrary.remote.server;
 
+import com.android.annotations.Nullable;
 import com.example.ymiyauchi.mylibrary.remote.Disconnectable;
 import com.example.ymiyauchi.mylibrary.remote.Swapper;
 import com.example.ymiyauchi.mylibrary.remote.handler.Handler;
@@ -144,7 +145,7 @@ public class NonBlockingServer implements Server, Disconnectable {
     }
 
     @Override
-    public void disconnect(SocketChannel channel, SelectionKey key) {
+    public void disconnect(SocketChannel channel, SelectionKey key, @Nullable Throwable cause) {
         try {
             if (channel != null) {
                 channel.close();

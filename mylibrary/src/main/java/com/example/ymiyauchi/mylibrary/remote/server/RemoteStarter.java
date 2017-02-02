@@ -38,9 +38,10 @@ public class RemoteStarter implements Handler {
 
     public void accept(SelectionKey key) {
         SocketChannel clientChannel = null;
+        String remoteAddress = "";
         try {
             clientChannel = ((ServerSocketChannel) key.channel()).accept();
-            String remoteAddress = clientChannel.socket().getRemoteSocketAddress().toString();
+            remoteAddress = clientChannel.socket().getRemoteSocketAddress().toString();
 
             Remote remote = new Remote(remoteAddress, mSwapperFactory);
             remote.addOnAcceptListener(mOnAcceptListener);
@@ -51,9 +52,9 @@ public class RemoteStarter implements Handler {
             clientChannel.configureBlocking(false);
             clientChannel.register(key.selector(), SelectionKey.OP_READ,
                     new ReadingHandler(mDisconnectable, remote, false)); // 新しいチャンネルなのでregister
-        } catch (IOException e) {
+        } catch (Exception e) {
             if (clientChannel != null) {
-                mDisconnectable.disconnect(clientChannel, key);
+                mDisconnectable.disconnect(clientChannel, key, new IOException("remote starter throws when accept new socket:" + remoteAddress, e));
             }
             e.printStackTrace();
         }

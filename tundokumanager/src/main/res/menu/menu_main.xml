@@ -8,6 +8,9 @@
         android:orderInCategory="1"
         app:showAsAction="always"/>
     <item
+        android:id="@+id/action_remote"
+        android:title="@string/action_remote"/>
+    <item
         android:id="@+id/action_pref"
         android:title="@string/action_pref"/>
 

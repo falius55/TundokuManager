@@ -3,6 +3,8 @@
           xmlns:tools="http://schemas.android.com/tools"
           package="com.example.ymiyauchi.tundokumanager">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:name=".ApplicationManager"
         android:allowBackup="true"

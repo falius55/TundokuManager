@@ -1,6 +1,10 @@
 package com.example.ymiyauchi.mylibrary.remote;
 
 
+import android.util.Log;
+
+import com.android.annotations.NonNull;
+import com.android.annotations.Nullable;
 import com.example.ymiyauchi.mylibrary.remote.handler.Handler;
 import com.example.ymiyauchi.mylibrary.remote.handler.WritingHandler;
 import com.example.ymiyauchi.mylibrary.remote.receiver.OnReceiveListener;
@@ -21,6 +25,7 @@ import java.util.concurrent.TimeoutException;
  */
 
 public class NonBlockingClient implements Client, Disconnectable {
+    private static final String TAG = "NONBLOCKING_CLIENT";
     private static final long POLL_TIMEOUT = 5000L;
 
     private final String mServerHost;
@@ -69,7 +74,8 @@ public class NonBlockingClient implements Client, Disconnectable {
     }
 
     @Override
-    public void disconnect(SocketChannel channel, SelectionKey key) {
+    public void disconnect(SocketChannel channel, SelectionKey key, @Nullable Throwable cause) {
+        Log.d(TAG, "disconnect:", cause);
         mIsExit = true;
         if (mSelector != null) {
             mSelector.wakeup();
@@ -79,9 +85,11 @@ public class NonBlockingClient implements Client, Disconnectable {
     /**
      * @throws IOException その他入出力エラーが発生した場合。接続がタイムアウトした場合も含まれます。
      */
+    @NonNull
     @Override
-    public Receiver start(Swapper swapper) throws IOException, TimeoutException {
-        Objects.requireNonNull(swapper, "sender is null");
+    public Receiver start(@NonNull Swapper swapper) throws IOException, TimeoutException {
+        Objects.requireNonNull(swapper, "swapper is null");
+        Log.d(TAG, "start");
         try (Selector selector = Selector.open(); SocketChannel channel = SocketChannel.open()) {
             mSelector = selector;
             Remote remote = connect(channel, swapper); // 接続はブロッキングモード
@@ -91,6 +99,7 @@ public class NonBlockingClient implements Client, Disconnectable {
 
             while (!mIsExit) {
                 if (selector.select(POLL_TIMEOUT) > 0 || selector.selectedKeys().size() > 0) {
+                    Log.d(TAG, "selectedKey count:" + selector.selectedKeys().size());
 
                     Iterator<SelectionKey> iter = selector.selectedKeys().iterator();
                     while (iter.hasNext()) {
@@ -101,6 +110,7 @@ public class NonBlockingClient implements Client, Disconnectable {
                     }
 
                 } else {
+                    Log.d(TAG, "timeout");
                     throw new TimeoutException("could not get selected operation during " +
                             ((int) (double) POLL_TIMEOUT / 1000) + " sec.");
                 }
@@ -110,6 +120,7 @@ public class NonBlockingClient implements Client, Disconnectable {
     }
 
     private Remote connect(SocketChannel channel, final Swapper swapper) throws IOException {
+        Log.d(TAG, "connect");
         InetSocketAddress address = new InetSocketAddress(mServerHost, mServerPort);
         channel.connect(address);
 

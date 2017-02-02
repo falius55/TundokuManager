@@ -1,6 +1,8 @@
 package com.example.ymiyauchi.mylibrary.remote.handler;
 
 
+import android.util.Log;
+
 import com.example.ymiyauchi.mylibrary.remote.Disconnectable;
 import com.example.ymiyauchi.mylibrary.remote.Remote;
 import com.example.ymiyauchi.mylibrary.remote.receiver.Receiver;
@@ -14,6 +16,7 @@ import java.nio.channels.SocketChannel;
  */
 
 public class ReadingHandler implements Handler {
+    private static final String TAG = "READING_HANDLER";
     private final Disconnectable mDisconnectable;
     private final Remote mRemote;
     private final boolean mIsClient;
@@ -26,6 +29,7 @@ public class ReadingHandler implements Handler {
 
     @Override
     public void handle(SelectionKey key) {
+        Log.d(TAG, "handle");
         SocketChannel channel = (SocketChannel) key.channel();
 
         try {
@@ -34,7 +38,7 @@ public class ReadingHandler implements Handler {
 
             if (receiver.receive(channel) < 0) {
                 System.err.println("receive error");
-                mDisconnectable.disconnect(channel, key);
+                mDisconnectable.disconnect(channel, key, new IOException("reading handler reads -1"));
                 return;
             }
 
@@ -42,11 +46,11 @@ public class ReadingHandler implements Handler {
                 key.interestOps(SelectionKey.OP_WRITE);
                 key.attach(new WritingHandler(mDisconnectable, mRemote, mIsClient));
             } else {
-                mDisconnectable.disconnect(channel, key);
+                mDisconnectable.disconnect(channel, key, null);
             }
 
-        } catch (IOException e) {
-            mDisconnectable.disconnect(channel, key);
+        } catch (Exception e) {
+            mDisconnectable.disconnect(channel, key, new IOException("reading handler throw", e));
             e.printStackTrace();
         }
     }

@@ -2,6 +2,7 @@
     <string name="app_name">積ん読防止</string>
     <string name="action_input">入力</string>
     <string name="action_pref">設定</string>
+    <string name="action_remote">リモートバックアップ</string>
     <string name="sum">合計額</string>
     <string name="get_loss">損失</string>
     <string name="filt">Filter</string>

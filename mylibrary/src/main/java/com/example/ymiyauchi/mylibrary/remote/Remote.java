@@ -1,5 +1,6 @@
 package com.example.ymiyauchi.mylibrary.remote;
 
+import com.android.annotations.NonNull;
 import com.example.ymiyauchi.mylibrary.remote.receiver.OnReceiveListener;
 import com.example.ymiyauchi.mylibrary.remote.sender.OnSendListener;
 import com.example.ymiyauchi.mylibrary.remote.receiver.MultiDataReceiver;
@@ -14,7 +15,7 @@ import com.example.ymiyauchi.mylibrary.remote.server.Server;
 public class Remote {
     private final String mRemoteAddress;
     private final Swapper mSwapper;
-    private Receiver mReceiver = null;
+    private Receiver mReceiver = null;  // receiver()が一度でも呼ばれるとnullではなくなる
     private Sender mNextSender = null;
 
     private Server.OnAcceptListener mOnAcceptListener = null;
@@ -42,6 +43,7 @@ public class Remote {
         return mRemoteAddress;
     }
 
+    @NonNull
     public Receiver receiver() {
         if (mReceiver == null) {
             mReceiver = new MultiDataReceiver();

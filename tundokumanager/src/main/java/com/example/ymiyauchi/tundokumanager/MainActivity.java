@@ -1,9 +1,10 @@
 package com.example.ymiyauchi.tundokumanager;
 
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -11,12 +12,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.ymiyauchi.mylibrary.AndroidDatabase;
+import com.example.ymiyauchi.mylibrary.remote.receiver.Receiver;
 import com.example.ymiyauchi.tundokumanager.data.DataConverter;
+import com.example.ymiyauchi.tundokumanager.database.BasicDatabase;
 import com.example.ymiyauchi.tundokumanager.mainfragment.MainFragment;
 import com.example.ymiyauchi.tundokumanager.input.InputActivity;
 import com.example.ymiyauchi.mylibrary.view.pageradapter.SimplePagerAdapter;
 import com.example.ymiyauchi.tundokumanager.pref.PrefActivity;
-import com.example.ymiyauchi.tundokumanager.pref.PrefFragment;
 
 
 /**
@@ -76,6 +79,16 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.action_pref) {
             Intent intent = new Intent(this, PrefActivity.class);
             startActivity(intent);
+        }
+
+        if (item.getItemId() == R.id.action_remote) {
+            AsyncTask<String, String, Receiver> task = new RemoteFileTask(this);
+            try (AndroidDatabase db = new BasicDatabase(this)) {
+                SQLiteDatabase sdb = db.getReadableDatabase();
+                String path = sdb.getPath();
+                task.execute("TundokuManager.sql", path);
+            }
+
         }
         return super.onOptionsItemSelected(item);
     }
