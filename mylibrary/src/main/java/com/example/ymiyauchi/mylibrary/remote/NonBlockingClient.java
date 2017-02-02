@@ -26,13 +26,12 @@ public class NonBlockingClient implements Client, Disconnectable {
     private final String mServerHost;
     private final int mServerPort;
 
+    private Selector mSelector = null;
+    private boolean mIsExit = false;
+
     private OnSendListener mOnSendListener = null;
     private OnReceiveListener mOnReceiveListener = null;
-
-    private Swapper.SwapperFactory mSwapperFactory;
-
-    private boolean mIsExit = false;
-    private Selector mSelector = null;
+    private Swapper.SwapperFactory mSwapperFactory = null;
 
     public NonBlockingClient(String serverHost, int serverPort) {
         this(serverHost, serverPort, null);
@@ -127,5 +126,4 @@ public class NonBlockingClient implements Client, Disconnectable {
         remote.addOnReceiveListener(mOnReceiveListener);
         return remote;
     }
-
 }

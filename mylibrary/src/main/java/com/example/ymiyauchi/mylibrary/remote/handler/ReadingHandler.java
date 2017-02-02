@@ -13,12 +13,12 @@ import java.nio.channels.SocketChannel;
  * Created by ymiyauchi on 2017/02/02.
  */
 
-class ReadingHandler implements Handler {
+public class ReadingHandler implements Handler {
     private final Disconnectable mDisconnectable;
     private final Remote mRemote;
     private final boolean mIsClient;
 
-    ReadingHandler(Disconnectable disconnectable, Remote remote, boolean isClient) {
+    public ReadingHandler(Disconnectable disconnectable, Remote remote, boolean isClient) {
         mDisconnectable = disconnectable;
         mRemote = remote;
         mIsClient = isClient;
@@ -50,5 +50,4 @@ class ReadingHandler implements Handler {
             e.printStackTrace();
         }
     }
-
 }

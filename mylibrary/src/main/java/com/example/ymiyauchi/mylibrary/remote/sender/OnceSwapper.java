@@ -13,5 +13,4 @@ public abstract class OnceSwapper implements Swapper {
     public boolean isContinue() {
         return false;
     }
-
 }

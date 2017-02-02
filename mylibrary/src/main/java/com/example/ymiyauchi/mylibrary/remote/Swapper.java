@@ -38,5 +38,4 @@ public interface Swapper {
 
         Swapper get();
     }
-
 }

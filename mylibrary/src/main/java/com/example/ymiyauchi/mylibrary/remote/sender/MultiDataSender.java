@@ -49,7 +49,6 @@ public class MultiDataSender implements Sender {
         if (mListener != null) {
             mListener.onSend(writeSize);
         }
-
     }
 
     private ByteBuffer getSendData() {
@@ -70,7 +69,6 @@ public class MultiDataSender implements Sender {
 
         mSendData = sendData;
         return sendData;
-
     }
 
     @Override

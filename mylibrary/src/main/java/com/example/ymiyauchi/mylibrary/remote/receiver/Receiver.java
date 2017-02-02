@@ -40,5 +40,4 @@ public interface Receiver {
     void getAndOutput(OutputStream os) throws IOException;
 
     void clear();
-
 }

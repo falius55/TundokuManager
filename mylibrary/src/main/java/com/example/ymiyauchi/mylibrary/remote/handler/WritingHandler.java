@@ -29,7 +29,7 @@ public class WritingHandler implements Handler {
         try {
             if (!channel.isOpen()) {
                 // チャンネルが閉じられている場合、書き込みを中止して正常終了させる
-                System.err.println("channel is closed. cancel writting.");
+                System.err.println("channel is closed. cancel writing.");
                 mDisconnectable.disconnect(channel, key);
                 return;
             }
@@ -57,7 +57,6 @@ public class WritingHandler implements Handler {
             mDisconnectable.disconnect(channel, key);
             e.printStackTrace();
         }
-
     }
 
 }

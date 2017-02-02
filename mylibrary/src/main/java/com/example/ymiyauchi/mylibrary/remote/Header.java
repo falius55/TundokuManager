@@ -93,6 +93,4 @@ public class Header {
         ret.flip();
         return ret;
     }
-
-
 }

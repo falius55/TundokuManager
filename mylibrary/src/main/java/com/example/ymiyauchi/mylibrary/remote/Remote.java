@@ -5,6 +5,7 @@ import com.example.ymiyauchi.mylibrary.remote.sender.OnSendListener;
 import com.example.ymiyauchi.mylibrary.remote.receiver.MultiDataReceiver;
 import com.example.ymiyauchi.mylibrary.remote.receiver.Receiver;
 import com.example.ymiyauchi.mylibrary.remote.sender.Sender;
+import com.example.ymiyauchi.mylibrary.remote.server.Server;
 
 /**
  * Created by ymiyauchi on 2017/02/02.
@@ -16,12 +17,17 @@ public class Remote {
     private Receiver mReceiver = null;
     private Sender mNextSender = null;
 
+    private Server.OnAcceptListener mOnAcceptListener = null;
     private OnSendListener mOnSendListener = null;
     private OnReceiveListener mOnReceiveListener = null;
 
     public Remote(String remoteAddress, Swapper.SwapperFactory swapperFactory) {
         mRemoteAddress = remoteAddress;
         mSwapper = swapperFactory.get();
+    }
+
+    public void addOnAcceptListener(Server.OnAcceptListener listener) {
+        mOnAcceptListener = listener;
     }
 
     public void addOnSendListener(OnSendListener listener) {
@@ -73,4 +79,10 @@ public class Remote {
         return mSwapper.isContinue();
     }
 
+
+    public void onAccept() {
+        if (mOnAcceptListener != null) {
+            mOnAcceptListener.onAccept(mRemoteAddress);
+        }
+    }
 }

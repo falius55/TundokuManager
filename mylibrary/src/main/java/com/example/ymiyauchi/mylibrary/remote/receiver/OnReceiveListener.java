@@ -5,6 +5,6 @@ package com.example.ymiyauchi.mylibrary.remote.receiver;
  */
 
 public interface OnReceiveListener {
-    void onReceive(String fromAddress, int readByte, Receiver receiver);
 
+    void onReceive(String fromAddress, int readByte, Receiver receiver);
 }

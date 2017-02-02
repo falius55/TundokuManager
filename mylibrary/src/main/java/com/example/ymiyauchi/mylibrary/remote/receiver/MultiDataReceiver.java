@@ -19,7 +19,6 @@ import java.util.Deque;
 
 public class MultiDataReceiver implements Receiver {
     private final Deque<ByteBuffer> mReceivedData = new ArrayDeque<>();
-
     private OnReceiveListener mListener = null;
 
     public MultiDataReceiver() {
@@ -94,19 +93,20 @@ public class MultiDataReceiver implements Receiver {
     @Override
     public String getString() {
         ByteBuffer buf = get();
-        if (buf == null) {
-            System.err.println("no data null");
+        if (buf == null)
             return null;
-        }
-        String ret = StandardCharsets.UTF_8.decode(buf).toString();
-        return ret;
+        return StandardCharsets.UTF_8.decode(buf).toString();
     }
 
+    /**
+     * @return 保持データがなければ0
+     */
     @Override
     public int getInt() {
         ByteBuffer buf = get();
-        int ret = buf.getInt();
-        return ret;
+        if (buf == null)
+            return 0;
+        return buf.getInt();
     }
 
     @Override

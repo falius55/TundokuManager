@@ -8,6 +8,6 @@ import java.nio.channels.SocketChannel;
  */
 
 public interface Disconnectable {
-    public void disconnect(SocketChannel channel, SelectionKey key);
 
+    void disconnect(SocketChannel channel, SelectionKey key);
 }

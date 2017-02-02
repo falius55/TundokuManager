@@ -37,7 +37,5 @@ public interface Sender {
 
     Sender put(InputStream in) throws IOException;
 
-    Sender put(File file) throws FileNotFoundException, IOException;
-
-
+    Sender put(File file) throws IOException;
 }
