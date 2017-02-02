@@ -46,10 +46,9 @@ class Conductor {
         Activity activity = mActivity;
         TextViewManager textViewManager = mTextViewManager;
         Type type = mData.getType();
-        int position = mData.getPosition();
 
         RadioGroup rd = (RadioGroup) activity.findViewById(R.id.rdgroup);
-        DataConverter inputDataConverter = new InputDataConverter(mData.getId(), mData.getPosition(), mData.getType(), textViewManager, rd, mData.getCurrent());
+        InputDataConverter inputDataConverter = new InputDataConverter(mData.getId(), mData.getPosition(), mData.getType(), textViewManager, rd, mData.getCurrent());
         textViewManager.setOnClickListener(R.id.btnEntry,
                 new EntryButtonClickListener(activity, inputDataConverter, mWhereFrom.getEntryResult().getCode()
                 )

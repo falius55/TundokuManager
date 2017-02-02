@@ -3,6 +3,7 @@ package com.example.ymiyauchi.tundokumanager;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -14,6 +15,8 @@ import com.example.ymiyauchi.tundokumanager.data.DataConverter;
 import com.example.ymiyauchi.tundokumanager.mainfragment.MainFragment;
 import com.example.ymiyauchi.tundokumanager.input.InputActivity;
 import com.example.ymiyauchi.mylibrary.view.pageradapter.SimplePagerAdapter;
+import com.example.ymiyauchi.tundokumanager.pref.PrefActivity;
+import com.example.ymiyauchi.tundokumanager.pref.PrefFragment;
 
 
 /**
@@ -54,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * オプションメニューの『入力』を選択した際の処理
+     *
      *
      * @param item
      * @return
@@ -68,6 +71,11 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, InputActivity.class);
             intent.putExtra(DataConverter.TYPE, fragment.type().getCode());
             startActivityForResult(intent, mViewPager.getCurrentItem());
+        }
+
+        if (item.getItemId() == R.id.action_pref) {
+            Intent intent = new Intent(this, PrefActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

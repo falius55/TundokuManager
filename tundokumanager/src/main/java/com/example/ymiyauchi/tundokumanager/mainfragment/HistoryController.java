@@ -41,10 +41,16 @@ public class HistoryController {
     }
 
     void deleteHistory(long itemId, AndroidDatabase db) {
+        if (!mType.hasProgress()) {
+            return;
+        }
         db.delete(mType.historyTable(), HistoryColumns.BASIC_ID.getName() + "=?", Long.toString(itemId));
     }
 
     public void updateDayResult(DataConverter itemData, DateTime modifyDate, int newDayResult) {
+        if (!mType.hasProgress()) {
+            return;
+        }
         // 指定日の実績を指定された値に置き換え
         try (AndroidDatabase db = new BasicDatabase(mFragment.getActivity())) {
             String strItemId = Long.toString(itemData.getId());
@@ -73,6 +79,9 @@ public class HistoryController {
     }
 
     void onUpdateItem(DataConverter itemData) {
+        if (!mType.hasProgress()) {
+            return;
+        }
         try (AndroidDatabase db = new BasicDatabase(mFragment.getActivity())) {
             String strItemId = Long.toString(itemData.getId());
 

@@ -11,6 +11,7 @@ import com.example.ymiyauchi.mylibrary.DateTime;
 import com.example.ymiyauchi.tundokumanager.data.DataConverter;
 import com.example.ymiyauchi.tundokumanager.data.MutableDataConverter;
 import com.example.ymiyauchi.tundokumanager.mainfragment.HistoryController;
+import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.highlight.Highlight;
@@ -23,6 +24,7 @@ import java.util.List;
  */
 
 class ResultChanger implements OnChartValueSelectedListener, View.OnClickListener {
+    private final CombinedChart mCombinedChart;
     private final List<String> mLabels;
     private final List<BarEntry> mBarEntries;
     private final List<Entry> mLineEntries;
@@ -34,9 +36,11 @@ class ResultChanger implements OnChartValueSelectedListener, View.OnClickListene
 
     private final HistoryController mHistoryController;
 
-    ResultChanger(ChartDialogFragment fragment, View layout, DataConverter itemData, List<String> labels, List<BarEntry> barEntries, List<Entry> lineEntries) {
+    ResultChanger(ChartDialogFragment fragment, View layout, DataConverter itemData, CombinedChart combinedChart,
+                  List<String> labels, List<BarEntry> barEntries, List<Entry> lineEntries) {
         mFragment = fragment;
         mItemData = itemData;
+        mCombinedChart = combinedChart;
         mLabels = labels;
         mBarEntries = barEntries;
         mLineEntries = lineEntries;
@@ -116,22 +120,19 @@ class ResultChanger implements OnChartValueSelectedListener, View.OnClickListene
 
         int dataIndex = mLabels.indexOf(currentDate.format());
         boolean isExistData = dataIndex != -1 && dataIndex < mBarEntries.size();
+        int resultDay;
+        int cumulativeOfDayBeforeSelected;
         if (isExistData) {
-            int resultDay = (int) mBarEntries.get(dataIndex).getVal();
-            int cumulativeOfDayBeforeSelected = dataIndex == 0 ? 0 : (int) mLineEntries.get(dataIndex - 1).getVal();
-            int dayLimit = mItemData.getCapacity() - cumulativeOfDayBeforeSelected;
-
-            mDaySeekBar.setMax(dayLimit);
-            mDaySeekBar.setProgress(resultDay);
+            resultDay = (int) mBarEntries.get(dataIndex).getVal();
+            cumulativeOfDayBeforeSelected = dataIndex == 0 ? 0 : (int) mLineEntries.get(dataIndex - 1).getVal();
         } else {
-            int resultDay = 0;
+            resultDay = 0;
             int lastDateIndex = mLineEntries.size() - 1;
-            int cumulativeOfDayBeforeSelected = (int) mLineEntries.get(lastDateIndex).getVal();
-            int dayLimit = mItemData.getCapacity() - cumulativeOfDayBeforeSelected;
-
-            mDaySeekBar.setMax(dayLimit);
-            mDaySeekBar.setProgress(resultDay);
+            cumulativeOfDayBeforeSelected = (int) mLineEntries.get(lastDateIndex).getVal();
         }
+        int dayLimit = mItemData.getCapacity() - cumulativeOfDayBeforeSelected;
+        mDaySeekBar.setMax(dayLimit);
+        mDaySeekBar.setProgress(resultDay);
     }
 
     @Override

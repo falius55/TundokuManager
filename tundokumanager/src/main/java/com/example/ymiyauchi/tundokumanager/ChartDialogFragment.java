@@ -41,10 +41,11 @@ public class ChartDialogFragment extends DialogFragment {
 
     private DataConverter mItemData;
 
+    private CombinedChart mCombinedChart;
     private final List<String> mLabels = new ArrayList<>();
     private final List<BarEntry> mBarEntries = new ArrayList<>();
     private final List<Entry> mLineEntries = new ArrayList<>();
-    private CombinedChart mCombinedChart;
+    private int mLatestDataIndex = 0;
 
     public static ChartDialogFragment newInstance(DataConverter data) {
         ChartDialogFragment fragment = new ChartDialogFragment();
@@ -69,6 +70,7 @@ public class ChartDialogFragment extends DialogFragment {
         CombinedChart combinedChart = (CombinedChart) layout.findViewById(R.id.combined_chart);
         mCombinedChart = combinedChart;
         combinedChart.setDescription("");
+
         DataConverter data = new BundleDataConverter(getArguments());
         mItemData = data;
 
@@ -80,14 +82,17 @@ public class ChartDialogFragment extends DialogFragment {
         yAxisR.setAxisMaxValue(data.getCapacity());
         yAxisR.setAxisMinValue(0);
 
-        combinedChart.setData(createData(data));
+        CombinedData combinedData = createData(data);
+        combinedChart.setData(combinedData);
 
-        ResultChanger resultChanger = new ResultChanger(this, layout, data, mLabels, mBarEntries, mLineEntries);
+        ResultChanger resultChanger = new ResultChanger(this, layout, data, combinedChart, mLabels, mBarEntries, mLineEntries);
         Button reflectButton = (Button) layout.findViewById(R.id.btn_reflect);
         reflectButton.setOnClickListener(resultChanger);
         combinedChart.setOnChartValueSelectedListener(resultChanger);
 
         combinedChart.invalidate();
+        combinedChart.setVisibleXRangeMaximum(12);
+        combinedChart.moveViewToX(mLatestDataIndex - 5);
 
         return builder.setTitle(data.getName()).create();
 
@@ -95,6 +100,7 @@ public class ChartDialogFragment extends DialogFragment {
 
     void reload() {
         loadEntries(mItemData);
+        mCombinedChart.notifyDataSetChanged();
         mCombinedChart.invalidate();
     }
 
@@ -138,6 +144,7 @@ public class ChartDialogFragment extends DialogFragment {
                     cumulativePage += todayPage;
                     Entry entry = new Entry(cumulativePage, i);
                     lineEntries.add(entry);
+                    mLatestDataIndex = i;
 
                     if (db.next()) {
                         cursorDate = DateTime.newInstance(db.getString(HistoryColumns.DATE.getName()), DateTime.SQLITE_DATE_FORMAT);
