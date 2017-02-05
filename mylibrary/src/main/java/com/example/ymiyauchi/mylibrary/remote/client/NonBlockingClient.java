@@ -7,7 +7,6 @@ import com.android.annotations.NonNull;
 import com.android.annotations.Nullable;
 import com.example.ymiyauchi.mylibrary.remote.Disconnectable;
 import com.example.ymiyauchi.mylibrary.remote.Remote;
-import com.example.ymiyauchi.mylibrary.remote.client.Client;
 import com.example.ymiyauchi.mylibrary.remote.handler.Handler;
 import com.example.ymiyauchi.mylibrary.remote.handler.WritingHandler;
 import com.example.ymiyauchi.mylibrary.remote.receiver.OnReceiveListener;
@@ -47,7 +46,7 @@ public class NonBlockingClient implements Client, Disconnectable {
     }
 
     /**
-     * このオブジェクトをRunnableとして扱う際のコンストラクター
+     * このオブジェクトをCallableとして扱う際のコンストラクター
      *
      * @param serverHost
      * @param serverPort

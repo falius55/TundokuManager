@@ -20,6 +20,9 @@ import com.example.ymiyauchi.tundokumanager.mainfragment.MainFragment;
 import com.example.ymiyauchi.tundokumanager.input.InputActivity;
 import com.example.ymiyauchi.mylibrary.view.pageradapter.SimplePagerAdapter;
 import com.example.ymiyauchi.tundokumanager.pref.PrefActivity;
+import com.example.ymiyauchi.tundokumanager.remote.RemoteSaveFileTask;
+import com.example.ymiyauchi.tundokumanager.tree.TreeListActivity;
+import com.example.ymiyauchi.tundokumanager.tree.filetree.FileTreeListActivity;
 
 
 /**
@@ -82,13 +85,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (item.getItemId() == R.id.action_remote) {
-            AsyncTask<String, String, Receiver> task = new RemoteFileTask(this);
+            AsyncTask<String, String, Receiver> task = new RemoteSaveFileTask(this);
             try (AndroidDatabase db = new BasicDatabase(this)) {
                 SQLiteDatabase sdb = db.getReadableDatabase();
                 String path = sdb.getPath();
                 task.execute("TundokuManager.sql", path);
             }
 
+        }
+
+        if (item.getItemId() == R.id.action_pcfile) {
+            Intent intent = new Intent(this, FileTreeListActivity.class);
+            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }

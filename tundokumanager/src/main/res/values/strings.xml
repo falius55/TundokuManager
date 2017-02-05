@@ -68,4 +68,7 @@
     <string name="btn_right">→</string>
     <string name="day_before">前日</string>
     <string name="day_after">翌日</string>
+    <string name="btn_save">保存</string>
+    <string name="action_pcfile">PCファイル</string>
+    <string name="save_db">データベースバックアップ</string>
 </resources>

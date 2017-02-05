@@ -1,7 +1,8 @@
 package com.example.ymiyauchi.mylibrary.remote.receiver;
 
 
-import com.example.ymiyauchi.mylibrary.IntRange;
+import android.util.Log;
+
 import com.example.ymiyauchi.mylibrary.remote.Header;
 
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.util.Deque;
  */
 
 public class MultiDataReceiver implements Receiver {
+    private static final String TAG = "MULTI_DATA RECEIVER";
     private final Deque<ByteBuffer> mReceivedData = new ArrayDeque<>();
     private Entry mNonFinishedEntry = null;
     private OnReceiveListener mListener = null;
@@ -38,8 +40,7 @@ public class MultiDataReceiver implements Receiver {
         Entry entry;
         if (mNonFinishedEntry == null) {
             try {
-                header = Header.parse(channel);
-                System.out.println("header size:" + header.size());
+                header = Header.from(channel);
             } catch (IOException e) {
                 return Result.ERROR;
             }
@@ -50,7 +51,7 @@ public class MultiDataReceiver implements Receiver {
         }
 
         int tmp = entry.read(channel);
-        System.out.println("data read:" + tmp);
+        Log.d(TAG, "data read:" + tmp);
         if (tmp < 0) {
             return Result.ERROR;
         }

@@ -1,10 +1,10 @@
 package com.example.ymiyauchi.mylibrary.remote.sender;
 
 
+import android.util.Log;
+
 import com.example.ymiyauchi.mylibrary.remote.Header;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -19,6 +19,7 @@ import java.util.Deque;
  */
 
 public class MultiDataSender implements Sender {
+    private static final String TAG = "MULTI_DATA_SENDER";
     private final Deque<ByteBuffer> mData = new ArrayDeque<>();
 
     private OnSendListener mListener = null;
@@ -36,7 +37,7 @@ public class MultiDataSender implements Sender {
         State state;
         if (mState == null) {
             state = mState = new State();
-            state.header = Header.parse(mData);
+            state.header = Header.from(mData);
             state.headerBuffer = state.header.toByteBuffer();
         } else {
             state = mState;
@@ -76,7 +77,8 @@ public class MultiDataSender implements Sender {
         return this;
     }
 
-    private Sender put(byte[] bytes) {
+    @Override
+    public Sender put(byte[] bytes) {
         ByteBuffer buf = ByteBuffer.allocate(bytes.length);
         buf.put(bytes);
         buf.flip();
@@ -117,11 +119,7 @@ public class MultiDataSender implements Sender {
         }
 
         result.flip();
+        Log.d(TAG, "input data size:" + result.limit());
         return put(result);
-    }
-
-    @Override
-    public Sender put(File file) throws IOException {
-        return put(new FileInputStream(file));
     }
 }

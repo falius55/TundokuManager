@@ -30,8 +30,8 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public int getChildrenCount(int i) {
-        return mData.get(i).getChildCount();
+    public int getChildrenCount(int groupPosition) {
+        return mData.get(groupPosition).getChildCount();
     }
 
     @Override
@@ -60,17 +60,17 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getGroupView(int i, boolean b, View view, ViewGroup viewGroup) {
+    public View getGroupView(int groupPosition, boolean isExpanded, View contentView, ViewGroup parent) {
         return null;
     }
 
     @Override
-    public View getChildView(int i, int i1, boolean b, View view, ViewGroup viewGroup) {
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View view, ViewGroup viewGroup) {
         return null;
     }
 
     @Override
-    public boolean isChildSelectable(int i, int i1) {
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
         return false;
     }
 }

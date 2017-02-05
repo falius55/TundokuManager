@@ -1,5 +1,7 @@
 package com.example.ymiyauchi.mylibrary.remote;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -11,6 +13,7 @@ import java.util.Collection;
  */
 
 public class Header {
+    private static final String TAG = "HEADER";
     private final int mHeaderSize;
     private final int mAllDataSize;
     private final IntBuffer mItemDataSizes;
@@ -19,9 +22,11 @@ public class Header {
         mHeaderSize = headerSize;
         mAllDataSize = allDataSize;
         mItemDataSizes = itemDataSizes.asReadOnlyBuffer();
+        Log.d(TAG, "header size:" + headerSize);
+        Log.d(TAG, "all data size:" + allDataSize);
     }
 
-    public static Header parse(Collection<ByteBuffer> data) {
+    public static Header from(Collection<ByteBuffer> data) {
         int headerSize = 4 + 4 + data.size() * 4;
         int dataSize = headerSize;
 
@@ -35,7 +40,7 @@ public class Header {
         return new Header(headerSize, dataSize, buf);
     }
 
-    public static Header parse(SocketChannel channel) throws IOException {
+    public static Header from(SocketChannel channel) throws IOException {
         int read = 0;
 
         ByteBuffer headerSizeBuf = ByteBuffer.allocate(8);
@@ -46,7 +51,9 @@ public class Header {
             throw new IOException();
         }
         int headerSize = headerSizeBuf.getInt();
-        int dataSize = headerSizeBuf.getInt();
+        Log.d(TAG, "size:" + headerSize);
+        int allDataSize = headerSizeBuf.getInt();
+        Log.d(TAG, "all data size:" + allDataSize);
 
         ByteBuffer headerBuf = ByteBuffer.allocate(headerSize - 8);
         tmp = channel.read(headerBuf);
@@ -59,10 +66,13 @@ public class Header {
         int dataCount = headerSize / 4 - 2;
         IntBuffer dataSizes = IntBuffer.allocate(dataCount);
         while (headerBuf.hasRemaining()) {
-            dataSizes.put(headerBuf.getInt());
+            int dataSize = headerBuf.getInt();
+            dataSizes.put(dataSize);
+            Log.d(TAG, "data size:" + dataSize);
+
         }
         dataSizes.flip();
-        return new Header(read, dataSize, dataSizes);
+        return new Header(read, allDataSize, dataSizes);
     }
 
     public int size() {
@@ -90,7 +100,9 @@ public class Header {
         ret.putInt(mHeaderSize);
         ret.putInt(mAllDataSize);
         while (dataSizes.hasRemaining()) {
-            ret.putInt(dataSizes.get());
+            int size = dataSizes.get();
+            ret.putInt(size);
+            Log.d(TAG, "data size:" + size);
         }
         ret.flip();
         return ret;

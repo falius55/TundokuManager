@@ -38,7 +38,7 @@ public class ReadingHandler implements Handler {
             Receiver.Result result = receiver.receive(channel);
 
             if (result == Receiver.Result.ERROR) {
-                System.err.println("receive error");
+                Log.d(TAG, "receive error");
                 mDisconnectable.disconnect(channel, key, new IOException("reading channel returns -1"));
                 return;
             }

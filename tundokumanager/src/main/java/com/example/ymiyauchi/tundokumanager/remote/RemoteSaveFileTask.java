@@ -1,15 +1,18 @@
-package com.example.ymiyauchi.tundokumanager;
+package com.example.ymiyauchi.tundokumanager.remote;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.ymiyauchi.mylibrary.remote.client.Client;
 import com.example.ymiyauchi.mylibrary.remote.client.NonBlockingClient;
 import com.example.ymiyauchi.mylibrary.remote.receiver.OnReceiveListener;
 import com.example.ymiyauchi.mylibrary.remote.receiver.Receiver;
+import com.example.ymiyauchi.mylibrary.remote.sender.FileSender;
 import com.example.ymiyauchi.mylibrary.remote.sender.MultiDataSender;
 import com.example.ymiyauchi.mylibrary.remote.sender.OnSendListener;
 import com.example.ymiyauchi.mylibrary.remote.swapper.OnceSwapper;
@@ -23,22 +26,23 @@ import java.util.concurrent.TimeoutException;
  * Created by ymiyauchi on 2017/02/02.
  */
 
-public class RemoteFileTask extends AsyncTask<String, String, Receiver> {
-    private final Context mContext;
+public class RemoteSaveFileTask extends AsyncTask<String, String, Receiver> {
+    private static final String TAG = "REMOTE_SAVE_FILE_TASK";
+    private final Activity mActivity;
 
-    public RemoteFileTask(Context context) {
-        mContext = context;
+    public RemoteSaveFileTask(Activity activity) {
+        mActivity = activity;
     }
 
     /**
-     * @param strings ファイル名、ファイルの場所。ファイル名が不適切(/や空白が含まれているなど)だと、
-     *                サーバー側でファイル保存に失敗する
+     * @param strings ファイル名、サーバー側での保存ディレクトリ、送るファイルの場所。
+     *                ファイル名が不適切(/や空白が含まれているなど)だと、サーバー側でファイル保存に失敗する
      * @return
      */
     @Override
     protected Receiver doInBackground(final String... strings) {
         SharedPreferences sharedPreferences
-                = PreferenceManager.getDefaultSharedPreferences(mContext);
+                = PreferenceManager.getDefaultSharedPreferences(mActivity);
         String serverHost = sharedPreferences.getString("ip_address", "localhost");
         int port = Integer.parseInt(sharedPreferences.getString("port", "0"));
 
@@ -59,13 +63,22 @@ public class RemoteFileTask extends AsyncTask<String, String, Receiver> {
         });
 
         try {
+            final String fileName = strings[0];
+            final String savePath = strings[1];
+            final String filePath = strings[2];
+            Log.d(TAG, "fileName:" + fileName);
+            Log.d(TAG, "savePath:" + savePath);
+            Log.d(TAG, "filePath:" + filePath);
             return client.start(new OnceSwapper() {
                 @Override
                 public Sender swap(String remoteAddress, Receiver receiver) {
                     Sender sender = new MultiDataSender();
-                    sender.put(strings[0]);
+                    sender.put(RequestHandler.FILE_SAVE.getCode());
+                    FileSender fileSender = new FileSender(sender);
+                    fileSender.put(fileName);
+                    fileSender.put(savePath);
                     try {
-                        sender.put(new File(strings[1]));
+                        fileSender.put(new File(filePath));
                     } catch (IOException e) {
                         return null;
                     }
@@ -82,9 +95,9 @@ public class RemoteFileTask extends AsyncTask<String, String, Receiver> {
     protected void onPostExecute(Receiver receiver) {
         super.onPostExecute(receiver);
         if (receiver == null) {
-            Toast.makeText(mContext, "failed send file", Toast.LENGTH_LONG).show();
+            Toast.makeText(mActivity, "failed send file", Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(mContext, "send file:" + receiver.getString(), Toast.LENGTH_LONG).show();
+            Toast.makeText(mActivity, "send file:" + receiver.getString(), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -95,6 +108,7 @@ public class RemoteFileTask extends AsyncTask<String, String, Receiver> {
         for (String msg : values) {
             sb.append(msg);
         }
-        Toast.makeText(mContext, sb.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(mActivity, sb.toString(), Toast.LENGTH_SHORT).show();
+        mActivity.finish();
     }
 }

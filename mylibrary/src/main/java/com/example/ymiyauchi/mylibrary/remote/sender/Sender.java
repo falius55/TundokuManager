@@ -34,11 +34,11 @@ public interface Sender {
 
     Sender put(ByteBuffer[] bufs);
 
+    Sender put(byte[] bytes);
+
     Sender put(int num);
 
     Sender put(String msg);
 
     Sender put(InputStream in) throws IOException;
-
-    Sender put(File file) throws IOException;
 }
