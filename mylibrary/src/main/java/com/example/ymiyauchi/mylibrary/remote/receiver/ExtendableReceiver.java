@@ -7,6 +7,8 @@ import java.nio.channels.SocketChannel;
 
 /**
  * Created by ymiyauchi on 2017/02/03.
+ *
+ * Receiverオブジェクトの受信データを拡張する場合にこのクラスを継承してください。
  */
 
 public abstract class ExtendableReceiver implements Receiver {

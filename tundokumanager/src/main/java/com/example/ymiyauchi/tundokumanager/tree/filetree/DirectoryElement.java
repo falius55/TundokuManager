@@ -16,6 +16,8 @@ import java.util.List;
 
 /**
  * Created by ymiyauchi on 2017/02/03.
+ *
+ * ディレクトリを表すクラスです。
  */
 
 public class DirectoryElement extends FileTreeElement {

@@ -6,17 +6,25 @@ import com.example.ymiyauchi.mylibrary.remote.sender.Sender;
 /**
  * Created by ymiyauchi on 2017/02/02.
  *
+ * <p/>
  * 受信内容を受け取り、送信内容を格納したSenderオブジェクトを作成するクラスのインターフェースです。
  *
+ * <p/>
+ * Senderが一度の送信ごとに使い捨てられるのに対し、Swapperは一つの接続に対して一つのオブジェクトがあてられます。
+ *
+ * <p/>
  * 受信内容をもとに送信内容を決定するためにReceiverオブジェクトを引数に受け取りますが、
  * クライアントにおいては最初の一度はreceiverにnullが入り、最後の受信内容はswap()メソッドで
  * 受け取れないなど不便なものとなっています。そのため、Swapperは純粋にSenderオブジェクトを生成するための
  * オブジェクトとし、受信内容の処理は一度の送受信ならClient#startメソッドの戻り値、複数の送受信を行うなら
  * OnReceiveListener#onReceiveの引数に渡されるReceiverオブジェクトを利用するのが確実です。
  *
+ * <p/>
  * サーバーとクライアントが同じ回数だけswapメソッドが呼ばれるようにisContinueメソッドがfalseを返すように調整する
  * ことで、お互いに受信失敗が発生せず自然に通信を終えることができます。
  *
+ * <p/>
+ * 具象クラスは、一度の送受信であればOnceSwapper、送受信を繰り返す場合はRepeatSwapperが利用できます。
  *
  */
 
@@ -24,7 +32,8 @@ import com.example.ymiyauchi.mylibrary.remote.sender.Sender;
 public interface Swapper {
 
     /**
-     * データの受信と送信を繋ぐ処理を行うクラスのインターフェースです。
+     * <p/>
+     * データの受信と送信を繋ぐ処理を行うメソッドです。
      * 受信データが格納されたReceiverからデータを取得し、
      * 送信するデータを格納したSenderオブジェクトを作成して戻り値としてください
      * <p>
@@ -37,6 +46,9 @@ public interface Swapper {
      * ただし通信相手は受信に失敗したことを検知して接続を切ることになるため、正常に終了したとは言えないかもしれません。
      * <p>
      * クライアントに限り、最初の一度だけreceiverにnullが渡されますので注意してください。
+     *
+     * @param remoteAddress 接続相手のアドレス
+     * @param receiver 一度でも受信していれば受信データ。一度も受信していなければnull
      */
     Sender swap(String remoteAddress, Receiver receiver);
 
@@ -48,6 +60,9 @@ public interface Swapper {
      */
     boolean isContinue();
 
+    /**
+     * Swapperを生成するファクトリメソッドを持つインターフェースです。
+     */
     interface SwapperFactory {
 
         Swapper get();

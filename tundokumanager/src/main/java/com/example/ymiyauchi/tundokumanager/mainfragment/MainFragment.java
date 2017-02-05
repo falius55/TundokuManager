@@ -70,7 +70,7 @@ public class MainFragment extends Fragment {
      * InputActivityから、登録ボタンおよび削除ボタンでActivityが破棄されたときに呼ばれる
      * 戻るボタンでアクティビティを破棄した場合でも呼ばれ、dataがセットされていないためdataはnullとなる
      * <p>
-     * 登録ボタン : 新規データ句の作成
+     * 登録ボタン : 新規データの作成
      * 削除ボタン : データの削除
      * 戻るボタン : 何もしない
      *

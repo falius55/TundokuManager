@@ -22,6 +22,15 @@ import java.util.concurrent.Future;
 
 /**
  * Created by ymiyauchi on 2017/02/02.
+ *
+ * {@inheritDoc}
+ *
+ * <p/>
+ * startOnNewThreadメソッドの呼び出し一回につき、ひとつのスレッドで起動します。
+ *
+ * <p/>
+ * Timeoutの設定はなく、別のスレッドからshutdownメソッドあるいはcloseメソッドが実行されるまで起動を
+ * 続けます。
  */
 
 public class NonBlockingServer implements Server, Disconnectable {
@@ -42,13 +51,13 @@ public class NonBlockingServer implements Server, Disconnectable {
     }
 
     @Override
-    public void addOnSendListener(OnSendListener listener) {
-        mRemoteStarter.addOnSendListener(listener);
+    public void addOnReceiveListener(OnReceiveListener listener) {
+        mRemoteStarter.addOnReceiveListener(listener);
     }
 
     @Override
-    public void addOnReceiveListener(OnReceiveListener listener) {
-        mRemoteStarter.addOnReceiveListener(listener);
+    public void addOnSendListener(OnSendListener listener) {
+        mRemoteStarter.addOnSendListener(listener);
     }
 
     @Override
@@ -59,15 +68,6 @@ public class NonBlockingServer implements Server, Disconnectable {
     @Override
     public void addOnShutdownCallback(Server.OnShutdownCallback callback) {
         mOnShutdownCallback = callback;
-    }
-
-    /**
-     * @return null
-     */
-    @Override
-    public Throwable call() throws IOException {
-        exec();
-        return null;
     }
 
     @Override
@@ -82,29 +82,13 @@ public class NonBlockingServer implements Server, Disconnectable {
         return mExecutor.submit(this);
     }
 
+    /**
+     * @return null
+     */
     @Override
-    public void close() throws IOException {
-        shutdown();
-    }
-
-    @Override
-    public void shutdown() throws IOException {
-        if (mIsShutdowned) {
-            return;
-        }
-        if (mServerSocketChannel == null) {
-            return;
-        }
-
-        mIsShutdowned = true;
-
-        mSelector.wakeup();
-        mServerSocketChannel.close();
-        mExecutor.shutdown();
-
-        if (mOnShutdownCallback != null) {
-            mOnShutdownCallback.onShutdown();
-        }
+    public Throwable call() throws IOException {
+        exec();
+        return null;
     }
 
     private void exec() throws IOException {
@@ -144,6 +128,16 @@ public class NonBlockingServer implements Server, Disconnectable {
         channel.socket().bind(address);
     }
 
+    private String getIPAddress() {
+        try {
+            InetAddress address = InetAddress.getLocalHost();
+            return address.getHostAddress();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     @Override
     public void disconnect(SocketChannel channel, SelectionKey key, @Nullable Throwable cause) {
         try {
@@ -156,13 +150,28 @@ public class NonBlockingServer implements Server, Disconnectable {
         }
     }
 
-    private String getIPAddress() {
-        try {
-            InetAddress address = InetAddress.getLocalHost();
-            return address.getHostAddress();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
+    @Override
+    public void close() throws IOException {
+        shutdown();
+    }
+
+    @Override
+    public void shutdown() throws IOException {
+        if (mIsShutdowned) {
+            return;
         }
-        return null;
+        if (mServerSocketChannel == null) {
+            return;
+        }
+
+        mIsShutdowned = true;
+
+        mSelector.wakeup();
+        mServerSocketChannel.close();
+        mExecutor.shutdown();
+
+        if (mOnShutdownCallback != null) {
+            mOnShutdownCallback.onShutdown();
+        }
     }
 }

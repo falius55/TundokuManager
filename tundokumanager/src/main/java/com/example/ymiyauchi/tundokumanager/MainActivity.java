@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             try (AndroidDatabase db = new BasicDatabase(this)) {
                 SQLiteDatabase sdb = db.getReadableDatabase();
                 String path = sdb.getPath();
-                task.execute("TundokuManager.sql", path);
+                task.execute("TundokuManager.sql", path);  // FIXME: 別の変更をコミットしたら削除する。引数が異なる。このままではエラー
             }
 
         }

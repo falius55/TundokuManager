@@ -7,6 +7,8 @@ import java.nio.channels.SocketChannel;
 
 /**
  * Created by ymiyauchi on 2017/02/03.
+ *
+ * Senderを拡張する場合、このクラスを継承してください。
  */
 
 public abstract class ExtendableSender implements Sender {

@@ -16,6 +16,8 @@ import java.nio.channels.SocketChannel;
 
 /**
  * Created by ymiyauchi on 2017/02/02.
+ *
+ * 接続要求を受入れ、Remoteオブジェクトを作成して続く処理を別のハンドラに委譲します。
  */
 
 public class RemoteStarter implements Handler {

@@ -16,8 +16,16 @@ import java.util.Deque;
 
 /**
  * Created by ymiyauchi on 2017/02/02.
+ *
+ * <p>
+ * 複数データの受信を管理するクラスです
+ * MultiDataSenderによって送信された際に利用します
+ *
+ * <p>
+ * 詳細はReceiver interfaceを参照してください。
+ *
+ * @see com.example.ymiyauchi.mylibrary.remote.receiver.Receiver
  */
-
 public class MultiDataReceiver implements Receiver {
     private static final String TAG = "MULTI_DATA RECEIVER";
     private final Deque<ByteBuffer> mReceivedData = new ArrayDeque<>();
@@ -31,6 +39,13 @@ public class MultiDataReceiver implements Receiver {
         mListener = listener;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param channel 受信用ソケット・チャネル
+     * @return
+     * @throws IOException
+     */
     @Override
     public Result receive(SocketChannel channel) throws IOException {
         // もし送信側がByteBufferの配列を使って送信してきても、
@@ -73,13 +88,19 @@ public class MultiDataReceiver implements Receiver {
     }
 
     /**
-     * @return 保持している受信データがあればそのデータ。なければnull
+     * {@inheritDoc}
+     *
      */
     @Override
     public ByteBuffer get() {
         return mReceivedData.poll();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return
+     */
     @Override
     public ByteBuffer[] getAll() {
         ByteBuffer[] ret = mReceivedData.toArray(new ByteBuffer[0]);
@@ -87,16 +108,29 @@ public class MultiDataReceiver implements Receiver {
         return ret;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return
+     */
     @Override
     public int dataCount() {
         return mReceivedData.size();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void clear() {
         mReceivedData.clear();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return
+     */
     @Override
     public String getString() {
         ByteBuffer buf = get();
@@ -106,7 +140,9 @@ public class MultiDataReceiver implements Receiver {
     }
 
     /**
-     * @return 保持データがなければ0
+     * {@inheritDoc}
+     *
+     * @return
      */
     @Override
     public int getInt() {
@@ -116,6 +152,12 @@ public class MultiDataReceiver implements Receiver {
         return buf.getInt();
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param os
+     * @throws IOException
+     */
     @Override
     public void getAndOutput(OutputStream os) throws IOException {
         ByteBuffer buf = get();
@@ -149,6 +191,9 @@ public class MultiDataReceiver implements Receiver {
             init();
         }
 
+        /**
+         * ヘッダーの情報を元に、読み取り予定データ分のバッファを用意します。
+         */
         private void init() {
             IntBuffer sizeBuf = mHeader.dataSizeBuffer();
             while (sizeBuf.hasRemaining()) {
@@ -157,6 +202,12 @@ public class MultiDataReceiver implements Receiver {
             }
         }
 
+        /**
+         * データを受信します。あらかじめ決定した容量を超えるデータは何度呼び出しても読み取りません。
+         * @param channel
+         * @return
+         * @throws IOException
+         */
         private int read(SocketChannel channel) throws IOException {
             int readed = 0;
             for (ByteBuffer itemBuf : mItemData) {
@@ -170,6 +221,10 @@ public class MultiDataReceiver implements Receiver {
             return readed;
         }
 
+        /**
+         * 保持データをdstに追加します。
+         * @param dst
+         */
         private void add(Deque<ByteBuffer> dst) {
             if (!isFinished()) {
                 return;
@@ -180,6 +235,10 @@ public class MultiDataReceiver implements Receiver {
             }
         }
 
+        /**
+         *
+         * @return 読み取り予定のデータをすべて受信したかどうか
+         */
         private boolean isFinished() {
             return mRemain == 0;
         }

@@ -14,6 +14,8 @@ import java.util.regex.Pattern;
 
 /**
  * Created by ymiyauchi on 2017/02/03.
+ *
+ * ファイルシステムの各ファイル、ディレクトリを表すクラスの基底クラスです。
  */
 
 public abstract class FileTreeElement implements TreeElement {
@@ -118,6 +120,7 @@ public abstract class FileTreeElement implements TreeElement {
 
     @Override
     public void setView(View view) {
+        // TODO: 未使用。削除
 //        Log.d(TAG, "set view:" + getName());
 //        TextView txtFile = (TextView) view.findViewById(R.id.txt_file_name);
 //        txtFile.setText(getName());

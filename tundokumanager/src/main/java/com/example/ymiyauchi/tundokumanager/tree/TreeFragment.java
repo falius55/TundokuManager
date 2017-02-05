@@ -63,6 +63,8 @@ public class TreeFragment extends ListFragment {
         TreeManager treeManager = root.getManager();
         TreeElement displayNode = treeManager.findById(dirId);
         mDisplayNode = displayNode;
+        setEmptyText("empty directory");
+
         if (displayNode.isLoadable()) {
             displayNode.load(this);
         } else {

@@ -16,22 +16,39 @@ import java.util.Deque;
 
 /**
  * Created by ymiyauchi on 2017/02/02.
+ *
+ * 複数データを送信する際に利用するクラスです。
+ *
+ * 再利用はできません。Swapper#swapメソッドでは必ず新しく作成したインスタンスを
+ * 返すようにしてください。
+ *
  */
-
 public class MultiDataSender implements Sender {
     private static final String TAG = "MULTI_DATA_SENDER";
     private final Deque<ByteBuffer> mData = new ArrayDeque<>();
 
     private OnSendListener mListener = null;
-    private ByteBuffer mSendData = null;
     private State mState = null;
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param listener
+     * @return
+     */
     @Override
     public Sender addOnSendListener(OnSendListener listener) {
         mListener = listener;
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param channel 送信するチャネル
+     * @return
+     * @throws IOException
+     */
     @Override
     public final Result send(SocketChannel channel) throws IOException {
         State state;
@@ -59,24 +76,46 @@ public class MultiDataSender implements Sender {
         }
     }
 
+    /**
+     * 書き込みが一度で終わらなかったときのために、
+     * 各情報を保持する。
+     */
     private static class State {
         private Header header;
         private ByteBuffer headerBuffer;
         private int writeSize = 0;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param buf
+     * @return
+     */
     @Override
     public final Sender put(ByteBuffer buf) {
         mData.add(buf);
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param bufs
+     * @return
+     */
     @Override
     public final Sender put(ByteBuffer[] bufs) {
         mData.addAll(Arrays.asList(bufs));
         return this;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param bytes
+     * @return
+     */
     @Override
     public Sender put(byte[] bytes) {
         ByteBuffer buf = ByteBuffer.allocate(bytes.length);
@@ -85,11 +124,23 @@ public class MultiDataSender implements Sender {
         return put(buf);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param str
+     * @return
+     */
     @Override
     public Sender put(String str) {
         return put(str.getBytes(StandardCharsets.UTF_8));
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param num
+     * @return
+     */
     @Override
     public Sender put(int num) {
         ByteBuffer buf = ByteBuffer.allocate(4);
@@ -98,6 +149,13 @@ public class MultiDataSender implements Sender {
         return put(buf);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @param is
+     * @return
+     * @throws IOException
+     */
     @Override
     public Sender put(InputStream is) throws IOException {
         final int READ_SIZE = 4096;
