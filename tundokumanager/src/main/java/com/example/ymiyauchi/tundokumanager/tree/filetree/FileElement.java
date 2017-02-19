@@ -13,8 +13,8 @@ import com.example.ymiyauchi.tundokumanager.tree.TreeFragment;
 
 public class FileElement extends FileTreeElement {
 
-    public FileElement(String absoluteName, FileTree fileTree) {
-        super(absoluteName, fileTree);
+    public FileElement(String[] paths, FileTree fileTree) {
+        super(paths, fileTree);
     }
 
     @Override

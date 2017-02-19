@@ -81,20 +81,28 @@ public class DirectoryLoadTask extends AsyncTask<DirectoryElement, Integer, Rece
         try {
             String dirsString = receiver.getString();
             String filesString = receiver.getString();
+
             Log.d(TAG, "dirsString:" + dirsString);
             Log.d(TAG, "filesString:" + filesString);
-            JSONArray dirs = new JSONArray(dirsString.replaceAll("\\\\", "\\\\\\\\"));
-            JSONArray files = new JSONArray(filesString.replaceAll("\\\\", "\\\\\\\\"));
+
+            JSONArray dirs = new JSONArray(dirsString);
+            JSONArray files = new JSONArray(filesString);
+
             Log.d(TAG, "dirs:" + dirs);
             Log.d(TAG, "files:" + files);
+
             DirectoryElement element = mDirectoryElement;
+
             for (int i = 0; i < dirs.length(); i++) {
-                String dirName = dirs.getString(i);
-                element.addDirectory(dirName);
+                JSONArray dirPath = dirs.getJSONArray(i);
+                String[] paths = getStringArray(dirPath);
+
+                element.addDirectory(paths);
             }
             for (int i = 0; i < files.length(); i++) {
-                String fileName = files.getString(i);
-                element.addFile(fileName);
+                JSONArray filePath = files.getJSONArray(i);
+                String[] paths = getStringArray(filePath);
+                element.addFile(paths);
             }
         } catch (JSONException | FileNotFoundException e) {
             e.printStackTrace();
@@ -103,5 +111,13 @@ public class DirectoryLoadTask extends AsyncTask<DirectoryElement, Integer, Rece
         Log.d("FILE_TREE_PRINT", "\n" + mDirectoryElement.root().toTreeString("|"));
 
         mFragment.createList(mDirectoryElement);
+    }
+
+    private String[] getStringArray(JSONArray filePath) throws JSONException {
+        String[] paths = new String[filePath.length()];
+        for (int i = 0; i < filePath.length(); i++) {
+            paths[i] = filePath.getString(i);
+        }
+        return paths;
     }
 }

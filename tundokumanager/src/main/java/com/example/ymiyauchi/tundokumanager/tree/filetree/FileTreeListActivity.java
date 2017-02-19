@@ -16,6 +16,6 @@ public class FileTreeListActivity extends TreeListActivity {
 
     @Override
     protected TreeElement getRoot() {
-        return new DirectoryElement("C:\\", new FileTree());
+        return new DirectoryElement(new String[]{"C:"}, new FileTree());
     }
 }
