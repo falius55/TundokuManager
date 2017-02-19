@@ -7,6 +7,8 @@ import com.example.ymiyauchi.mylibrary.remote.receiver.Receiver;
 import com.example.ymiyauchi.mylibrary.remote.sender.MultiDataSender;
 import com.example.ymiyauchi.mylibrary.remote.sender.Sender;
 
+import org.json.JSONArray;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -29,19 +31,16 @@ public enum RequestHandler {
 
             String fileName = receiver.getString();
             String savePath = receiver.getString();
-            System.out.println("filename:" + fileName);
             try {
                 FileReceiver fileReceiver = new FileReceiver(receiver);
                 fileReceiver.getAndSave(new File(savePath + "\\" + fileName));
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("IOException in swap()");
                 sender.put("failed save file");
                 return sender;
             }
 
             sender.put("save file");
-            System.out.println("send");
             return sender;
 
         }
@@ -56,13 +55,12 @@ public enum RequestHandler {
             // ディレクトリ一覧の配列のＪｓｏｎ文字列
             // ファイル一覧の配列のＪｓｏｎ文字列
             String directory = receiver.getString();
-            StringBuilder sbDirs = new StringBuilder("[");
-            StringBuilder sbFiles = new StringBuilder("[");
             File dir = new File(directory);
 
-            File[] files = dir.listFiles();
-            for (int i = 0, len = files.length; i < len; i++) {
-                File file = files[i];
+            JSONArray dirsArray = new JSONArray();
+            JSONArray filesArray = new JSONArray();
+
+            for (File file : dir.listFiles()) {
                 if (!file.canRead() || !file.canWrite()
                         || file.getAbsolutePath().equals("C:\\Documents and Settings")
                         || file.getAbsolutePath().equals("C:\\$Recycle.Bin")
@@ -71,57 +69,22 @@ public enum RequestHandler {
                     continue;
                 }
 
-                if (file.isFile()) {
-                    continue;
-                }
-
-                if (i != 0) {
-                    sbDirs.append(",");
-                }
-
                 String[] paths = file.getAbsolutePath().split("\\\\");
-                StringBuilder sbDir = new StringBuilder("[");
-                for (int j = 0; j < paths.length; j++) {
-                    if (j != 0) {
-                        sbDir.append(",");
-                    }
-                    String path = paths[j];
-                    sbDir.append("\"").append(path).append("\"");
+                JSONArray pathArray = new JSONArray();
+                for (String path : paths) {
+                    pathArray.put(path);
                 }
-                sbDir.append("]");
 
-
-                sbDirs.append(sbDir.toString());
-            }
-            sbDirs.append("]");
-
-            for (int i = 0, len = files.length; i < len; i++) {
-                File file = files[i];
                 if (file.isDirectory()) {
-                    continue;
+                    dirsArray.put(pathArray);
+                } else {
+                    filesArray.put(pathArray);
                 }
-                if (i != 0) {
-                    sbFiles.append(",");
-                }
-
-                String[] paths = file.getAbsolutePath().split("\\\\");
-                StringBuilder sbFile = new StringBuilder("[");
-                for (int j = 0; j < paths.length; j++) {
-                    if (j != 0) {
-                        sbFile.append(",");
-                    }
-                    String path = paths[j];
-                    sbFile.append("\"").append(path).append("\"");
-                }
-                sbFile.append("]");
-
-                sbFiles.append(sbFile.toString());
             }
-            sbFiles.append("]");
 
             Sender sender = new MultiDataSender();
-            sender.put(sbDirs.toString());
-            sender.put(sbFiles.toString());
+            sender.put(dirsArray.toString());
+            sender.put(filesArray.toString());
             return sender;
         }
     };
