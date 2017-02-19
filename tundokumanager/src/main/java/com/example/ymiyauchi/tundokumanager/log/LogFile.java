@@ -11,7 +11,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 
 /**
  * Created by ymiyauchi on 2017/02/19.
@@ -54,11 +53,6 @@ public class LogFile implements Thread.UncaughtExceptionHandler {
             for (StackTraceElement element : elements) {
                 bw.write(++cnt + " : ");
                 bw.write(element.toString());
-//                bw.write(element.getClassName());
-//                bw.write("#");
-//                bw.write(element.getMethodName());
-//                bw.write(" : ");
-//                bw.write(element.getLineNumber());
                 bw.write(System.lineSeparator());
             }
 

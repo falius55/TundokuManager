@@ -22,6 +22,14 @@ public abstract class TreeListActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            finish();
+        }
+    }
+
     protected abstract TreeElement getRoot();
 
     protected abstract TreeFragment getFragment(TreeElement node);
