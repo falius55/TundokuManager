@@ -104,7 +104,7 @@ public class DirectoryElement extends FileTreeElement {
     }
 
     @Override
-    public TreeElement getChild(int index) {
+    public FileTreeElement getChild(int index) {
         return mChildren.get(index);
     }
 

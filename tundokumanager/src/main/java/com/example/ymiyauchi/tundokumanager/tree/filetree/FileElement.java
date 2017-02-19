@@ -2,9 +2,7 @@ package com.example.ymiyauchi.tundokumanager.tree.filetree;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.view.View;
 
-import com.example.ymiyauchi.tundokumanager.tree.TreeElement;
 import com.example.ymiyauchi.tundokumanager.tree.TreeFragment;
 
 /**
@@ -18,7 +16,7 @@ public class FileElement extends FileTreeElement {
     }
 
     @Override
-    public TreeElement getChild(int index) {
+    public FileTreeElement getChild(int index) {
         return null;
     }
 

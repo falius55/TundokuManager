@@ -153,7 +153,7 @@ public abstract class FileTreeElement implements TreeElement {
 
         String childLine = acumulator + separator;
         for (int i = 0; i < getChildCount(); i++) {
-            FileTreeElement child = (FileTreeElement) getChild(i);
+            FileTreeElement child = getChild(i);
             sb.append(child.toTreeString(separator, childLine)).append(LINE_SEPARATOR);
         }
         return sb.toString();
@@ -181,4 +181,7 @@ public abstract class FileTreeElement implements TreeElement {
     public int describeContents() {
         return 0;
     }
+
+    @Override
+    public abstract FileTreeElement getChild(int index);
 }

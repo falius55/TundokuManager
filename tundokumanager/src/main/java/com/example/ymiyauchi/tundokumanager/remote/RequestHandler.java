@@ -74,11 +74,27 @@ public enum RequestHandler {
                 if (file.isFile()) {
                     continue;
                 }
+
                 if (i != 0) {
                     sbDirs.append(",");
                 }
-                sbDirs.append("\"").append(file.getAbsolutePath()).append("\"");
+
+                String[] paths = file.getAbsolutePath().split("\\\\");
+                StringBuilder sbDir = new StringBuilder("[");
+                for (int j = 0; j < paths.length; j++) {
+                    if (j != 0) {
+                        sbDir.append(",");
+                    }
+                    String path = paths[j];
+                    sbDir.append("\"").append(path).append("\"");
+                }
+                sbDir.append("]");
+
+
+                sbDirs.append(sbDir.toString());
             }
+            sbDirs.append("]");
+
             for (int i = 0, len = files.length; i < len; i++) {
                 File file = files[i];
                 if (file.isDirectory()) {
@@ -87,8 +103,21 @@ public enum RequestHandler {
                 if (i != 0) {
                     sbFiles.append(",");
                 }
-                sbFiles.append("\"").append(file.isAbsolute()).append("\"");
+
+                String[] paths = file.getAbsolutePath().split("\\\\");
+                StringBuilder sbFile = new StringBuilder("[");
+                for (int j = 0; j < paths.length; j++) {
+                    if (j != 0) {
+                        sbFile.append(",");
+                    }
+                    String path = paths[j];
+                    sbFile.append("\"").append(path).append("\"");
+                }
+                sbFile.append("]");
+
+                sbFiles.append(sbFile.toString());
             }
+            sbFiles.append("]");
 
             Sender sender = new MultiDataSender();
             sender.put(sbDirs.toString());

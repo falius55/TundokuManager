@@ -11,7 +11,7 @@ import com.example.ymiyauchi.tundokumanager.tree.TreeListActivity;
 public class FileTreeListActivity extends TreeListActivity {
     @Override
     protected TreeFragment getFragment(TreeElement node) {
-        return TreeFragment.newInstance(node);
+        return FileTreeFragment.newInstance((FileTreeElement) node);
     }
 
     @Override

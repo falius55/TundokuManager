@@ -10,7 +10,7 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.example.ymiyauchi.mylibrary.AndroidDatabase;
@@ -26,27 +26,14 @@ import java.util.Objects;
  * Created by ymiyauchi on 2017/02/05.
  */
 
-public class TreeFragment extends ListFragment {
+public abstract class TreeFragment extends ListFragment {
     private static final String TAG = "TREE_FRAGMENT";
 
-    private static final String ARG_ROOT_ELEMENT = "arg tree root element";
-    private static final String ARG_PRINT_NODE_ID = "arg print node id";
+    public static final String ARG_ROOT_ELEMENT = "arg tree root element";
+    public static final String ARG_PRINT_NODE_ID = "arg print node id";
 
     private TreeElement mDisplayNode = null;
 
-    public static TreeFragment newInstance(TreeElement node) {
-        TreeFragment fragment = new TreeFragment();
-        Bundle bundle = new Bundle();
-
-        TreeElement root = node.root();
-        bundle.putParcelable(ARG_ROOT_ELEMENT, root);
-
-        long id = node.getId();
-        bundle.putLong(ARG_PRINT_NODE_ID, id);
-
-        fragment.setArguments(bundle);
-        return fragment;
-    }
 
     public TreeFragment() {
         // empty
@@ -81,21 +68,13 @@ public class TreeFragment extends ListFragment {
     }
 
     public void createList(TreeElement node) {
-        if (node == null) {
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                    android.R.layout.simple_list_item_1, new String[0]);
-            setListAdapter(adapter);
-            return;
-        }
-        String[] data = new String[node.getChildCount()];
-        for (int i = 0; i < node.getChildCount(); i++) {
-            TreeElement child = node.getChild(i);
-            data[i] = child.toString();
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(),
-                android.R.layout.simple_list_item_1, data);
+        ListAdapter adapter = createAdapter(node);
         setListAdapter(adapter);
     }
+
+    public abstract ListAdapter createAdapter(TreeElement node);
+
+    public abstract String getTitle();
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {

@@ -55,7 +55,7 @@ public class DirectoryLoadTask extends AsyncTask<DirectoryElement, Integer, Rece
                 Sender sender = new MultiDataSender();
                 sender.put(RequestHandler.DIRECTORY_ASK.getCode());
                 String dirName = elements[0].getAbsoluteName();
-                Log.d(TAG, "receive:" + dirName);
+                Log.d(TAG, "send:" + dirName);
                 sender.put(dirName);
                 return sender;
             }
