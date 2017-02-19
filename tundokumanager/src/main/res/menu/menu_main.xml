@@ -18,4 +18,8 @@
         android:id="@+id/action_pcfile"
         android:title="@string/action_pcfile"/>
 
+    <item
+        android:id="@+id/action_log"
+        android:title="@string/action_log"/>
+
 </menu>

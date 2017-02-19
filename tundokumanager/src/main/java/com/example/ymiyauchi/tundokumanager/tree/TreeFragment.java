@@ -18,6 +18,7 @@ import com.example.ymiyauchi.mylibrary.remote.receiver.Receiver;
 import com.example.ymiyauchi.tundokumanager.R;
 import com.example.ymiyauchi.tundokumanager.database.BasicDatabase;
 import com.example.ymiyauchi.tundokumanager.remote.RemoteSaveFileTask;
+import com.example.ymiyauchi.tundokumanager.tree.filetree.FileTreeElement;
 
 import java.util.Objects;
 
@@ -29,7 +30,7 @@ public class TreeFragment extends ListFragment {
     private static final String TAG = "TREE_FRAGMENT";
 
     private static final String ARG_ROOT_ELEMENT = "arg tree root element";
-    private static final String ARG_PRING_NODE_ID = "arg print node id";
+    private static final String ARG_PRINT_NODE_ID = "arg print node id";
 
     private TreeElement mDisplayNode = null;
 
@@ -41,7 +42,7 @@ public class TreeFragment extends ListFragment {
         bundle.putParcelable(ARG_ROOT_ELEMENT, root);
 
         long id = node.getId();
-        bundle.putLong(ARG_PRING_NODE_ID, id);
+        bundle.putLong(ARG_PRINT_NODE_ID, id);
 
         fragment.setArguments(bundle);
         return fragment;
@@ -59,11 +60,10 @@ public class TreeFragment extends ListFragment {
         TreeElement root = bundle.getParcelable(ARG_ROOT_ELEMENT);
         Objects.requireNonNull(root);
 
-        long dirId = bundle.getLong(ARG_PRING_NODE_ID);
+        long dirId = bundle.getLong(ARG_PRINT_NODE_ID);
         TreeManager treeManager = root.getManager();
         TreeElement displayNode = treeManager.findById(dirId);
         mDisplayNode = displayNode;
-        setEmptyText("empty directory");
 
         if (displayNode.isLoadable()) {
             displayNode.load(this);
@@ -76,6 +76,7 @@ public class TreeFragment extends ListFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        setEmptyText("empty directory");
         registerForContextMenu(getListView());
     }
 
@@ -107,6 +108,9 @@ public class TreeFragment extends ListFragment {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         int pos = info.position;
         TreeElement selectedElement = mDisplayNode.getChild(pos);
+        if (((FileTreeElement) selectedElement).isFile()) {
+            return false;
+        }
 
         if (item.getItemId() == R.id.action_save_db) {
             try (AndroidDatabase db = new BasicDatabase(getActivity())) {

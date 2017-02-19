@@ -4,11 +4,10 @@ import android.os.Parcel;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
 import com.example.ymiyauchi.tundokumanager.tree.TreeElement;
 
+import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,7 +20,7 @@ import java.util.regex.Pattern;
 public abstract class FileTreeElement implements TreeElement {
     private static final String TAG = "FILE_TREE_ELEMENT";
     private static final String CREATE_TAG = "FILE_TREE_CREATE";
-    protected static final String FILENAME_SEPARATOR = "\\";
+    private static final String FILENAME_SEPARATOR = "\\";
 
     public enum Type {
         FILE, DIRECTORY,
@@ -72,9 +71,9 @@ public abstract class FileTreeElement implements TreeElement {
         // directory : "\xxx"
         // file : "\xxx"
         if (mPath.equals("")) {
-            return FILENAME_SEPARATOR;
+            return File.separator;
         }
-        return mPath;
+        return mPath.replaceAll("[/\\\\]", File.separator);
     }
 
     public String getName() {
@@ -88,8 +87,8 @@ public abstract class FileTreeElement implements TreeElement {
         // root: "\"
         // directory: "\xxx\aaa"
         // file : "\xxx\aaa.txt"
-        String absoluteName = TextUtils.join(FILENAME_SEPARATOR, new String[]{mPath, mName});
-        return absoluteName;
+        String absoluteName = TextUtils.join(File.separator, new String[]{mPath, mName});
+        return absoluteName.replaceAll("[\\\\/]", File.separator);
     }
 
     @NonNull
@@ -116,16 +115,6 @@ public abstract class FileTreeElement implements TreeElement {
                 return ret;
             }
         }
-    }
-
-    @Override
-    public void setView(View view) {
-        // TODO: 未使用。削除
-//        Log.d(TAG, "set view:" + getName());
-//        TextView txtFile = (TextView) view.findViewById(R.id.txt_file_name);
-//        txtFile.setText(getName());
-        TextView textView = (TextView) view;
-        textView.setText(getAbsoluteName());
     }
 
     @Override

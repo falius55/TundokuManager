@@ -63,6 +63,14 @@ public enum RequestHandler {
             File[] files = dir.listFiles();
             for (int i = 0, len = files.length; i < len; i++) {
                 File file = files[i];
+                if (!file.canRead() || !file.canWrite()
+                        || file.getAbsolutePath().equals("C:\\Documents and Settings")
+                        || file.getAbsolutePath().equals("C:\\$Recycle.Bin")
+                        || file.getAbsolutePath().equals("C:\\System Volume Information")
+                        || file.getAbsolutePath().equals("C:\\Recovery")) {
+                    continue;
+                }
+
                 if (file.isFile()) {
                     continue;
                 }

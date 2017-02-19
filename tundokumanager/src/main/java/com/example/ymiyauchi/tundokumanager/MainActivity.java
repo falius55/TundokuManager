@@ -16,12 +16,13 @@ import com.example.ymiyauchi.mylibrary.AndroidDatabase;
 import com.example.ymiyauchi.mylibrary.remote.receiver.Receiver;
 import com.example.ymiyauchi.tundokumanager.data.DataConverter;
 import com.example.ymiyauchi.tundokumanager.database.BasicDatabase;
+import com.example.ymiyauchi.tundokumanager.log.LogActivity;
+import com.example.ymiyauchi.tundokumanager.log.LogFile;
 import com.example.ymiyauchi.tundokumanager.mainfragment.MainFragment;
 import com.example.ymiyauchi.tundokumanager.input.InputActivity;
 import com.example.ymiyauchi.mylibrary.view.pageradapter.SimplePagerAdapter;
 import com.example.ymiyauchi.tundokumanager.pref.PrefActivity;
 import com.example.ymiyauchi.tundokumanager.remote.RemoteSaveFileTask;
-import com.example.ymiyauchi.tundokumanager.tree.TreeListActivity;
 import com.example.ymiyauchi.tundokumanager.tree.filetree.FileTreeListActivity;
 
 
@@ -41,8 +42,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        LogFile logFile = new LogFile(getApplicationContext());
+        Thread.setDefaultUncaughtExceptionHandler(logFile);
 
         mPagerAdapter = new SimplePagerAdapter(this);
         mPagerAdapter.addAll(Type.values());
@@ -96,6 +101,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (item.getItemId() == R.id.action_pcfile) {
             Intent intent = new Intent(this, FileTreeListActivity.class);
+            startActivity(intent);
+        }
+
+        if (item.getItemId() == R.id.action_log) {
+            Intent intent = new Intent(this, LogActivity.class);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);

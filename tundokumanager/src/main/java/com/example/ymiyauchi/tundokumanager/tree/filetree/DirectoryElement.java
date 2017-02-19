@@ -67,7 +67,7 @@ public class DirectoryElement extends FileTreeElement {
     }
 
     private boolean checkChild(FileTreeElement newChild) throws FileNotFoundException {
-//        Log.d(TAG, "checkChild newChild:" + newChild);
+        Log.d(TAG, "checkChild newChild:" + newChild);
         if (!newChild.getPath().equals(getAbsoluteName())) {
             throw new FileNotFoundException("invalid file name:" + newChild +
                     " is not child of " + getAbsoluteName() + " : dir of child is " + newChild.getPath());
@@ -153,4 +153,3 @@ public class DirectoryElement extends FileTreeElement {
         }
     };
 }
-

@@ -2,7 +2,6 @@ package com.example.ymiyauchi.tundokumanager.tree;
 
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.view.View;
 
 /**
  * Created by ymiyauchi on 2017/02/03.
@@ -13,11 +12,6 @@ public interface TreeElement extends Parcelable {
     // View内の各Viewの保持も行うこと
 
     TreeElement getChild(int index);
-
-    /**
-     * @param view 自身を担当するView
-     */
-    void setView(View view);
 
     /**
      * 子要素を新たに読み込む必要があれば読み込みます。

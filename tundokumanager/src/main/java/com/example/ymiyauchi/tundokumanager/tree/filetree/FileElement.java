@@ -33,11 +33,6 @@ public class FileElement extends FileTreeElement {
     }
 
     @Override
-    public void setView(View view) {
-
-    }
-
-    @Override
     public boolean hasChild() {
         return false;
     }

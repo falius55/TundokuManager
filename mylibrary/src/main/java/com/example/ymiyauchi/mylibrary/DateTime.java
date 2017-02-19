@@ -16,8 +16,8 @@ import java.util.Locale;
  */
 
 public final class DateTime implements Comparable<DateTime> {
-    private final static String DEFAULT_DATETIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
-    private final static String DEFAULT_DATE_FORMAT = "yyyy/MM/dd";
+    public final static String DEFAULT_DATETIME_FORMAT = "yyyy/MM/dd HH:mm:ss";
+    public final static String DEFAULT_DATE_FORMAT = "yyyy/MM/dd";
     public final static String SQLITE_DATE_FORMAT = "yyyy-MM-dd";
 
     private final Calendar mCalendar;

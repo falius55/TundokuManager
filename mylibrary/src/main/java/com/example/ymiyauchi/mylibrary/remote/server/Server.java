@@ -21,9 +21,8 @@ import java.util.concurrent.Future;
  * 適宜startOnNewThreadメソッドの戻り値であるFutureオブジェクトを利用するなどして
  * 対応してください。
  * <p/>
- * 特定の接続先との間でIOExceptionが発生した場合、捕捉してその接続先との通信を切断した上で
+ * 特定の接続先との間で例外が発生した場合、捕捉してその接続先との通信を切断した上で
  * 続行します。
- * IOException以外の例外は捕捉しません。実行時例外などではサーバーがダウンする可能性があります。
  */
 
 public interface Server extends Callable<Throwable>, AutoCloseable {

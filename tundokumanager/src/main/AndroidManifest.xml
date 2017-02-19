@@ -37,6 +37,10 @@
             android:name=".tree.filetree.FileTreeListActivity"
             android:theme="@style/AppTheme">
         </activity>
+        <activity
+            android:name=".log.LogActivity"
+            android:theme="@style/AppTheme">
+        </activity>
     </application>
 
 </manifest>
