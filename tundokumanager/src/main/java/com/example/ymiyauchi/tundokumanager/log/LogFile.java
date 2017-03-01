@@ -73,7 +73,7 @@ public class LogFile implements Thread.UncaughtExceptionHandler {
             return sb.toString();
         } catch (IOException ex) {
             ex.printStackTrace();
-            throw new IllegalStateException(ex);
+            return "can not read file";
         }
     }
 
