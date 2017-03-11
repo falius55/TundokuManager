@@ -34,6 +34,8 @@ import java.util.List;
 
 /**
  * Created by ymiyauchi on 2017/01/22.
+ *
+ * チャートを表示するダイアログ
  */
 
 public class ChartDialogFragment extends DialogFragment {

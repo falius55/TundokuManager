@@ -2,10 +2,11 @@ package com.example.ymiyauchi.tundokumanager.tree;
 
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.view.View;
 
 /**
  * Created by ymiyauchi on 2017/02/03.
+ *
+ * 木構造の要素を表すクラスのインターフェースです。
  */
 public interface TreeElement extends Parcelable {
     // View内の各Viewの保持も行うこと
@@ -13,12 +14,15 @@ public interface TreeElement extends Parcelable {
     TreeElement getChild(int index);
 
     /**
-     * @param view 自身を担当するView
+     * 子要素を新たに読み込む必要があれば読み込みます。
+     *
+     * @param fragment
      */
-    void setView(View view);
-
     void load(TreeFragment fragment);
 
+    /**
+     * @return 子要素を新たに読み込む必要があるかどうか
+     */
     boolean isLoadable();
 
     long getId();

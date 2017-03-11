@@ -12,6 +12,7 @@ import java.nio.channels.SocketChannel;
 public interface Disconnectable {
 
     /**
+     * 特定の接続先との接続を切断するメソッドです。
      * @param channel
      * @param key
      * @param cause   切断の原因。正常終了ならnullが渡される

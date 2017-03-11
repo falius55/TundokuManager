@@ -13,6 +13,8 @@ import java.nio.channels.SocketChannel;
 
 /**
  * Created by ymiyauchi on 2017/02/02.
+ *
+ * 受信処理を行うハンドラです。
  */
 
 public class ReadingHandler implements Handler {

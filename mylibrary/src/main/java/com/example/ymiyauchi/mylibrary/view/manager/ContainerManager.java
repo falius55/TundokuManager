@@ -7,8 +7,62 @@ import android.widget.BaseAdapter;
 
 /**
  * Created by ymiyauchi on 2016/11/27.
+ *
  * <p>
  * Adapterを内包し、データの受入を主に配列とCursorオブジェクトに規定するインターフェースです
+ * ListViewを支援します。
+ *
+ * <p/>
+ * インスタンスを作成してから、getAdapter()で返されるadapterをListViewのsetAdapterに渡します<br>
+ * 渡すデータは各リストのビューがもつidをキーにしたMapであり、データを変更する度にリストビューに通知して変更を自動的に反映させます<br>
+ * もしデータを渡さない場合には空のデータが作成され、各種メソッドでデータを操作できます</p>
+ *
+ * <p>
+ * <p>SimpleAdapterを直接扱う方法から、ListのMapにデータを入れる煩わしさをなくしてデータの受入方法を多様化しました</p>
+ * <p>
+ * {@code
+ * <pre>
+ *     // 基本的な使い方
+ *     // 以下のように、MapにputしてListにaddするといったことを一切行わずに、一気にデータを作成してListViewに表示することができる
+ *
+ *     ListView listView = (ListView)findById(R.id.listView);
+ *
+ *     // コンストラクタはデータを渡さず空のListViewにする場合にだけ用意している。なお、この場合でも後からアイテムを追加できる
+ *     // ContainerManager manager = new CustomContainerManager(this, R.id.list, new int[]{R.id.name, R.id.age, R.id.place, R.id.is_student};
+ *
+ *     // 複数データを最初に用意してリストを表示させる場合にはstatic factoryメソッドを用いる
+ *     ContainerManager manager = ContainerManager.create(
+ *          this,  // Activityなどのコンテキスト
+ *          R.id.list,  // 各リストアイテムのレイアウトをしたレイアウトID
+ *          new int[]{R.id.name, R.id.age, R.id.place, R.id.is_student},  // R.id.list内にある各TextViewなどのID
+ *          new Object[][]{  // ２元配列であればデータの型は何でも良いが(プリミティブはintのみ)、複数の型を混在させる場合にはObject型にする(表示はtoStringメソッドにより文字列化)
+ *               {"taro", 12, "北海道", true},  // ひとつひとつが各リストに収まる。直前に渡した順番通り、R.id.name、R.id.age、R.id.placeに表示
+ *               {"hanako", 20, "東京", false},
+ *               {"jiro", 35, "福岡", false}
+ *           }
+ *     );
+ *
+ *     listView.setAdapter(manager.getAdapter());  // このクラス自体はadapterを継承していないので、getAdapterメソッドでadapterを取得してListViewに渡す
+ *
+ *     manager.addItem(new String{"saburo", "42", "名古屋", false});
+ *     manager.updateItem(2, R.id.age, 32);  // jiroの年齢を32に変更。直接変更箇所を指定する場合はリソースIDを使う
+ *     manager.updateItem(0, new Object[]{"taro", 13, "東京"});  // dataの数が足りないのは問題ない
+ *     manager.updateItem(1, new int[]{R.id.name, R.id.place}, new String[]{"yamada hanako", "広島"});
+ *
+ *     // Cursorを渡すパターンでもあくまで追加。データベースの内容で総入れ替えしたいならclearメソッドでリストを空にしてから
+ *     // manager.clear();
+ *     try (AndroidDatabase db = new MyDatabase(this, DB_NAME)) {
+ *          Cursor cursor = db.selectAll(TABLE_NAME);
+ *          // 列名で使用する値を特定し、指定した順序で表示位置が決まる。
+ *          // 例えばR.id.placeにはデータベースDB_NAMEのテーブルTABLE_NAMEにあるaddressという列名の値が表示されることになる
+ *          // また、真偽値をintegerを使ってデータベースに保存していると文字列が０と１になってしまうので、データベースには"true"と"false"をtextで保存するのが望ましい
+ *           manager.addItem(cursor, "name", "age", "address", "is_student");
+ *     }
+ *
+ *     String hanakoName = manager.get(1, R.id.name);
+ *     int jiroAge = Integer.parseInt(manager.get(2, R.id.age));  // リストの値は文字列で取得。適宜パースすること
+ * </pre>
+ * }
  */
 
 public interface ContainerManager {

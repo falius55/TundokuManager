@@ -12,6 +12,9 @@ import com.example.ymiyauchi.mylibrary.remote.swapper.Swapper;
 
 /**
  * Created by ymiyauchi on 2017/02/02.
+ *
+ * 接続先に関する情報を管理するクラスです。
+ * 一度の接続を通して共有されます。
  */
 
 public class Remote {

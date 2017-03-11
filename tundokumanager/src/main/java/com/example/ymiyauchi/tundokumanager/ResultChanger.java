@@ -21,6 +21,8 @@ import java.util.List;
 
 /**
  * Created by ymiyauchi on 2017/01/26.
+ *
+ * チャートダイアログで利用するリスナー定義
  */
 
 class ResultChanger implements OnChartValueSelectedListener, View.OnClickListener {

@@ -10,20 +10,23 @@ import com.example.ymiyauchi.tundokumanager.remote.DirectoryLoadTask;
 import com.example.ymiyauchi.tundokumanager.tree.TreeElement;
 import com.example.ymiyauchi.tundokumanager.tree.TreeFragment;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by ymiyauchi on 2017/02/03.
+ *
+ * ディレクトリを表すクラスです。
  */
 
 public class DirectoryElement extends FileTreeElement {
     private static final String TAG = "DirectoryElement";
     private final List<FileTreeElement> mChildren = new ArrayList<>();
 
-    public DirectoryElement(String absoluteName, FileTree fileTree) {
-        super(absoluteName, fileTree);
+    public DirectoryElement(String[] paths, FileTree fileTree) {
+        super(paths, fileTree);
     }
 
     @Override
@@ -36,40 +39,62 @@ public class DirectoryElement extends FileTreeElement {
         return false;
     }
 
-    public void addDirectory(String absoluteName) throws FileNotFoundException {
-        FileTreeElement child = new DirectoryElement(absoluteName, mFileTree);
+    public void addDirectory(String[] paths) throws FileNotFoundException {
+        FileTreeElement child = new DirectoryElement(paths, getFileTree());
+        child.addParent(this);
         if (!checkChild(child)) {
             return;
         }
         mChildren.add(child);
-        child.addParent(this);
     }
 
-    public void addFile(String absoluteName) throws FileNotFoundException {
-        FileTreeElement child = new FileElement(absoluteName, mFileTree);
+    public void addFile(String[] paths) throws FileNotFoundException {
+        FileTreeElement child = new FileElement(paths, getFileTree());
+        child.addParent(this);
         if (!checkChild(child)) {
             return;
         }
         mChildren.add(child);
-        child.addParent(this);
     }
 
-    public void addParent(String absoluteName) throws FileNotFoundException {
+    public void addParent(String[] paths) throws FileNotFoundException {
+        DirectoryElement parent = new DirectoryElement(paths, getFileTree());
+
+        // rootは最後に\がつくが、それ以外はつかない(getAbsoluteName())
+        // getPath()で得られる文字列は最後に\がつく
+        // そのため、\をすべてにつけてから比較する
+        String absoluteName;
+        if (parent.getAbsoluteName().endsWith(File.separator)) {
+            absoluteName = parent.getAbsoluteName();
+        } else {
+            absoluteName = parent.getAbsoluteName() + File.separator;
+        }
         if (!absoluteName.equals(getPath())) {
-            throw new FileNotFoundException("parent sbsolutename " + absoluteName + " is " +
+            throw new FileNotFoundException("parent sbsolutename " + parent.getAbsoluteName() + " is " +
                     "not " + getPath());
         }
-        DirectoryElement parent = new DirectoryElement(absoluteName, mFileTree);
+
         super.addParent(parent);
         parent.mChildren.add(this);
     }
 
     private boolean checkChild(FileTreeElement newChild) throws FileNotFoundException {
-//        Log.d(TAG, "checkChild newChild:" + newChild);
-        if (!newChild.getPath().equals(getAbsoluteName())) {
-            throw new FileNotFoundException("invalid file name:" + newChild +
-                    " is not child of " + getAbsoluteName() + " : dir of child is " + newChild.getPath());
+        Log.d(TAG, "checkChild newChild:" + newChild);
+        // rootは最後に\がつくが、それ以外はつかない(getAbsoluteName())
+        // getPath()で得られる文字列は最後に\がつく
+        // そのため、\をすべてにつけてから比較する
+        String absoluteName;
+        if (getAbsoluteName().endsWith(File.separator)) {
+            absoluteName = getAbsoluteName();
+        } else {
+            absoluteName = getAbsoluteName() + File.separator;
         }
+        if (!newChild.getPath().equals(absoluteName)) {
+            throw new FileNotFoundException("invalid file name: \"" + newChild +
+                    "\" is not child of \"" + getAbsoluteName() + "\" : \"" + newChild.getPath() + "\" != " + absoluteName + "\"");
+        }
+
+        // already add
         for (FileTreeElement child : mChildren) {
             if (newChild.getAbsoluteName().equals(child.getAbsoluteName())) {
                 return false;
@@ -79,7 +104,7 @@ public class DirectoryElement extends FileTreeElement {
     }
 
     @Override
-    public TreeElement getChild(int index) {
+    public FileTreeElement getChild(int index) {
         return mChildren.get(index);
     }
 
@@ -151,4 +176,3 @@ public class DirectoryElement extends FileTreeElement {
         }
     };
 }
-

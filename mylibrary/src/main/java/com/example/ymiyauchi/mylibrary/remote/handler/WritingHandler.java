@@ -12,6 +12,8 @@ import java.nio.channels.SocketChannel;
 
 /**
  * Created by ymiyauchi on 2017/02/02.
+ *
+ * 送信処理を行うハンドラです。
  */
 
 public class WritingHandler implements Handler {

@@ -10,6 +10,8 @@ import java.util.Collection;
 
 /**
  * Created by ymiyauchi on 2017/02/02.
+ *
+ * ヘッダー情報を管理するクラスです。
  */
 
 public class Header {
@@ -26,6 +28,12 @@ public class Header {
         Log.d(TAG, "all data size:" + allDataSize);
     }
 
+    /**
+     * 渡されたデータを元にヘッダーを構築します。
+     *
+     * @param data
+     * @return
+     */
     public static Header from(Collection<ByteBuffer> data) {
         int headerSize = 4 + 4 + data.size() * 4;
         int dataSize = headerSize;
@@ -40,6 +48,12 @@ public class Header {
         return new Header(headerSize, dataSize, buf);
     }
 
+    /**
+     * 受信チャネルからヘッダー情報を読み取ります。
+     * @param channel
+     * @return
+     * @throws IOException
+     */
     public static Header from(SocketChannel channel) throws IOException {
         int read = 0;
 
@@ -79,6 +93,10 @@ public class Header {
         return mHeaderSize;
     }
 
+    /**
+     *
+     * @return ヘッダーも含めた送信データの総サイズ
+     */
     public int allDataSize() {
         return mAllDataSize;
     }
@@ -87,6 +105,10 @@ public class Header {
         return mItemDataSizes.get(index);
     }
 
+    /**
+     * 各データのサイズを順に格納したバッファを返します。
+     * @return 各データサイズを格納した読み取り専用バッファ
+     */
     public IntBuffer dataSizeBuffer() {
         mItemDataSizes.rewind();
         return mItemDataSizes;
