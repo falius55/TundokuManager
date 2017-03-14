@@ -6,13 +6,13 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.example.ymiyauchi.mylibrary.remote.client.Client;
-import com.example.ymiyauchi.mylibrary.remote.client.NonBlockingClient;
-import com.example.ymiyauchi.mylibrary.remote.receiver.Receiver;
-import com.example.ymiyauchi.mylibrary.remote.sender.MultiDataSender;
-import com.example.ymiyauchi.mylibrary.remote.sender.Sender;
-import com.example.ymiyauchi.mylibrary.remote.swapper.OnceSwapper;
-import com.example.ymiyauchi.mylibrary.remote.swapper.Swapper;
+import communication.client.Client;
+import communication.client.NonBlockingClient;
+import communication.receiver.Receiver;
+import communication.sender.MultiDataSender;
+import communication.sender.Sender;
+import communication.OnceSwapper;
+import communication.Swapper;
 import com.example.ymiyauchi.tundokumanager.tree.TreeFragment;
 import com.example.ymiyauchi.tundokumanager.tree.filetree.DirectoryElement;
 

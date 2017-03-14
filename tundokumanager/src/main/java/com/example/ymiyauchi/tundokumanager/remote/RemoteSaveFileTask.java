@@ -1,22 +1,21 @@
 package com.example.ymiyauchi.tundokumanager.remote;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.ymiyauchi.mylibrary.remote.client.Client;
-import com.example.ymiyauchi.mylibrary.remote.client.NonBlockingClient;
-import com.example.ymiyauchi.mylibrary.remote.receiver.OnReceiveListener;
-import com.example.ymiyauchi.mylibrary.remote.receiver.Receiver;
-import com.example.ymiyauchi.mylibrary.remote.sender.FileSender;
-import com.example.ymiyauchi.mylibrary.remote.sender.MultiDataSender;
-import com.example.ymiyauchi.mylibrary.remote.sender.OnSendListener;
-import com.example.ymiyauchi.mylibrary.remote.swapper.OnceSwapper;
-import com.example.ymiyauchi.mylibrary.remote.sender.Sender;
+import communication.client.Client;
+import communication.client.NonBlockingClient;
+import communication.receiver.OnReceiveListener;
+import communication.receiver.Receiver;
+import communication.sender.FileSender;
+import communication.sender.MultiDataSender;
+import communication.sender.OnSendListener;
+import communication.OnceSwapper;
+import communication.sender.Sender;
 
 import java.io.File;
 import java.io.IOException;

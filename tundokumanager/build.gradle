@@ -43,6 +43,7 @@ dependencies {
     compile project(':mylibrary')
 
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
+    compile 'com.github.falius55:communication:1.1.2&'
 
     compile 'org.mockito:mockito-android:2.7.13'
 

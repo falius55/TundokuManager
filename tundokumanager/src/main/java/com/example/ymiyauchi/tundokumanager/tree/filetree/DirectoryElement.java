@@ -5,9 +5,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import com.example.ymiyauchi.mylibrary.remote.receiver.Receiver;
+import communication.receiver.Receiver;
 import com.example.ymiyauchi.tundokumanager.remote.DirectoryLoadTask;
-import com.example.ymiyauchi.tundokumanager.tree.TreeElement;
 import com.example.ymiyauchi.tundokumanager.tree.TreeFragment;
 
 import java.io.File;

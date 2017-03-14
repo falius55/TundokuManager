@@ -13,7 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.ymiyauchi.mylibrary.AndroidDatabase;
-import com.example.ymiyauchi.mylibrary.remote.receiver.Receiver;
+
+import communication.receiver.Receiver;
 import com.example.ymiyauchi.tundokumanager.data.DataConverter;
 import com.example.ymiyauchi.tundokumanager.database.BasicDatabase;
 import com.example.ymiyauchi.tundokumanager.log.LogActivity;

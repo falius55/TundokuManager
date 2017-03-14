@@ -14,7 +14,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.example.ymiyauchi.mylibrary.AndroidDatabase;
-import com.example.ymiyauchi.mylibrary.remote.receiver.Receiver;
+
+import communication.receiver.Receiver;
 import com.example.ymiyauchi.tundokumanager.R;
 import com.example.ymiyauchi.tundokumanager.database.BasicDatabase;
 import com.example.ymiyauchi.tundokumanager.remote.RemoteSaveFileTask;
