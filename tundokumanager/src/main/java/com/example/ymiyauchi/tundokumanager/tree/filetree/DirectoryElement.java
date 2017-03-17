@@ -5,7 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import communication.receiver.Receiver;
+import jp.gr.java_conf.falius.communication.receiver.Receiver;
 import com.example.ymiyauchi.tundokumanager.remote.DirectoryLoadTask;
 import com.example.ymiyauchi.tundokumanager.tree.TreeFragment;
 

@@ -7,15 +7,15 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import communication.client.Client;
-import communication.client.NonBlockingClient;
-import communication.receiver.OnReceiveListener;
-import communication.receiver.Receiver;
-import communication.sender.FileSender;
-import communication.sender.MultiDataSender;
-import communication.sender.OnSendListener;
-import communication.OnceSwapper;
-import communication.sender.Sender;
+import jp.gr.java_conf.falius.communication.client.Client;
+import jp.gr.java_conf.falius.communication.client.NonBlockingClient;
+import jp.gr.java_conf.falius.communication.receiver.OnReceiveListener;
+import jp.gr.java_conf.falius.communication.receiver.Receiver;
+import jp.gr.java_conf.falius.communication.sender.FileSender;
+import jp.gr.java_conf.falius.communication.sender.MultiDataSender;
+import jp.gr.java_conf.falius.communication.sender.OnSendListener;
+import jp.gr.java_conf.falius.communication.sender.Sender;
+import jp.gr.java_conf.falius.communication.swapper.OnceSwapper;
 
 import java.io.File;
 import java.io.IOException;

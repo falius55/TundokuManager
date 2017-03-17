@@ -14,7 +14,7 @@ import android.view.MenuItem;
 
 import com.example.ymiyauchi.mylibrary.AndroidDatabase;
 
-import communication.receiver.Receiver;
+import jp.gr.java_conf.falius.communication.receiver.Receiver;
 import com.example.ymiyauchi.tundokumanager.data.DataConverter;
 import com.example.ymiyauchi.tundokumanager.database.BasicDatabase;
 import com.example.ymiyauchi.tundokumanager.log.LogActivity;

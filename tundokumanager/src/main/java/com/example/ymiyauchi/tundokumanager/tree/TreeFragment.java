@@ -15,11 +15,12 @@ import android.widget.ListView;
 
 import com.example.ymiyauchi.mylibrary.AndroidDatabase;
 
-import communication.receiver.Receiver;
 import com.example.ymiyauchi.tundokumanager.R;
 import com.example.ymiyauchi.tundokumanager.database.BasicDatabase;
 import com.example.ymiyauchi.tundokumanager.remote.RemoteSaveFileTask;
 import com.example.ymiyauchi.tundokumanager.tree.filetree.FileTreeElement;
+
+import jp.gr.java_conf.falius.communication.receiver.Receiver;
 
 import java.util.Objects;
 

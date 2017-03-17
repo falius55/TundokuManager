@@ -2,10 +2,10 @@ package com.example.ymiyauchi.tundokumanager.remote;
 
 import android.util.SparseArray;
 
-import communication.receiver.FileReceiver;
-import communication.receiver.Receiver;
-import communication.sender.MultiDataSender;
-import communication.sender.Sender;
+import jp.gr.java_conf.falius.communication.receiver.FileReceiver;
+import jp.gr.java_conf.falius.communication.receiver.Receiver;
+import jp.gr.java_conf.falius.communication.sender.MultiDataSender;
+import jp.gr.java_conf.falius.communication.sender.Sender;
 
 import org.json.JSONArray;
 

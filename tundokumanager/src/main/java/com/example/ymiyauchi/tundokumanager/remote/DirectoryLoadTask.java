@@ -6,13 +6,13 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import communication.client.Client;
-import communication.client.NonBlockingClient;
-import communication.receiver.Receiver;
-import communication.sender.MultiDataSender;
-import communication.sender.Sender;
-import communication.OnceSwapper;
-import communication.Swapper;
+import jp.gr.java_conf.falius.communication.client.Client;
+import jp.gr.java_conf.falius.communication.client.NonBlockingClient;
+import jp.gr.java_conf.falius.communication.receiver.Receiver;
+import jp.gr.java_conf.falius.communication.sender.MultiDataSender;
+import jp.gr.java_conf.falius.communication.sender.Sender;
+import jp.gr.java_conf.falius.communication.swapper.OnceSwapper;
+import jp.gr.java_conf.falius.communication.swapper.Swapper;
 import com.example.ymiyauchi.tundokumanager.tree.TreeFragment;
 import com.example.ymiyauchi.tundokumanager.tree.filetree.DirectoryElement;
 
