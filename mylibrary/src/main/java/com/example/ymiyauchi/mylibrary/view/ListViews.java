@@ -5,10 +5,11 @@ import android.view.View;
 import android.widget.CheckedTextView;
 import android.widget.ListView;
 
-import com.example.ymiyauchi.mylibrary.IntRange;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.gr.java_conf.falius.util.range.IntRange;
+
 
 /**
  * Created by ymiyauchi on 2017/01/13.

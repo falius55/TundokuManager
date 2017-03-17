@@ -2,8 +2,6 @@ package com.example.ymiyauchi.tundokumanager.log;
 
 import android.content.Context;
 
-import com.example.ymiyauchi.mylibrary.DateTime;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileInputStream;
@@ -11,6 +9,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+
+import jp.gr.java_conf.falius.util.datetime.DateTime;
 
 /**
  * Created by ymiyauchi on 2017/02/19.

@@ -15,7 +15,6 @@ import com.example.ymiyauchi.tundokumanager.data.DataConverter;
 import com.example.ymiyauchi.tundokumanager.database.BasicDatabase;
 import com.example.ymiyauchi.tundokumanager.database.HistoryColumns;
 import com.example.ymiyauchi.mylibrary.AndroidDatabase;
-import com.example.ymiyauchi.mylibrary.DateTime;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -31,6 +30,8 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.gr.java_conf.falius.util.datetime.DateTime;
 
 /**
  * Created by ymiyauchi on 2017/01/22.

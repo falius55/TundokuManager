@@ -4,18 +4,11 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.CheckedTextView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.ymiyauchi.mylibrary.IntRange;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 /**

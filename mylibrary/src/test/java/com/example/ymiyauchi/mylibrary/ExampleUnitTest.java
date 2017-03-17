@@ -1,9 +1,9 @@
 package com.example.ymiyauchi.mylibrary;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-import static org.hamcrest.CoreMatchers.is;
+import jp.gr.java_conf.falius.util.range.IntRange;
+
 import static org.junit.Assert.*;
 
 /**

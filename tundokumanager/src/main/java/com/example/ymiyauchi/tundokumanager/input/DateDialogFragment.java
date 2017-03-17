@@ -9,7 +9,8 @@ import android.widget.DatePicker;
 import android.widget.TextView;
 
 import com.example.ymiyauchi.tundokumanager.R;
-import com.example.ymiyauchi.mylibrary.DateTime;
+
+import jp.gr.java_conf.falius.util.datetime.DateTime;
 
 /**
  * Created by ymiyauchi on 2017/01/16.

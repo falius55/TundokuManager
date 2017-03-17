@@ -3,7 +3,8 @@ package com.example.ymiyauchi.tundokumanager.data;
 import android.content.ContentValues;
 
 import com.example.ymiyauchi.tundokumanager.database.ItemColumns;
-import com.example.ymiyauchi.mylibrary.DateTime;
+
+import jp.gr.java_conf.falius.util.datetime.DateTime;
 
 /**
  * Created by ymiyauchi on 2017/01/07.

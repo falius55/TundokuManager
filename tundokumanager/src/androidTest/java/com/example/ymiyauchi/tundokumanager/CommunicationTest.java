@@ -1,25 +1,24 @@
 package com.example.ymiyauchi.tundokumanager;
 
 import android.support.test.runner.AndroidJUnit4;
-import android.support.test.runner.AndroidJUnitRunner;
 
-import com.example.ymiyauchi.mylibrary.remote.client.Client;
-import com.example.ymiyauchi.mylibrary.remote.client.NonBlockingClient;
-import com.example.ymiyauchi.mylibrary.remote.receiver.Receiver;
-import com.example.ymiyauchi.mylibrary.remote.sender.MultiDataSender;
-import com.example.ymiyauchi.mylibrary.remote.sender.Sender;
-import com.example.ymiyauchi.mylibrary.remote.swapper.RepeatSwapper;
-import com.example.ymiyauchi.mylibrary.remote.swapper.Swapper;
 import com.example.ymiyauchi.tundokumanager.remote.RequestHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
+
+import jp.gr.java_conf.falius.communication.client.Client;
+import jp.gr.java_conf.falius.communication.client.NonBlockingClient;
+import jp.gr.java_conf.falius.communication.receiver.Receiver;
+import jp.gr.java_conf.falius.communication.sender.MultiDataSender;
+import jp.gr.java_conf.falius.communication.sender.Sender;
+import jp.gr.java_conf.falius.communication.swapper.RepeatSwapper;
+import jp.gr.java_conf.falius.communication.swapper.Swapper;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;

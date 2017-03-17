@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.example.ymiyauchi.mylibrary.DateTime;
 import com.example.ymiyauchi.tundokumanager.data.DataConverter;
 import com.example.ymiyauchi.tundokumanager.data.MutableDataConverter;
 import com.example.ymiyauchi.tundokumanager.mainfragment.HistoryController;
@@ -18,6 +17,8 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.List;
+
+import jp.gr.java_conf.falius.util.datetime.DateTime;
 
 /**
  * Created by ymiyauchi on 2017/01/26.

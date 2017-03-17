@@ -11,11 +11,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.example.ymiyauchi.mylibrary.IntRange;
-
 import java.util.List;
 
-import static com.example.ymiyauchi.mylibrary.view.containeradapter.ViewType.IMAGE;
+import jp.gr.java_conf.falius.util.range.IntRange;
+
 import static com.example.ymiyauchi.mylibrary.view.containeradapter.ViewType.TEXT;
 
 
