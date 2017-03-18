@@ -23,3 +23,56 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+subprojects {
+
+    task rewritePackag << {
+        def sourceFiles  = fileTree('src') {
+            include '**/*.java'
+        }
+
+        sourceFiles.each {
+//            println it.absolutePath
+        changePackage(it)
+        }
+    }
+}
+
+def changePackage(File sourceFile) {
+    String pack  = createPackageLine(sourceFile)
+
+    def lines  = sourceFile.readLines()
+
+    if (!lines[0].contains("package")) {
+        return
+    }
+    lines.set(0, pack)
+
+    def newText = lines.join("${System.lineSeparator()}")
+
+    def defaultEncoding = 'UTF-8'
+    sourceFile.withWriter(defaultEncoding) {
+        it.println(newText)
+    }
+}
+
+def createPackageLine(File sourceFile) {
+    def ROOT_PACKAGE = "jp"
+    String[] paths = sourceFile.absolutePath.split(/\${File.separator}/)
+    String pack = "package "
+
+    boolean skip = true
+    paths.each({ path ->
+        if (path == ROOT_PACKAGE) {
+            skip  =false
+            pack += ROOT_PACKAGE
+            return
+        }
+        if (skip) {
+            return
+        }
+        if (!path.contains(".")) {
+            pack += ".${path}"
+        }
+    })
+    pack += ";"
+}
