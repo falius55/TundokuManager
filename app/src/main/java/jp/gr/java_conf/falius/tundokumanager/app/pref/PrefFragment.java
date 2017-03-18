@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app.pref;
+package jp.gr.java_conf.falius.tundokumanager.app.pref;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;

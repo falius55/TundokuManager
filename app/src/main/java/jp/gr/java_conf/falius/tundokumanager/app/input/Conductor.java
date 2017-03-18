@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app.input;
+package jp.gr.java_conf.falius.tundokumanager.app.input;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -7,12 +7,13 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
 import com.example.ymiyauchi.app.R;
-import com.example.ymiyauchi.app.Type;
-import com.example.ymiyauchi.app.data.BundleDataConverter;
-import com.example.ymiyauchi.app.data.DataConverter;
-import com.example.ymiyauchi.app.data.InputDataConverter;
-import com.example.ymiyauchi.app.data.ReceiveDataConverter;
-import com.example.ymiyauchi.lib.view.manager.TextViewManager;
+
+import jp.gr.java_conf.falius.tundokumanager.app.Type;
+import jp.gr.java_conf.falius.tundokumanager.app.data.BundleDataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.data.InputDataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.data.ReceiveDataConverter;
+import jp.gr.java_conf.falius.tundokumanager.lib.view.manager.TextViewManager;
 
 /**
  * Created by ymiyauchi on 2017/01/07.

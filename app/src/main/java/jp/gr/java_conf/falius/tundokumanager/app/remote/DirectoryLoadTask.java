@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app.remote;
+package jp.gr.java_conf.falius.tundokumanager.app.remote;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -13,8 +13,8 @@ import jp.gr.java_conf.falius.communication.sender.MultiDataSender;
 import jp.gr.java_conf.falius.communication.sender.Sender;
 import jp.gr.java_conf.falius.communication.swapper.OnceSwapper;
 import jp.gr.java_conf.falius.communication.swapper.Swapper;
-import com.example.ymiyauchi.app.tree.TreeFragment;
-import com.example.ymiyauchi.app.tree.filetree.DirectoryElement;
+import jp.gr.java_conf.falius.tundokumanager.app.tree.TreeFragment;
+import jp.gr.java_conf.falius.tundokumanager.app.tree.filetree.DirectoryElement;
 
 import org.json.JSONArray;
 import org.json.JSONException;

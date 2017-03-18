@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app;
+package jp.gr.java_conf.falius.tundokumanager.app;
 
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
@@ -7,9 +7,7 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.example.ymiyauchi.app.data.DataConverter;
-import com.example.ymiyauchi.app.data.MutableDataConverter;
-import com.example.ymiyauchi.app.mainfragment.HistoryController;
+import com.example.ymiyauchi.app.R;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.Entry;
@@ -18,6 +16,9 @@ import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.List;
 
+import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.data.MutableDataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.mainfragment.HistoryController;
 import jp.gr.java_conf.falius.util.datetime.DateTime;
 
 /**

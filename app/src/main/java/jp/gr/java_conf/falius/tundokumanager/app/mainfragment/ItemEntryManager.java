@@ -1,18 +1,19 @@
-package com.example.ymiyauchi.app.mainfragment;
+package jp.gr.java_conf.falius.tundokumanager.app.mainfragment;
 
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
-import com.example.ymiyauchi.app.database.BasicDatabase;
-import com.example.ymiyauchi.app.database.ItemColumns;
-import com.example.ymiyauchi.app.data.DataConverter;
 import com.example.ymiyauchi.app.R;
-import com.example.ymiyauchi.app.data.ListItemDataConverter;
-import com.example.ymiyauchi.app.Type;
-import com.example.ymiyauchi.app.mainfragment.listctrl.ListBuilder;
-import com.example.ymiyauchi.app.mainfragment.listctrl.SortFilter;
-import com.example.ymiyauchi.lib.AndroidDatabase;
-import com.example.ymiyauchi.lib.view.manager.ContainerManager;
+
+import jp.gr.java_conf.falius.tundokumanager.app.Type;
+import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.data.ListItemDataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.database.BasicDatabase;
+import jp.gr.java_conf.falius.tundokumanager.app.database.ItemColumns;
+import jp.gr.java_conf.falius.tundokumanager.app.mainfragment.listctrl.ListBuilder;
+import jp.gr.java_conf.falius.tundokumanager.app.mainfragment.listctrl.SortFilter;
+import jp.gr.java_conf.falius.tundokumanager.lib.AndroidDatabase;
+import jp.gr.java_conf.falius.tundokumanager.lib.view.manager.ContainerManager;
 
 /**
  * Created by ymiyauchi on 2017/01/07.

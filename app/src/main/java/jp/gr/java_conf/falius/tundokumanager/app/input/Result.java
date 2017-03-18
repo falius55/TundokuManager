@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app.input;
+package jp.gr.java_conf.falius.tundokumanager.app.input;
 
 import android.util.SparseArray;
 

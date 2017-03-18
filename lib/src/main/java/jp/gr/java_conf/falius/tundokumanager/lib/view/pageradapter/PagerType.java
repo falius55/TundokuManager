@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.lib.view.pageradapter;
+package jp.gr.java_conf.falius.tundokumanager.lib.view.pageradapter;
 
 import android.support.v4.app.Fragment;
 

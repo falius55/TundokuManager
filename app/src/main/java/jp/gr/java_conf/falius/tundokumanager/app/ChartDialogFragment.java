@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app;
+package jp.gr.java_conf.falius.tundokumanager.app;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -10,11 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.ymiyauchi.app.data.BundleDataConverter;
-import com.example.ymiyauchi.app.data.DataConverter;
-import com.example.ymiyauchi.app.database.BasicDatabase;
-import com.example.ymiyauchi.app.database.HistoryColumns;
-import com.example.ymiyauchi.lib.AndroidDatabase;
+import com.example.ymiyauchi.app.R;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -31,6 +27,11 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.gr.java_conf.falius.tundokumanager.app.data.BundleDataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.database.BasicDatabase;
+import jp.gr.java_conf.falius.tundokumanager.app.database.HistoryColumns;
+import jp.gr.java_conf.falius.tundokumanager.lib.AndroidDatabase;
 import jp.gr.java_conf.falius.util.datetime.DateTime;
 
 /**

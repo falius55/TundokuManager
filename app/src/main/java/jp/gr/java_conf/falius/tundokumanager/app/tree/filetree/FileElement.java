@@ -1,9 +1,9 @@
-package com.example.ymiyauchi.app.tree.filetree;
+package jp.gr.java_conf.falius.tundokumanager.app.tree.filetree;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.ymiyauchi.app.tree.TreeFragment;
+import jp.gr.java_conf.falius.tundokumanager.app.tree.TreeFragment;
 
 /**
  * Created by ymiyauchi on 2017/02/03.

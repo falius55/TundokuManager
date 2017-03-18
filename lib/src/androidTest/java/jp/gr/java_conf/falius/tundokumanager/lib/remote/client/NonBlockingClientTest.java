@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.lib.remote.client;
+package jp.gr.java_conf.falius.tundokumanager.lib.remote.client;
 
 /**
  * Created by ymiyauchi on 2017/03/02.

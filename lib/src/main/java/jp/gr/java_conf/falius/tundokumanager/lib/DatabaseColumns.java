@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.lib;
+package jp.gr.java_conf.falius.tundokumanager.lib;
 
 /**
  * Created by ymiyauchi on 2017/01/26.

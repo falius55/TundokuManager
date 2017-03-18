@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app.mainfragment.listctrl;
+package jp.gr.java_conf.falius.tundokumanager.app.mainfragment.listctrl;
 
 import android.util.ArrayMap;
 

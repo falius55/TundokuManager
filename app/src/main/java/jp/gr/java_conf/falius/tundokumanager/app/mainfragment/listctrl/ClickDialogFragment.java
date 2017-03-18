@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app.mainfragment.listctrl;
+package jp.gr.java_conf.falius.tundokumanager.app.mainfragment.listctrl;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -13,16 +13,17 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.example.ymiyauchi.app.ApplicationManager;
-import com.example.ymiyauchi.app.database.ItemColumns;
-import com.example.ymiyauchi.app.MainActivity;
 import com.example.ymiyauchi.app.R;
-import com.example.ymiyauchi.app.Type;
-import com.example.ymiyauchi.app.data.BundleDataConverter;
-import com.example.ymiyauchi.app.data.DataConverter;
-import com.example.ymiyauchi.app.data.ListItemDataConverter;
-import com.example.ymiyauchi.app.data.MutableDataConverter;
-import com.example.ymiyauchi.lib.view.manager.ContainerManager;
+
+import jp.gr.java_conf.falius.tundokumanager.app.ApplicationManager;
+import jp.gr.java_conf.falius.tundokumanager.app.MainActivity;
+import jp.gr.java_conf.falius.tundokumanager.app.Type;
+import jp.gr.java_conf.falius.tundokumanager.app.data.BundleDataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.data.ListItemDataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.data.MutableDataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.database.ItemColumns;
+import jp.gr.java_conf.falius.tundokumanager.lib.view.manager.ContainerManager;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app;
+package jp.gr.java_conf.falius.tundokumanager.app;
 
 import android.app.Application;
 import android.content.Context;

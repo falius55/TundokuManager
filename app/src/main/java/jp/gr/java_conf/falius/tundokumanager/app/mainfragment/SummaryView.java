@@ -1,15 +1,16 @@
-package com.example.ymiyauchi.app.mainfragment;
+package jp.gr.java_conf.falius.tundokumanager.app.mainfragment;
 
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.example.ymiyauchi.app.database.BasicDatabase;
 import com.example.ymiyauchi.app.R;
-import com.example.ymiyauchi.app.Type;
-import com.example.ymiyauchi.lib.AndroidDatabase;
-import com.example.ymiyauchi.lib.view.manager.TextViewManager;
-import com.example.ymiyauchi.app.database.ItemColumns;
+
+import jp.gr.java_conf.falius.tundokumanager.app.Type;
+import jp.gr.java_conf.falius.tundokumanager.app.database.BasicDatabase;
+import jp.gr.java_conf.falius.tundokumanager.app.database.ItemColumns;
+import jp.gr.java_conf.falius.tundokumanager.lib.AndroidDatabase;
+import jp.gr.java_conf.falius.tundokumanager.lib.view.manager.TextViewManager;
 
 /**
  * Created by ymiyauchi on 2017/01/07.

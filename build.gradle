@@ -42,33 +42,29 @@ def changePackage(File sourceFile) {
 
     def lines  = sourceFile.readLines()
 
-//    if (lines[1].contains("package")) {
-//        def newLines = lines.subList(2, lines.size())
-//        newLines.add(0, pack)
-//        def newText = newLines.join("${System.lineSeparator()}")
-//        sourceFile.text  = newText
-//    }
+    if (!lines[0].contains("package")) {
+        return
+    }
     lines.set(0, pack)
 
     def newText = lines.join("${System.lineSeparator()}")
 
-//    sourceFile.text  = newText
     def defaultEncoding = 'UTF-8'
     sourceFile.withWriter(defaultEncoding) {
-
-        it.print(newText)
+        it.println(newText)
     }
 }
 
 def createPackageLine(File sourceFile) {
+    def ROOT_PACKAGE = "jp"
     String[] paths = sourceFile.absolutePath.split(/\${File.separator}/)
     String pack = "package "
 
     boolean skip = true
     paths.each({ path ->
-        if (path == "jp") {
+        if (path == ROOT_PACKAGE) {
             skip  =false
-            pack += "jp"
+            pack += ROOT_PACKAGE
             return
         }
         if (skip) {

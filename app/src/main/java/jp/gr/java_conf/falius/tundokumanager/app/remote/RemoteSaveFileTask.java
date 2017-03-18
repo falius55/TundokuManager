@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app.remote;
+package jp.gr.java_conf.falius.tundokumanager.app.remote;
 
 import android.app.Activity;
 import android.content.SharedPreferences;

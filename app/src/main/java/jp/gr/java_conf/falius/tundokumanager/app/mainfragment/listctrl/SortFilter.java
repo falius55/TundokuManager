@@ -1,12 +1,13 @@
-package com.example.ymiyauchi.app.mainfragment.listctrl;
+package jp.gr.java_conf.falius.tundokumanager.app.mainfragment.listctrl;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
 import com.example.ymiyauchi.app.R;
-import com.example.ymiyauchi.app.Type;
-import com.example.ymiyauchi.lib.view.manager.TextViewManager;
+
+import jp.gr.java_conf.falius.tundokumanager.app.Type;
+import jp.gr.java_conf.falius.tundokumanager.lib.view.manager.TextViewManager;
 
 /**
  * Created by ymiyauchi on 2017/01/20.

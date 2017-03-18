@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app;
+package jp.gr.java_conf.falius.tundokumanager.app;
 
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,19 +12,20 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.ymiyauchi.lib.AndroidDatabase;
+import com.example.ymiyauchi.app.R;
 
 import jp.gr.java_conf.falius.communication.receiver.Receiver;
-import com.example.ymiyauchi.app.data.DataConverter;
-import com.example.ymiyauchi.app.database.BasicDatabase;
-import com.example.ymiyauchi.app.log.LogActivity;
-import com.example.ymiyauchi.app.log.LogFile;
-import com.example.ymiyauchi.app.mainfragment.MainFragment;
-import com.example.ymiyauchi.app.input.InputActivity;
-import com.example.ymiyauchi.lib.view.pageradapter.SimplePagerAdapter;
-import com.example.ymiyauchi.app.pref.PrefActivity;
-import com.example.ymiyauchi.app.remote.RemoteSaveFileTask;
-import com.example.ymiyauchi.app.tree.filetree.FileTreeListActivity;
+import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.database.BasicDatabase;
+import jp.gr.java_conf.falius.tundokumanager.app.input.InputActivity;
+import jp.gr.java_conf.falius.tundokumanager.app.log.LogActivity;
+import jp.gr.java_conf.falius.tundokumanager.app.log.LogFile;
+import jp.gr.java_conf.falius.tundokumanager.app.mainfragment.MainFragment;
+import jp.gr.java_conf.falius.tundokumanager.app.pref.PrefActivity;
+import jp.gr.java_conf.falius.tundokumanager.app.remote.RemoteSaveFileTask;
+import jp.gr.java_conf.falius.tundokumanager.app.tree.filetree.FileTreeListActivity;
+import jp.gr.java_conf.falius.tundokumanager.lib.AndroidDatabase;
+import jp.gr.java_conf.falius.tundokumanager.lib.view.pageradapter.SimplePagerAdapter;
 
 
 /**

@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.lib;
+package jp.gr.java_conf.falius.tundokumanager.lib;
 
 import android.content.ContentValues;
 import android.content.Context;

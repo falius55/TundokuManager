@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.lib.view.containeradapter;
+package jp.gr.java_conf.falius.tundokumanager.lib.view.containeradapter;
 
 import android.content.Context;
 import android.support.annotation.IdRes;
@@ -15,7 +15,7 @@ import java.util.List;
 
 import jp.gr.java_conf.falius.util.range.IntRange;
 
-import static com.example.ymiyauchi.lib.view.containeradapter.ViewType.TEXT;
+import static jp.gr.java_conf.falius.tundokumanager.lib.view.containeradapter.ViewType.TEXT;
 
 
 /**

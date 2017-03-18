@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.lib.view.manager;
+package jp.gr.java_conf.falius.tundokumanager.lib.view.manager;
 
 import android.support.annotation.IdRes;
 import android.support.annotation.StringRes;

@@ -1,11 +1,16 @@
-package com.example.ymiyauchi.app.mainfragment;
+package jp.gr.java_conf.falius.tundokumanager.app.mainfragment;
 
 import android.content.Intent;
 import android.util.Log;
 
-import com.example.ymiyauchi.app.data.DataConverter;
-import com.example.ymiyauchi.app.data.ReceiveDataConverter;
-import com.example.ymiyauchi.app.input.Result;
+import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.data.ReceiveDataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.input.Result;
+
+import static jp.gr.java_conf.falius.tundokumanager.app.input.Result.DELETE;
+import static jp.gr.java_conf.falius.tundokumanager.app.input.Result.NON;
+import static jp.gr.java_conf.falius.tundokumanager.app.input.Result.REGISTER;
+import static jp.gr.java_conf.falius.tundokumanager.app.input.Result.UPDATE;
 
 /**
  * Created by ymiyauchi on 2017/01/20.

@@ -1,8 +1,8 @@
-package com.example.ymiyauchi.app.tree.filetree;
+package jp.gr.java_conf.falius.tundokumanager.app.tree.filetree;
 
-import com.example.ymiyauchi.app.tree.TreeElement;
-import com.example.ymiyauchi.app.tree.TreeFragment;
-import com.example.ymiyauchi.app.tree.TreeListActivity;
+import jp.gr.java_conf.falius.tundokumanager.app.tree.TreeElement;
+import jp.gr.java_conf.falius.tundokumanager.app.tree.TreeFragment;
+import jp.gr.java_conf.falius.tundokumanager.app.tree.TreeListActivity;
 
 /**
  * Created by ymiyauchi on 2017/02/05.

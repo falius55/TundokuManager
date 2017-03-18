@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app.mainfragment.listctrl;
+package jp.gr.java_conf.falius.tundokumanager.app.mainfragment.listctrl;
 
 import android.content.Intent;
 import android.support.v4.app.DialogFragment;
@@ -7,16 +7,17 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.ymiyauchi.app.ChartDialogFragment;
-import com.example.ymiyauchi.app.data.DataConverter;
-import com.example.ymiyauchi.app.data.ListItemDataConverter;
-import com.example.ymiyauchi.app.input.InputActivity;
-import com.example.ymiyauchi.app.MainActivity;
 import com.example.ymiyauchi.app.R;
-import com.example.ymiyauchi.app.Type;
-import com.example.ymiyauchi.app.mainfragment.ItemEntryManager;
-import com.example.ymiyauchi.app.mainfragment.MainFragment;
-import com.example.ymiyauchi.lib.view.manager.ContainerManager;
+
+import jp.gr.java_conf.falius.tundokumanager.app.ChartDialogFragment;
+import jp.gr.java_conf.falius.tundokumanager.app.MainActivity;
+import jp.gr.java_conf.falius.tundokumanager.app.Type;
+import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.data.ListItemDataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.input.InputActivity;
+import jp.gr.java_conf.falius.tundokumanager.app.mainfragment.ItemEntryManager;
+import jp.gr.java_conf.falius.tundokumanager.app.mainfragment.MainFragment;
+import jp.gr.java_conf.falius.tundokumanager.lib.view.manager.ContainerManager;
 
 /**
  * Created by ymiyauchi on 2017/01/07.

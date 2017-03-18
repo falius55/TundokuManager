@@ -1,10 +1,10 @@
-package com.example.ymiyauchi.app.mainfragment.listctrl;
+package jp.gr.java_conf.falius.tundokumanager.app.mainfragment.listctrl;
 
 import android.util.ArrayMap;
 
-import com.example.ymiyauchi.app.Type;
-
 import java.util.Map;
+
+import jp.gr.java_conf.falius.tundokumanager.app.Type;
 
 /**
  * Created by ymiyauchi on 2017/01/07.

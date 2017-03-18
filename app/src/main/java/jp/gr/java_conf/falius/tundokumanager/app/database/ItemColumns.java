@@ -1,10 +1,11 @@
-package com.example.ymiyauchi.app.database;
+package jp.gr.java_conf.falius.tundokumanager.app.database;
 
 import android.provider.BaseColumns;
 import android.text.TextUtils;
 
-import com.example.ymiyauchi.lib.DatabaseColumns;
-import com.example.ymiyauchi.app.Type;
+import jp.gr.java_conf.falius.tundokumanager.app.Type;
+import jp.gr.java_conf.falius.tundokumanager.lib.DatabaseColumns;
+
 
 /**
  * Created by ymiyauchi on 2016/11/25.

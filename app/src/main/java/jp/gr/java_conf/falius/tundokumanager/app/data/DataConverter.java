@@ -1,10 +1,10 @@
-package com.example.ymiyauchi.app.data;
+package jp.gr.java_conf.falius.tundokumanager.app.data;
 
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.ymiyauchi.app.Type;
+import jp.gr.java_conf.falius.tundokumanager.app.Type;
 
 /**
  * Created by ymiyauchi on 2017/01/07.

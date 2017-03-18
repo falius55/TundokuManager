@@ -1,12 +1,12 @@
-package com.example.ymiyauchi.app.tree.filetree;
+package jp.gr.java_conf.falius.tundokumanager.app.tree.filetree;
 
 import android.os.Parcel;
 
-import com.example.ymiyauchi.app.tree.TreeElement;
-import com.example.ymiyauchi.app.tree.TreeManager;
-
 import java.util.HashSet;
 import java.util.Set;
+
+import jp.gr.java_conf.falius.tundokumanager.app.tree.TreeElement;
+import jp.gr.java_conf.falius.tundokumanager.app.tree.TreeManager;
 
 /**
  * Created by ymiyauchi on 2017/02/03.

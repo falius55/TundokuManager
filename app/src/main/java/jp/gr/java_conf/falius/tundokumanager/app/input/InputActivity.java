@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app.input;
+package jp.gr.java_conf.falius.tundokumanager.app.input;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -7,7 +7,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.ymiyauchi.app.R;
-import com.example.ymiyauchi.app.data.DataConverter;
+
+import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
 
 /**
  * Created by ymiyauchi on 2017/01/07.

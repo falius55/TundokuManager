@@ -1,11 +1,11 @@
-package com.example.ymiyauchi.app.input;
+package jp.gr.java_conf.falius.tundokumanager.app.input;
 
 import android.app.Activity;
 import android.util.Log;
 import android.view.View;
 
-import com.example.ymiyauchi.app.data.DataConverter;
-import com.example.ymiyauchi.app.data.InputDataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.data.InputDataConverter;
 
 /**
  * Created by ymiyauchi on 2017/01/07.

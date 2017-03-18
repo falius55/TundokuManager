@@ -1,14 +1,13 @@
-package com.example.ymiyauchi.app.mainfragment;
+package jp.gr.java_conf.falius.tundokumanager.app.mainfragment;
 
 import android.content.ContentValues;
 import android.support.v4.app.Fragment;
 
-import com.example.ymiyauchi.lib.AndroidDatabase;
-import com.example.ymiyauchi.app.Type;
-import com.example.ymiyauchi.app.data.DataConverter;
-import com.example.ymiyauchi.app.database.BasicDatabase;
-import com.example.ymiyauchi.app.database.HistoryColumns;
-
+import jp.gr.java_conf.falius.tundokumanager.app.Type;
+import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.database.BasicDatabase;
+import jp.gr.java_conf.falius.tundokumanager.app.database.HistoryColumns;
+import jp.gr.java_conf.falius.tundokumanager.lib.AndroidDatabase;
 import jp.gr.java_conf.falius.util.datetime.DateTime;
 
 

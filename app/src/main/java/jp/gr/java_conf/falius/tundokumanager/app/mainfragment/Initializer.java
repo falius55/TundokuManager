@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app.mainfragment;
+package jp.gr.java_conf.falius.tundokumanager.app.mainfragment;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -10,17 +10,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.ymiyauchi.app.R;
-import com.example.ymiyauchi.app.Type;
-import com.example.ymiyauchi.app.mainfragment.listctrl.ListBuilder;
-import com.example.ymiyauchi.app.mainfragment.listctrl.ListContextMenu;
-import com.example.ymiyauchi.app.mainfragment.listctrl.SortFilter;
-import com.example.ymiyauchi.lib.view.containeradapter.CustomAdapter;
-import com.example.ymiyauchi.lib.view.manager.ContainerManager;
-import com.example.ymiyauchi.lib.view.manager.CustomContainerManager;
 
-import static com.example.ymiyauchi.lib.view.containeradapter.ViewType.DEFAULT;
-import static com.example.ymiyauchi.lib.view.containeradapter.ViewType.NONE;
-import static com.example.ymiyauchi.lib.view.containeradapter.ViewType.TEXT;
+import jp.gr.java_conf.falius.tundokumanager.app.Type;
+import jp.gr.java_conf.falius.tundokumanager.app.mainfragment.listctrl.ListBuilder;
+import jp.gr.java_conf.falius.tundokumanager.app.mainfragment.listctrl.ListContextMenu;
+import jp.gr.java_conf.falius.tundokumanager.app.mainfragment.listctrl.SortFilter;
+import jp.gr.java_conf.falius.tundokumanager.lib.view.containeradapter.CustomAdapter;
+import jp.gr.java_conf.falius.tundokumanager.lib.view.manager.ContainerManager;
+import jp.gr.java_conf.falius.tundokumanager.lib.view.manager.CustomContainerManager;
+
+import static jp.gr.java_conf.falius.tundokumanager.lib.view.containeradapter.ViewType.DEFAULT;
+import static jp.gr.java_conf.falius.tundokumanager.lib.view.containeradapter.ViewType.NONE;
+import static jp.gr.java_conf.falius.tundokumanager.lib.view.containeradapter.ViewType.TEXT;
 
 /**
  * Created by ymiyauchi on 2017/01/20.

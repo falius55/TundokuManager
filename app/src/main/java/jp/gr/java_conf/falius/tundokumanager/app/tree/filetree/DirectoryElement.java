@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app.tree.filetree;
+package jp.gr.java_conf.falius.tundokumanager.app.tree.filetree;
 
 import android.os.AsyncTask;
 import android.os.Parcel;
@@ -6,8 +6,8 @@ import android.os.Parcelable;
 import android.util.Log;
 
 import jp.gr.java_conf.falius.communication.receiver.Receiver;
-import com.example.ymiyauchi.app.remote.DirectoryLoadTask;
-import com.example.ymiyauchi.app.tree.TreeFragment;
+import jp.gr.java_conf.falius.tundokumanager.app.remote.DirectoryLoadTask;
+import jp.gr.java_conf.falius.tundokumanager.app.tree.TreeFragment;
 
 import java.io.File;
 import java.io.FileNotFoundException;

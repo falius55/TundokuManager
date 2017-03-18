@@ -1,10 +1,10 @@
-package com.example.ymiyauchi.app.database;
+package jp.gr.java_conf.falius.tundokumanager.app.database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.ymiyauchi.app.Type;
-import com.example.ymiyauchi.lib.AndroidDatabase;
+import jp.gr.java_conf.falius.tundokumanager.app.Type;
+import jp.gr.java_conf.falius.tundokumanager.lib.AndroidDatabase;
 
 /**
  * Created by ymiyauchi on 2016/11/12.

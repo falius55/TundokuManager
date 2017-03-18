@@ -1,10 +1,9 @@
-package com.example.ymiyauchi.app.data;
+package jp.gr.java_conf.falius.tundokumanager.app.data;
 
 import android.content.Intent;
 import android.text.TextUtils;
 
-import com.example.ymiyauchi.app.database.ItemColumns;
-
+import jp.gr.java_conf.falius.tundokumanager.app.database.ItemColumns;
 import jp.gr.java_conf.falius.util.datetime.DateTime;
 
 /**

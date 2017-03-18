@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app.mainfragment.listctrl;
+package jp.gr.java_conf.falius.tundokumanager.app.mainfragment.listctrl;
 
 import android.database.Cursor;
 import android.support.v4.app.Fragment;
@@ -6,17 +6,17 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.ymiyauchi.app.database.BasicDatabase;
-import com.example.ymiyauchi.app.Type;
-import com.example.ymiyauchi.app.data.DataConverter;
-import com.example.ymiyauchi.app.data.ListItemDataConverter;
-import com.example.ymiyauchi.app.data.MutableDataConverter;
-import com.example.ymiyauchi.app.database.ItemColumns;
-import com.example.ymiyauchi.app.mainfragment.ItemEntryManager;
-import com.example.ymiyauchi.lib.AndroidDatabase;
-import com.example.ymiyauchi.lib.view.manager.ContainerManager;
-
 import java.util.Locale;
+
+import jp.gr.java_conf.falius.tundokumanager.app.Type;
+import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.data.ListItemDataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.data.MutableDataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.database.BasicDatabase;
+import jp.gr.java_conf.falius.tundokumanager.app.database.ItemColumns;
+import jp.gr.java_conf.falius.tundokumanager.app.mainfragment.ItemEntryManager;
+import jp.gr.java_conf.falius.tundokumanager.lib.AndroidDatabase;
+import jp.gr.java_conf.falius.tundokumanager.lib.view.manager.ContainerManager;
 
 /**
  * Created by ymiyauchi on 2017/01/19.

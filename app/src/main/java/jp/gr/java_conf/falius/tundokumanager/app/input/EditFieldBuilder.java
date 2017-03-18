@@ -1,12 +1,13 @@
-package com.example.ymiyauchi.app.input;
+package jp.gr.java_conf.falius.tundokumanager.app.input;
 
 import android.app.Activity;
 import android.util.Log;
 import android.widget.RadioButton;
 
 import com.example.ymiyauchi.app.R;
-import com.example.ymiyauchi.app.data.DataConverter;
-import com.example.ymiyauchi.lib.view.manager.TextViewManager;
+
+import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
+import jp.gr.java_conf.falius.tundokumanager.lib.view.manager.TextViewManager;
 
 /**
  * Created by ymiyauchi on 2017/01/20.

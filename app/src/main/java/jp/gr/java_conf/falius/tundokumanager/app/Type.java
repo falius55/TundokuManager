@@ -1,13 +1,13 @@
-package com.example.ymiyauchi.app;
+package jp.gr.java_conf.falius.tundokumanager.app;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
 
-import com.example.ymiyauchi.app.mainfragment.MainFragment;
-import com.example.ymiyauchi.lib.view.pageradapter.PagerType;
-
 import java.util.Objects;
+
+import jp.gr.java_conf.falius.tundokumanager.app.mainfragment.MainFragment;
+import jp.gr.java_conf.falius.tundokumanager.lib.view.pageradapter.PagerType;
 
 /**
  * Created by ymiyauchi on 2016/11/15.

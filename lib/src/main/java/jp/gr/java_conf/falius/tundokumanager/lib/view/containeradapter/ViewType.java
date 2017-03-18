@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.lib.view.containeradapter;
+package jp.gr.java_conf.falius.tundokumanager.lib.view.containeradapter;
 
 import android.content.Context;
 import android.content.res.Resources;

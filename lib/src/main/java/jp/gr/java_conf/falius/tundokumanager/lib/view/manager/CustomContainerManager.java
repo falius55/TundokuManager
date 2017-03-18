@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.lib.view.manager;
+package jp.gr.java_conf.falius.tundokumanager.lib.view.manager;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -9,10 +9,10 @@ import android.support.annotation.StringRes;
 import android.text.TextUtils;
 import android.util.SparseArray;
 
-import com.example.ymiyauchi.lib.view.containeradapter.CustomAdapter;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.gr.java_conf.falius.tundokumanager.lib.view.containeradapter.CustomAdapter;
 
 /**
  * Created by ymiyauchi on 2016/11/27.

@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app.mainfragment;
+package jp.gr.java_conf.falius.tundokumanager.app.mainfragment;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,9 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.ymiyauchi.app.R;
-import com.example.ymiyauchi.app.Type;
-import com.example.ymiyauchi.app.data.DataConverter;
-import com.example.ymiyauchi.app.mainfragment.listctrl.ListContextMenu;
+
+import jp.gr.java_conf.falius.tundokumanager.app.Type;
+import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
+import jp.gr.java_conf.falius.tundokumanager.app.mainfragment.listctrl.ListContextMenu;
 
 /**
  * Created by ymiyauchi on 2017/01/07.

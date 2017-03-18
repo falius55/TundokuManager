@@ -1,8 +1,6 @@
-package com.example.ymiyauchi.app;
+package jp.gr.java_conf.falius.tundokumanager.app;
 
 import android.support.test.runner.AndroidJUnit4;
-
-import com.example.ymiyauchi.app.remote.RequestHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,6 +17,7 @@ import jp.gr.java_conf.falius.communication.sender.MultiDataSender;
 import jp.gr.java_conf.falius.communication.sender.Sender;
 import jp.gr.java_conf.falius.communication.swapper.RepeatSwapper;
 import jp.gr.java_conf.falius.communication.swapper.Swapper;
+import jp.gr.java_conf.falius.tundokumanager.app.remote.RequestHandler;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.*;

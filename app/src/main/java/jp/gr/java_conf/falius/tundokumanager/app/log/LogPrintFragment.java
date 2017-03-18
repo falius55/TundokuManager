@@ -1,4 +1,4 @@
-package com.example.ymiyauchi.app.log;
+package jp.gr.java_conf.falius.tundokumanager.app.log;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
