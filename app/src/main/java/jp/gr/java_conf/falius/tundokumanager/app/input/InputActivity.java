@@ -6,8 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.ymiyauchi.app.R;
-
+import jp.gr.java_conf.falius.tundokumanager.app.R;
 import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
 
 /**

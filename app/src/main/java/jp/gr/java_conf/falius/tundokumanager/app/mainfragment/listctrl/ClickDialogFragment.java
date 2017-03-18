@@ -13,10 +13,9 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.example.ymiyauchi.app.R;
-
 import jp.gr.java_conf.falius.tundokumanager.app.ApplicationManager;
 import jp.gr.java_conf.falius.tundokumanager.app.MainActivity;
+import jp.gr.java_conf.falius.tundokumanager.app.R;
 import jp.gr.java_conf.falius.tundokumanager.app.Type;
 import jp.gr.java_conf.falius.tundokumanager.app.data.BundleDataConverter;
 import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;

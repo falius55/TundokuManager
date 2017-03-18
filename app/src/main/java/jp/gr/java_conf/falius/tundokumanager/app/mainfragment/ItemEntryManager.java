@@ -3,8 +3,7 @@ package jp.gr.java_conf.falius.tundokumanager.app.mainfragment;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
-import com.example.ymiyauchi.app.R;
-
+import jp.gr.java_conf.falius.tundokumanager.app.R;
 import jp.gr.java_conf.falius.tundokumanager.app.Type;
 import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
 import jp.gr.java_conf.falius.tundokumanager.app.data.ListItemDataConverter;

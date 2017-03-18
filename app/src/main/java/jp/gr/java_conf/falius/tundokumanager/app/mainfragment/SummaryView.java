@@ -4,8 +4,7 @@ import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.View;
 
-import com.example.ymiyauchi.app.R;
-
+import jp.gr.java_conf.falius.tundokumanager.app.R;
 import jp.gr.java_conf.falius.tundokumanager.app.Type;
 import jp.gr.java_conf.falius.tundokumanager.app.database.BasicDatabase;
 import jp.gr.java_conf.falius.tundokumanager.app.database.ItemColumns;

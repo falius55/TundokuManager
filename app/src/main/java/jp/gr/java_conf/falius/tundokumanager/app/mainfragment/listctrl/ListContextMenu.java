@@ -7,10 +7,9 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.example.ymiyauchi.app.R;
-
 import jp.gr.java_conf.falius.tundokumanager.app.ChartDialogFragment;
 import jp.gr.java_conf.falius.tundokumanager.app.MainActivity;
+import jp.gr.java_conf.falius.tundokumanager.app.R;
 import jp.gr.java_conf.falius.tundokumanager.app.Type;
 import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
 import jp.gr.java_conf.falius.tundokumanager.app.data.ListItemDataConverter;

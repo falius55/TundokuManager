@@ -5,12 +5,11 @@ import android.util.SparseArray;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 
-import com.example.ymiyauchi.app.R;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.gr.java_conf.falius.tundokumanager.app.R;
 import jp.gr.java_conf.falius.tundokumanager.app.tree.TreeElement;
 import jp.gr.java_conf.falius.tundokumanager.app.tree.TreeFragment;
 import jp.gr.java_conf.falius.tundokumanager.lib.view.containeradapter.CustomAdapter;

@@ -4,9 +4,8 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.ymiyauchi.app.R;
-
 import jp.gr.java_conf.falius.tundokumanager.app.ApplicationManager;
+import jp.gr.java_conf.falius.tundokumanager.app.R;
 import jp.gr.java_conf.falius.tundokumanager.app.Type;
 import jp.gr.java_conf.falius.tundokumanager.app.database.ItemColumns;
 import jp.gr.java_conf.falius.util.datetime.DateTime;

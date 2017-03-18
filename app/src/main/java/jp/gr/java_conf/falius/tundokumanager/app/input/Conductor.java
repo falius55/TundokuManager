@@ -6,8 +6,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 
-import com.example.ymiyauchi.app.R;
-
+import jp.gr.java_conf.falius.tundokumanager.app.R;
 import jp.gr.java_conf.falius.tundokumanager.app.Type;
 import jp.gr.java_conf.falius.tundokumanager.app.data.BundleDataConverter;
 import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;

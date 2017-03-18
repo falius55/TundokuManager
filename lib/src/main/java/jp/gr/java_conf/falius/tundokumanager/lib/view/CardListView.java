@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
 
-import com.example.ymiyauchi.lib.R;
+import jp.gr.java_conf.falius.tundokumanager.lib.R;
 
 /**
  * TODO: document your custom view class.

@@ -13,9 +13,8 @@ import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.example.ymiyauchi.app.R;
-
 import jp.gr.java_conf.falius.communication.receiver.Receiver;
+import jp.gr.java_conf.falius.tundokumanager.app.R;
 import jp.gr.java_conf.falius.tundokumanager.app.database.BasicDatabase;
 import jp.gr.java_conf.falius.tundokumanager.app.remote.RemoteSaveFileTask;
 import jp.gr.java_conf.falius.tundokumanager.app.tree.filetree.FileTreeElement;

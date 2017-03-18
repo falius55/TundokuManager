@@ -12,8 +12,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.ymiyauchi.app.R;
-
 import jp.gr.java_conf.falius.communication.receiver.Receiver;
 import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
 import jp.gr.java_conf.falius.tundokumanager.app.database.BasicDatabase;

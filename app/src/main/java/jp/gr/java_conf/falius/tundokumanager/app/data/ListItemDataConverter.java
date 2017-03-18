@@ -1,7 +1,6 @@
 package jp.gr.java_conf.falius.tundokumanager.app.data;
 
-import com.example.ymiyauchi.app.R;
-
+import jp.gr.java_conf.falius.tundokumanager.app.R;
 import jp.gr.java_conf.falius.tundokumanager.app.Type;
 import jp.gr.java_conf.falius.tundokumanager.lib.view.manager.ContainerManager;
 import jp.gr.java_conf.falius.util.datetime.DateTime;

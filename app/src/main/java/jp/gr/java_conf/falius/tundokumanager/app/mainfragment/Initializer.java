@@ -9,8 +9,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.ymiyauchi.app.R;
-
+import jp.gr.java_conf.falius.tundokumanager.app.R;
 import jp.gr.java_conf.falius.tundokumanager.app.Type;
 import jp.gr.java_conf.falius.tundokumanager.app.mainfragment.listctrl.ListBuilder;
 import jp.gr.java_conf.falius.tundokumanager.app.mainfragment.listctrl.ListContextMenu;

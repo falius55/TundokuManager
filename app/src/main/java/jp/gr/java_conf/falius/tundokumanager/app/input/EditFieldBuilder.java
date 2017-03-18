@@ -4,8 +4,7 @@ import android.app.Activity;
 import android.util.Log;
 import android.widget.RadioButton;
 
-import com.example.ymiyauchi.app.R;
-
+import jp.gr.java_conf.falius.tundokumanager.app.R;
 import jp.gr.java_conf.falius.tundokumanager.app.data.DataConverter;
 import jp.gr.java_conf.falius.tundokumanager.lib.view.manager.TextViewManager;
 

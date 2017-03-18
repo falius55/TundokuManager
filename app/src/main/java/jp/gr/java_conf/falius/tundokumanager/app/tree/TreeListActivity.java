@@ -8,7 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.example.ymiyauchi.app.R;
+import jp.gr.java_conf.falius.tundokumanager.app.R;
 
 public abstract class TreeListActivity extends AppCompatActivity {
 
